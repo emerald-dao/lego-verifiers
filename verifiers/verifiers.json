@@ -1,0 +1,26 @@
+[
+  {
+    "id": 0,
+    "name": "Owns FLOAT",
+    "description": "Checks to see if a user owns a FLOAT from a specific event.",
+    "cadence": "owns_float.cdc",
+    "parameterNames": [
+      "EVENT_ID"
+    ],
+    "imports": [
+      "import FLOAT from 0xFLOAT"
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Owns X Flovatar(s)",
+    "description": "Checks to see if a user owns AMOUNT Flovatars",
+    "cadence": "owns_flovatar.cdc",
+    "parameterNames": [
+      "AMOUNT"
+    ],
+    "imports": [
+      "import Flovatar from 0x921ea449dffec68a"
+    ]
+  }
+]
