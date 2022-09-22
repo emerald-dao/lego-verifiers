@@ -4,26 +4,7 @@ const verifiers = require('./verifiers.json');
 const fs = require('fs');
 const path = require('path');
 
-async function generateScript() {
-  const sampleData = {
-    100124012401204: [
-      {
-        verifierId: 0,
-        parameters: [1234]
-      },
-      {
-        verifierId: 1,
-        parameters: [3]
-      }
-    ],
-    100124012401216: [
-      {
-        verifierId: 2,
-        parameters: []
-      }
-    ]
-  }
-
+async function generateScript(data) {
   // Start building Cadence script
   let totalImports = [];
   let totalMain = '';
@@ -69,4 +50,23 @@ async function generateScript() {
   console.log(verifyScript)
 }
 
-generateScript();
+const sampleData = {
+  100124012401204: [
+    {
+      verifierId: 0,
+      parameters: [1234]
+    },
+    {
+      verifierId: 1,
+      parameters: [3]
+    }
+  ],
+  100124012401216: [
+    {
+      verifierId: 2,
+      parameters: []
+    }
+  ]
+}
+
+generateScript(sampleData);
