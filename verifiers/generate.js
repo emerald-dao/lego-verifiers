@@ -1,8 +1,10 @@
+// TRY IT OUT: node ./verifiers/generate.js
+
 const verifiers = require('./verifiers.json');
 const fs = require('fs');
 const path = require('path');
 
-async function generateScript(buttonId) {
+async function generateScript() {
   const data = {
     100124012401204: [
       {
@@ -16,11 +18,11 @@ async function generateScript(buttonId) {
     ],
     100124012401216: [
       {
-        verifierId: 0,
-        parameters: [1234]
+        verifierId: 2,
+        parameters: []
       }
     ]
-  } // await getButton(buttonId);
+  }
 
   // Start building Cadence script
   let totalImports = [];
@@ -28,39 +30,17 @@ async function generateScript(buttonId) {
   let totalSuccesses = 0;
 
   for (const roleId in data) {
-    /*
-    [
-      {
-        verifierId: 0,
-        parameters: [1234]
-      },
-      {
-        verifierId: 0,
-        parameters: [123423523]
-      },
-      {
-        verifierId: 1,
-        parameters: [12421]
-      }
-    ]
-    */
     const roleVerifier = data[roleId];
     let ifStatement = [];
     for (let i = 0; i < roleVerifier.length; i++) {
-      /*
-      {
-        verifierId: 0,
-        parameters: [1234]
-      }
-      */
       const { verifierId, parameters } = roleVerifier[i];
       const { cadence, parameterNames, imports } = verifiers[verifierId];
-      let cadenceCode = fs.readFileSync(path.join(__dirname, `/cadence/${cadence}`), 'utf8');
+      let cadenceCode = fs.readFileSync(path.join(__dirname, `/scripts/${cadence}`), 'utf8');
       for (let j = 0; j < parameterNames.length; j++) {
         cadenceCode = cadenceCode.replaceAll(parameterNames[j], parameters[j])
       }
       totalImports = [...new Set([...totalImports, ...imports])];
-      const successNumber = success + totalSuccesses;
+      const successNumber = 'success' + totalSuccesses;
       totalMain += `
       var ${successNumber} = false
       ${cadenceCode.replace('SUCCESS', `${successNumber} = true`)} \n
@@ -85,11 +65,8 @@ async function generateScript(buttonId) {
     return earnedRoles
   }
   `;
+
+  console.log(verifyScript)
 }
 
-// fetches the roles and ids of the verifiers from the database
-async function getButton(buttonId) {
-
-}
-
-const script = generateScript();
+generateScript();
