@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 async function generateScript() {
-  const data = {
+  const sampleData = {
     100124012401204: [
       {
         verifierId: 0,
