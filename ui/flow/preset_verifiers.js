@@ -62,8 +62,11 @@ export const mainnetPresetVerifiersList = [
     logo: "/float.png",
     cadence: "owns_float.cdc",
     parameterNames: [
-      "EVENT_ID"
+      {placeholder: "EVENT_ID", display: "Event ID"}
     ],
+    validateParameters: () => {
+      return false
+    },
     imports: [
       "import FLOAT from 0xFLOAT"
     ]
@@ -75,8 +78,11 @@ export const mainnetPresetVerifiersList = [
     logo: "/flovatar.jpeg",
     cadence: "owns_x_flovatars.cdc",
     parameterNames: [
-      "AMOUNT"
+      {placeholder: "AMOUNT", display: "Amount"}
     ],
+    validateParameters: () => {
+      return false
+    },
     imports: [
       "import Flovatar from 0x921ea449dffec68a"
     ]
@@ -88,6 +94,9 @@ export const mainnetPresetVerifiersList = [
     logo: "/flovatar.jpeg",
     cadence: "owns_flovatar.cdc",
     parameterNames: [],
+    validateParameters: () => {
+      return true
+    },
     imports: [
       "import Flovatar from 0x921ea449dffec68a"
     ]
