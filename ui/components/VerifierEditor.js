@@ -58,19 +58,19 @@ export default function VerifierEditor(props) {
         isPreset ?
           <div className={`flex flex-col h-full justify-between font-flow p-1`}>
             <div className="flex flex-col gap-y-1 font-flow p-1">
-            <div className="flex items-center rounded-full py-1 text-base font-bold text-black">
-              <Image className="rounded-full" src={verifierInfo.logo} alt="" layout="intrinsic" width={80} height={80} objectFit="cover" />
-            </div>
-            <label className="cursor-pointer text-left text-2xl font-bold">{verifierInfo.name}</label>
-            <label className="cursor-pointer text-left text-sm">{verifierInfo.description}</label>
+              <div className="flex items-center rounded-full py-1 text-base font-bold text-black">
+                <Image className="rounded-full" src={verifierInfo.logo} alt="" layout="intrinsic" width={80} height={80} objectFit="cover" />
+              </div>
+              <label className="cursor-pointer text-left text-2xl font-bold">{verifierInfo.name}</label>
+              <label className="cursor-pointer text-left text-sm">{verifierInfo.description}</label>
             </div>
 
             <div className="flex flex-col gap-y-2 p-1 pb-4">
-            {
-                  verifierInfo.parameterNames.length > 0 ?
-                    verifierInfo.parameterNames.map((parameterName) => {
-                      return (
-                        <div className="flex flex-col gap-y-1">
+              {
+                verifierInfo.parameterNames.length > 0 ?
+                  verifierInfo.parameterNames.map((parameterName) => {
+                    return (
+                      <div className="flex flex-col gap-y-1" key={parameterName.display}>
                         <label className="block text-base font-bold font-flow">
                           {parameterName.display}
                         </label>
@@ -92,11 +92,11 @@ export default function VerifierEditor(props) {
                           />
                         </div>
                       </div>
-                      )
-                    })
-                    : null
-                }
-              </div>
+                    )
+                  })
+                  : null
+              }
+            </div>
           </div> :
           <>
             <NFTSelector selectedNFT={selectedNFT} setSelectedNFT={setSelectedNFT} />
