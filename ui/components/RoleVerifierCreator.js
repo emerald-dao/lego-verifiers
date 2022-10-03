@@ -6,8 +6,10 @@ const generateVerifierCreationCode = (verifiers) => {
 
 }
 
-export default function RoleVerifierCreator() {
-  const [verifiers, setVerifiers] = useState([])
+export default function RoleVerifierCreator(props) {
+  console.log(props)
+  const { basicVerifiers: verifiers, setBasicVerifiers: setVerifiers} = props
+
   const createNewVerifier = () => {
     console.log("new verifier")
     setVerifiers(oldVerifiers => [1, ...oldVerifiers])
@@ -29,17 +31,9 @@ export default function RoleVerifierCreator() {
   return (
     <div className="flex flex-col gap-y-2">
       <div className="flex gap-x-2 justify-between items-center">
-      <label className="block text-2xl font-bold font-flow">
-        Verifiers
-      </label>
-      <button
-          type="button"
-          className="h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
-          onClick={() => {
-            console.log("CREATE")
-          }}>
-            Create Role Verifier
-        </button>
+        <label className="block text-2xl font-bold font-flow">
+          Basic Verifiers
+        </label>
       </div>
 
       <div className="mt-1 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-6 auto-rows-fr">
@@ -47,26 +41,26 @@ export default function RoleVerifierCreator() {
           verifiers.map((verifier, index) => {
             if (verifier.isPreset) {
               return (
-                <BasicVerifierEditor 
-                  key={index} 
-                  index={index} 
+                <BasicVerifierEditor
+                  key={index}
+                  index={index}
                   isPreset={true}
                   verifierInfo={verifier}
-                  deleteVerifier={deleteVerifier} 
+                  deleteVerifier={deleteVerifier}
                 />
               )
             }
             return (
-              <BasicVerifierEditor 
-                key={index} 
-                index={index} 
+              <BasicVerifierEditor
+                key={index}
+                index={index}
                 isPreset={false}
-                deleteVerifier={deleteVerifier} 
+                deleteVerifier={deleteVerifier}
               />
             )
           })
         }
-        <BasicVerifierSelector 
+        <BasicVerifierSelector
           createNewVerifier={createNewVerifier}
           createPresetVerifier={createPresetVerifier}
         />

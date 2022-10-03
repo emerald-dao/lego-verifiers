@@ -17,7 +17,7 @@ export default function BasicVerifierSelector(props) {
     flex flex-col gap-y-4
     p-4 overflow-auto
     `}>
-      <button className={`
+      {/* <button className={`
         w-full h-[96px] bg-white
         rounded-2xl shadow-sm p-4 shrink-0
         flex items-center justify-center cursor-pointer
@@ -34,8 +34,9 @@ export default function BasicVerifierSelector(props) {
         </div>
       </button>
 
+      */}
       <label className="font-flow text-black text-lg font-bold">
-        Preset Verifiers
+        Templates
       </label>
       {
         presetVerifiers.map((verifier, index) => {

@@ -5,6 +5,11 @@ import {
 } from "../lib/atoms"
 import { classNames } from "../lib/utils"
 
+export const BasicVerifiersLogic = {
+  AND: "AND",
+  OR: "OR"
+}
+
 export default function LogicSelector() {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
   const [logicAnd, setLogicAnd] = useState(true)
@@ -13,7 +18,7 @@ export default function LogicSelector() {
   return (
     <div className="flex flex-col gap-y-2">
       <label className="block text-2xl font-bold font-flow">
-        Verifiers Logic
+        Basic Verifiers Logic
       </label>
       <div className="mt-1 flex gap-x-4 h-12">
         <button

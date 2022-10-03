@@ -33,6 +33,7 @@ export default function BasicVerifierEditor(props) {
   const { isPreset, verifierInfo, index, deleteVerifier } = props
   const [selectedNFT, setSelectedNFT] = useState(null)
   const [verificationType, setVerificationType] = useState(null)
+  const [verifierParams, setVerifierParams] = useState({})
 
   return (
     <div className="
@@ -87,7 +88,7 @@ export default function BasicVerifierEditor(props) {
             outline-0 focus:outline-2 focus:outline-emerald-dark 
             placeholder:text-gray-300"
                             onChange={(event) => {
-                              console.log("ROLEID")
+                              setVerifierParams(oldValue => oldValue[parameterName.placeholder] = event.target.value)
                             }}
                           />
                         </div>
