@@ -12,8 +12,11 @@ export const testnetPresetVerifiersList = [
     description: "Checks to see if a user owns a FLOAT from a specific event.",
     logo: "/float.png",
     cadence: "owns_float.cdc",
-    parameterNames: [
-      {placeholder: "EVENT_ID", display: "Event ID"}
+    parameters: [
+      {
+        names: {placeholder: "EVENT_ID", display: "Event ID"},
+        value: null
+      }
     ],
     validateParameters: () => {
       return false
@@ -28,8 +31,11 @@ export const testnetPresetVerifiersList = [
     description: "Checks to see if a user owns AMOUNT Flovatars",
     logo: "/flovatar.jpeg",
     cadence: "owns_x_flovatars.cdc",
-    parameterNames: [
-      {placeholder: "AMOUNT", display: "Amount"}
+    parameters: [
+      {
+        names: {placeholder: "AMOUNT", display: "Amount"},
+        value: null
+      }
     ],
     validateParameters: () => {
       return false
@@ -44,7 +50,7 @@ export const testnetPresetVerifiersList = [
     description: "Checks to see if a user owns at least 1 Flovatar",
     logo: "/flovatar.jpeg",
     cadence: "owns_flovatar.cdc",
-    parameterNames: [],
+    parameters: [],
     validateParameters: () => {
       return true
     },
@@ -61,8 +67,11 @@ export const mainnetPresetVerifiersList = [
     description: "Checks to see if a user owns a FLOAT from a specific event.",
     logo: "/float.png",
     cadence: "owns_float.cdc",
-    parameterNames: [
-      {placeholder: "EVENT_ID", display: "Event ID"}
+    parameters: [
+      {
+        names: {placeholder: "EVENT_ID", display: "Event ID"},
+        value: null
+      }
     ],
     validateParameters: () => {
       return false
@@ -77,8 +86,11 @@ export const mainnetPresetVerifiersList = [
     description: "Checks to see if a user owns AMOUNT Flovatars",
     logo: "/flovatar.jpeg",
     cadence: "owns_x_flovatars.cdc",
-    parameterNames: [
-      {placeholder: "AMOUNT", display: "Amount"}
+    parameters: [
+      {
+        names: {placeholder: "AMOUNT", display: "Amount"},
+        value: null
+      }
     ],
     validateParameters: () => {
       return false
@@ -93,7 +105,7 @@ export const mainnetPresetVerifiersList = [
     description: "Checks to see if a user owns at least 1 Flovatar",
     logo: "/flovatar.jpeg",
     cadence: "owns_flovatar.cdc",
-    parameterNames: [],
+    parameters: [],
     validateParameters: () => {
       return true
     },

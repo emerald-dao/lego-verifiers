@@ -7,7 +7,6 @@ const generateVerifierCreationCode = (verifiers) => {
 }
 
 export default function RoleVerifierCreator(props) {
-  console.log(props)
   const { basicVerifiers: verifiers, setBasicVerifiers: setVerifiers} = props
 
   const createNewVerifier = () => {
@@ -17,8 +16,9 @@ export default function RoleVerifierCreator(props) {
 
   const createPresetVerifier = (verifierInfo) => {
     console.log("preset verifier")
-    verifierInfo.isPreset = true
-    setVerifiers(oldVerifiers => [verifierInfo, ...oldVerifiers])
+    const verifier = Object.assign({}, verifierInfo)
+    verifier.isPreset = true
+    setVerifiers(oldVerifiers => [...oldVerifiers, verifier])
   }
 
   const deleteVerifier = (index) => {
@@ -26,6 +26,26 @@ export default function RoleVerifierCreator(props) {
     console.log(newVerifiers)
     setVerifiers(newVerifiers)
     console.log("delete verifier at index", index)
+  }
+
+  const updateVerifier = (index, paramName, paramValue) => {
+    setVerifiers(oldVerifiers => {
+      const newVerifiers = oldVerifiers.map((verifier, idx) => {
+        if (idx == index) {
+          const newParameters = verifier.parameters.map((param) => {
+            if (param.names.placeholder == paramName) {
+              return {...param, value: paramValue}
+            }
+            return param
+          })
+
+          return {...verifier, parameters: newParameters}
+        }
+        return verifier
+      })
+
+      return newVerifiers
+    })
   }
 
   return (
@@ -46,6 +66,7 @@ export default function RoleVerifierCreator(props) {
                   index={index}
                   isPreset={true}
                   verifierInfo={verifier}
+                  updateVerifier={updateVerifier}
                   deleteVerifier={deleteVerifier}
                 />
               )
@@ -55,6 +76,7 @@ export default function RoleVerifierCreator(props) {
                 key={index}
                 index={index}
                 isPreset={false}
+                updateVerifier={updateVerifier}
                 deleteVerifier={deleteVerifier}
               />
             )

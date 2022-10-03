@@ -9,7 +9,6 @@ import {
 } from "../lib/atoms"
 
 const getVerificationTypes = (nft) => {
-  console.log(nft)
   const baseTypes = [
     {
       type: "Amount"
@@ -24,16 +23,15 @@ const getVerificationTypes = (nft) => {
   }
 
   const res = baseTypes.concat([{ type: "EventID" }])
-  console.log(res)
   return res
 }
 
 export default function BasicVerifierEditor(props) {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
-  const { isPreset, verifierInfo, index, deleteVerifier } = props
+  const { isPreset, verifierInfo, index, updateVerifier, deleteVerifier } = props
   const [selectedNFT, setSelectedNFT] = useState(null)
   const [verificationType, setVerificationType] = useState(null)
-  const [verifierParams, setVerifierParams] = useState({})
+
 
   return (
     <div className="
@@ -68,18 +66,18 @@ export default function BasicVerifierEditor(props) {
 
             <div className="flex flex-col gap-y-2 p-1 pb-4">
               {
-                verifierInfo.parameterNames.length > 0 ?
-                  verifierInfo.parameterNames.map((parameterName) => {
+                verifierInfo.parameters.length > 0 ?
+                  verifierInfo.parameters.map((parameter) => {
                     return (
-                      <div className="flex flex-col gap-y-1" key={parameterName.display}>
+                      <div className="flex flex-col gap-y-1" key={`${parameter.names.display}${index}`}>
                         <label className="block text-base font-bold font-flow">
-                          {parameterName.display}
+                          {parameter.names.display}
                         </label>
                         <div className="mt-1">
                           <input
                             type="text"
-                            name={parameterName.display}
-                            id={parameterName.display}
+                            name={`${parameter.names.display}${index}`}
+                            id={`${parameter.names.display}${index}`}
                             disabled={transactionInProgress}
                             required
                             placeholder={``}
@@ -87,8 +85,9 @@ export default function BasicVerifierEditor(props) {
             border border-emerald focus:border-emerald-dark
             outline-0 focus:outline-2 focus:outline-emerald-dark 
             placeholder:text-gray-300"
+                            value={parameter.value}
                             onChange={(event) => {
-                              setVerifierParams(oldValue => oldValue[parameterName.placeholder] = event.target.value)
+                              updateVerifier(index, parameter.names.placeholder, event.target.value)
                             }}
                           />
                         </div>

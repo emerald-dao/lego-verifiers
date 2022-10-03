@@ -40,7 +40,6 @@ export default function BasicVerifierSelector(props) {
       </label>
       {
         presetVerifiers.map((verifier, index) => {
-          console.log(verifier)
           return (
             <button
               key={index}
