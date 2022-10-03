@@ -5,11 +5,21 @@ import RoleVerifierCreator from './RoleVerifierCreator'
 import DiscordRoleView from './DiscordRoleView'
 import LogicSelector, { BasicVerifiersLogic } from './LogicSelector'
 
+import { readOnlySelector, useRecoilState } from "recoil"
+import {
+  showBasicNotificationState,
+  basicNotificationContentState
+} from "../lib/atoms.js"
+import { isValidRoleID } from '../lib/utils'
+
 export default function RoleVerifierCreatorSlideOver(props) {
+  const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
+  const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
+
   const { open, setOpen, createNewRoleVerifier } = props
-  const [ roleID, setRoleID ] = useState(null)
-  const [ basicVerifiersLogic, setBasicVerifiersLogic] = useState(BasicVerifiersLogic.AND)
-  const [ basicVerifiers, setBasicVerifiers] = useState([])
+  const [roleID, setRoleID] = useState(null)
+  const [basicVerifiersLogic, setBasicVerifiersLogic] = useState(BasicVerifiersLogic.AND)
+  const [basicVerifiers, setBasicVerifiers] = useState([])
 
   useEffect(() => {
     if (open) {
@@ -66,16 +76,16 @@ export default function RoleVerifierCreatorSlideOver(props) {
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
                         <div className="flex flex-col gap-y-8">
-                          <DiscordRoleView 
+                          <DiscordRoleView
                             roleID={roleID}
                             setRoleID={setRoleID}
                           />
-                          <LogicSelector 
+                          <LogicSelector
                             basicVerifiersLogic={basicVerifiersLogic}
                             setBasicVerifiersLogic={setBasicVerifiersLogic}
                           />
-                          <RoleVerifierCreator 
-                            basicVerifiers={basicVerifiers} 
+                          <RoleVerifierCreator
+                            basicVerifiers={basicVerifiers}
                             setBasicVerifiers={setBasicVerifiers}
                           />
                         </div>
@@ -98,10 +108,31 @@ export default function RoleVerifierCreatorSlideOver(props) {
                           console.log("roleID", roleID)
                           console.log("basicVerifierLogic", basicVerifiersLogic)
                           console.log("basicVerifiers", basicVerifiers)
-                          // Validate Params
-                          createNewRoleVerifier(roleID, basicVerifiersLogic, basicVerifiers)
-                          setOpen(false)
+                          const alertInvalidParams = () => {
+                            setShowBasicNotification(true)
+                            setBasicNotificationContent({ type: "exclamation", title: "INVALID PARAMS", detail: null })
+                          }
 
+                          if (!isValidRoleID(roleID)) {
+                            alertInvalidParams()
+                            return
+                          }
+
+                          for (let i = 0; i < basicVerifiers.length; i++) {
+                            const bv = basicVerifiers[i]
+                            for (let j = 0; j < bv.parameters.length; j++) {
+                              const param = bv.parameters[j]
+                              if (!param.isValid) {
+                                alertInvalidParams()
+                                return
+                              }
+                            }
+                          }
+
+                          if (basicVerifiers.length > 0) {
+                            createNewRoleVerifier(roleID, basicVerifiersLogic, basicVerifiers)
+                          }
+                          setOpen(false)
                         }}
                       >
                         Save

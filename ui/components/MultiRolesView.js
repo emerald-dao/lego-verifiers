@@ -3,9 +3,16 @@ import { generateScript } from "../lib/utils";
 import RoleVerifierCreatorSlideOver from "./RoleVerifierCreatorSlideOver";
 import RoleView from "./RoleView";
 
-
+import { useRecoilState } from "recoil"
+import {
+  showBasicNotificationState,
+  basicNotificationContentState
+} from "../lib/atoms.js"
 
 export default function MultiRolesView(props) {
+  const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
+  const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
+
   const {roleVerifiers, setRoleVerifiers} = props
   const [open, setOpen] = useState(false)
 

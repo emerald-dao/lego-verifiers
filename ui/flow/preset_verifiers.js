@@ -1,3 +1,5 @@
+import Decimal from "decimal.js"
+
 export const PresetVerifiersList = (network) => {
   if (network === "mainnet") {
     return mainnetPresetVerifiersList
@@ -15,23 +17,30 @@ export const testnetPresetVerifiersList = [
     parameters: [
       {
         names: {placeholder: "EVENT_ID", display: "Event ID"},
-        value: null
+        value: null,
+        regex: /^(0|[1-9]\d*)$/,
+        isValid: false,
+        validate: (value) => {
+          try {
+            const v = new Decimal(value)
+            return v.isInteger() && v.isPositive() && !v.isZero()
+          } catch (e) {
+            return false
+          }
+        }
       }
     ],
-    validateParameters: () => {
-      return false
-    },
     imports: [
       "import FLOAT from 0xFLOAT"
     ],
     script: `
-      if let floatCollection = getAccount(user).getCapability(FLOAT.FLOATCollectionPublicPath).borrow<&FLOAT.Collection{FLOAT.CollectionPublic}>() {
-        let eventId: UInt64 = EVENT_ID
-        let ids = floatCollection.ownedIdsFromEvent(eventId: eventId)
-        if ids.length > 0 {
-          SUCCESS
-        }
+    if let floatCollection = getAccount(user).getCapability(FLOAT.FLOATCollectionPublicPath).borrow<&FLOAT.Collection{FLOAT.CollectionPublic}>() {
+      let eventId: UInt64 = EVENT_ID
+      let ids = floatCollection.ownedIdsFromEvent(eventId: eventId)
+      if ids.length > 0 {
+        SUCCESS
       }
+    }
     `
   },
   {
@@ -43,12 +52,19 @@ export const testnetPresetVerifiersList = [
     parameters: [
       {
         names: {placeholder: "AMOUNT", display: "Amount"},
-        value: null
+        value: null,
+        regex: /^(0|[1-9]\d*)$/,
+        isValid: false,
+        validate: (value) => {
+          try {
+            const v = new Decimal(value)
+            return v.isInteger() && v.isPositive() && !v.isZero()
+          } catch (e) {
+            return false
+          }
+        }
       }
     ],
-    validateParameters: () => {
-      return false
-    },
     imports: [
       "import Flovatar from 0x921ea449dffec68a"
     ],

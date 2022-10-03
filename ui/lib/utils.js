@@ -1,5 +1,16 @@
+import Decimal from "decimal.js"
+
 export const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
+}
+
+export const isValidRoleID = (roleID) => {
+  try {
+    const v = new Decimal(roleID)
+    return v.isInteger() && v.isPositive() && !v.isZero()
+  } catch (e) {
+    return false
+  }
 }
 
 export const generateScript = (roleVerifiers) => {
@@ -27,7 +38,7 @@ export const generateScript = (roleVerifiers) => {
 
       const successNumber = `success${checkNumber}`
       totalMain += `
-      var ${successNumber} = false
+    var ${successNumber} = false
       ${code.replace("SUCCESS", `${successNumber} = true`)}
       `
       ifStatement.push(successNumber)
@@ -41,7 +52,8 @@ export const generateScript = (roleVerifiers) => {
   }
 
   const verifyScript = `
-  ${imports.join('\n')}
+${imports.join('\n')}
+
   pub fun main(user: Address): [String] {
     var earnedRoles: [String] = []
 
@@ -56,7 +68,6 @@ export const generateScript = (roleVerifiers) => {
 
 const generateImports = (roleVerifiers) => {
   const imports = []
-  console.log(roleVerifiers)
   for (let i = 0; i < roleVerifiers.length; i++) {
     const rv = roleVerifiers[i]
     for (let j = 0; j < rv.basicVerifiers.length; j++) {
@@ -64,6 +75,6 @@ const generateImports = (roleVerifiers) => {
       imports.push(...bv.imports)
     }
   }
-  let uniqueImports = [...new Set(imports)]
-  return uniqueImports
+  const uniqueImports = [...new Set(imports)]
+  return uniqueImports.map((i) => i.trim())
 }

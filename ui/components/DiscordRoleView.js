@@ -1,11 +1,14 @@
+import { useState } from "react"
 import { useRecoilState } from "recoil"
 import {
   transactionInProgressState,
 } from "../lib/atoms"
+import { classNames, isValidRoleID } from "../lib/utils"
 
 export default function DiscordRoleView(props) {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
   const { roleID, setRoleID } = props
+  const [isValid, setIsValid] = useState(false)
   return (
     <div className="flex flex-col gap-y-2">
       <label className="block text-2xl font-bold font-flow">
@@ -20,12 +23,22 @@ export default function DiscordRoleView(props) {
           required
           placeholder={`Discord RoleID`}
           value={roleID ?? ""}
-          className="bg-white block w-full font-flow text-lg rounded-2xl px-3 py-2
-          border border-emerald focus:border-emerald-dark
-          outline-0 focus:outline-2 focus:outline-emerald-dark 
-          placeholder:text-gray-300"
+          className={classNames(
+            isValid ? `border-emerald` : `border-rose-500`, 
+            `bg-white block w-full font-flow text-lg rounded-2xl px-3 py-2 border
+             focus:border-emerald-dark
+            outline-0 focus:outline-2 focus:outline-emerald-dark 
+            placeholder:text-gray-300`
+          )}
           onChange={(event) => {
-            setRoleID(event.target.value)
+            const reg = /^(0|[1-9]\d*)$/
+            if (event.target.value === "" || reg.test(event.target.value)) {
+              setRoleID(event.target.value)
+            }
+          }}
+          onBlur={() => {
+            const valid = isValidRoleID(roleID)
+            setIsValid(valid)
           }}
         />
       </div>

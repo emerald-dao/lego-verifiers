@@ -24,13 +24,13 @@ export default function RoleVerifierCreator(props) {
     setVerifiers(newVerifiers)
   }
 
-  const updateVerifier = (index, paramName, paramValue) => {
+  const updateVerifier = (index, paramName, paramValue, validity = true) => {
     setVerifiers(oldVerifiers => {
       const newVerifiers = oldVerifiers.map((verifier, idx) => {
         if (idx == index) {
           const newParameters = verifier.parameters.map((param) => {
             if (param.names.placeholder == paramName) {
-              return {...param, value: paramValue}
+              return {...param, value: paramValue, isValid: validity}
             }
             return param
           })
