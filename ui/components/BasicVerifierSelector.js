@@ -4,7 +4,7 @@ import Image from "next/image"
 import { PresetVerifiersList } from "../flow/preset_verifiers"
 import publicConfig from "../publicConfig"
 
-export default function VerifierCreator(props) {
+export default function BasicVerifierSelector(props) {
 
   const presetVerifiers = PresetVerifiersList(publicConfig.chainEnv)
   const { createNewVerifier, createPresetVerifier } = props

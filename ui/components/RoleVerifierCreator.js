@@ -1,12 +1,12 @@
 import { useState } from "react"
-import VerifierCreator from "./VerifierCreator"
-import VerifierEditor from "./VerifierEditor"
+import BasicVerifierSelector from "./BasicVerifierSelector"
+import BasicVerifierEditor from "./BasicVerifierEditor"
 
 const generateVerifierCreationCode = (verifiers) => {
 
 }
 
-export default function VerifiersComposer() {
+export default function RoleVerifierCreator() {
   const [verifiers, setVerifiers] = useState([])
   const createNewVerifier = () => {
     console.log("new verifier")
@@ -38,7 +38,7 @@ export default function VerifiersComposer() {
           onClick={() => {
             console.log("CREATE")
           }}>
-            Create Lego Verifiers
+            Create Role Verifier
         </button>
       </div>
 
@@ -47,7 +47,7 @@ export default function VerifiersComposer() {
           verifiers.map((verifier, index) => {
             if (verifier.isPreset) {
               return (
-                <VerifierEditor 
+                <BasicVerifierEditor 
                   key={index} 
                   index={index} 
                   isPreset={true}
@@ -57,7 +57,7 @@ export default function VerifiersComposer() {
               )
             }
             return (
-              <VerifierEditor 
+              <BasicVerifierEditor 
                 key={index} 
                 index={index} 
                 isPreset={false}
@@ -66,7 +66,7 @@ export default function VerifiersComposer() {
             )
           })
         }
-        <VerifierCreator 
+        <BasicVerifierSelector 
           createNewVerifier={createNewVerifier}
           createPresetVerifier={createPresetVerifier}
         />

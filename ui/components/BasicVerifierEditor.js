@@ -2,7 +2,7 @@ import { XCircleIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import { useState } from "react";
 import NFTSelector from "./NFTSelector";
-import VerificationTypeSelector from "./VerificationTypeSelector";
+import VerificationTypeSelector from "./RoleVerificationTypeSelector";
 import { useRecoilState } from "recoil"
 import {
   transactionInProgressState,
@@ -28,7 +28,7 @@ const getVerificationTypes = (nft) => {
   return res
 }
 
-export default function VerifierEditor(props) {
+export default function BasicVerifierEditor(props) {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
   const { isPreset, verifierInfo, index, deleteVerifier } = props
   const [selectedNFT, setSelectedNFT] = useState(null)

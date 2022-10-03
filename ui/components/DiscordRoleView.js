@@ -3,7 +3,7 @@ import {
   transactionInProgressState,
 } from "../lib/atoms"
 
-export default function DiscordView() {
+export default function DiscordRoleView() {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
   return (
     <div className="flex flex-col gap-y-2">

@@ -14,7 +14,7 @@ import { NFTList } from "../flow/nft-list"
 import publicConfig from "../publicConfig.js"
 import { classNames } from "../lib/utils"
 
-export default function VerificationTypeSelector(props) {
+export default function RoleVerificationTypeSelector(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
   const [transactionInProgress] = useRecoilState(transactionInProgressState)
