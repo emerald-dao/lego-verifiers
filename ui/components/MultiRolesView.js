@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { generateScript } from "../lib/utils";
 import RoleVerifierCreatorSlideOver from "./RoleVerifierCreatorSlideOver";
 import RoleView from "./RoleView";
 
@@ -22,7 +23,11 @@ export default function MultiRolesView(props) {
         <label className="block text-2xl font-bold font-flow">
           Role Verifiers
         </label>
-        <button>
+        <button
+          onClick={() => {
+            generateScript(roleVerifiers)
+          }}
+        >
           Generate Script
         </button>
       </div>
