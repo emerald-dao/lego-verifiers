@@ -10,12 +10,10 @@ export default function RoleVerifierCreator(props) {
   const { basicVerifiers: verifiers, setBasicVerifiers: setVerifiers} = props
 
   const createNewVerifier = () => {
-    console.log("new verifier")
-    setVerifiers(oldVerifiers => [1, ...oldVerifiers])
+    setVerifiers(oldVerifiers => [...oldVerifiers, 1])
   }
 
   const createPresetVerifier = (verifierInfo) => {
-    console.log("preset verifier")
     const verifier = Object.assign({}, verifierInfo)
     verifier.isPreset = true
     setVerifiers(oldVerifiers => [...oldVerifiers, verifier])
@@ -23,9 +21,7 @@ export default function RoleVerifierCreator(props) {
 
   const deleteVerifier = (index) => {
     const newVerifiers = verifiers.filter((verifier, idx) => idx != index)
-    console.log(newVerifiers)
     setVerifiers(newVerifiers)
-    console.log("delete verifier at index", index)
   }
 
   const updateVerifier = (index, paramName, paramValue) => {

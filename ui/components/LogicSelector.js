@@ -10,10 +10,9 @@ export const BasicVerifiersLogic = {
   OR: "OR"
 }
 
-export default function LogicSelector() {
+export default function LogicSelector(props) {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
-  const [logicAnd, setLogicAnd] = useState(true)
-  const [logicOr, setLogicOr] = useState(false)
+  const { basicVerifiersLogic, setBasicVerifiersLogic } = props
 
   return (
     <div className="flex flex-col gap-y-2">
@@ -23,14 +22,13 @@ export default function LogicSelector() {
       <div className="mt-1 flex gap-x-4 h-12">
         <button
           className={classNames(
-            logicAnd ? "bg-emerald text-black shadow-md" : "bg-emerald-light text-gray-500",
+            basicVerifiersLogic == BasicVerifiersLogic.AND ? "bg-emerald text-black shadow-md" : "bg-emerald-light text-gray-500",
             `basis-1/2 rounded-2xl font-flow font-semibold`
           )
           }
           onClick={() => {
-            if (!logicAnd) {
-              setLogicAnd(true)
-              setLogicOr(false)
+            if (basicVerifiersLogic == BasicVerifiersLogic.OR) {
+              setBasicVerifiersLogic(BasicVerifiersLogic.AND)
             }
           }}
         >
@@ -38,14 +36,13 @@ export default function LogicSelector() {
         </button>
         <button
           className={classNames(
-            logicOr ? "bg-emerald text-black shadow-md" : "bg-emerald-light text-gray-500",
+            basicVerifiersLogic == BasicVerifiersLogic.OR ? "bg-emerald text-black shadow-md" : "bg-emerald-light text-gray-500",
             `basis-1/2 rounded-2xl font-flow font-semibold`
           )
           }
           onClick={() => {
-            if (!logicOr) {
-              setLogicOr(true)
-              setLogicAnd(false)
+            if (basicVerifiersLogic == BasicVerifiersLogic.AND) {
+              setBasicVerifiersLogic(BasicVerifiersLogic.OR)
             }
           }}
         >

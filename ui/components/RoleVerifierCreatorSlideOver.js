@@ -1,23 +1,33 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import RoleVerifierCreator from './RoleVerifierCreator'
 import DiscordRoleView from './DiscordRoleView'
-import LogicSelector from './LogicSelector'
+import LogicSelector, { BasicVerifiersLogic } from './LogicSelector'
 
 export default function RoleVerifierCreatorSlideOver(props) {
-  const { open, setOpen, setNewRoleVerifier } = props
+  const { open, setOpen, createNewRoleVerifier } = props
+  const [ roleID, setRoleID ] = useState(null)
+  const [ basicVerifiersLogic, setBasicVerifiersLogic] = useState(BasicVerifiersLogic.AND)
   const [ basicVerifiers, setBasicVerifiers] = useState([])
+
+  useEffect(() => {
+    if (open) {
+      setRoleID(null)
+      setBasicVerifiersLogic(BasicVerifiersLogic.AND)
+      setBasicVerifiers([])
+    }
+  }, [open])
 
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
         <Transition.Child
           as={Fragment}
-          enter="ease-in-out duration-500"
+          enter="ease-in-out duration-400"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="ease-in-out duration-500"
+          leave="ease-in-out duration-400"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
@@ -56,8 +66,14 @@ export default function RoleVerifierCreatorSlideOver(props) {
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
                         <div className="flex flex-col gap-y-8">
-                          <DiscordRoleView />
-                          <LogicSelector />
+                          <DiscordRoleView 
+                            roleID={roleID}
+                            setRoleID={setRoleID}
+                          />
+                          <LogicSelector 
+                            basicVerifiersLogic={basicVerifiersLogic}
+                            setBasicVerifiersLogic={setBasicVerifiersLogic}
+                          />
                           <RoleVerifierCreator 
                             basicVerifiers={basicVerifiers} 
                             setBasicVerifiers={setBasicVerifiers}
@@ -70,7 +86,6 @@ export default function RoleVerifierCreatorSlideOver(props) {
                         type="button"
                         className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-black shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2"
                         onClick={() => {
-                          setNewRoleVerifier(null)
                           setOpen(false)
                         }}
                       >
@@ -80,7 +95,13 @@ export default function RoleVerifierCreatorSlideOver(props) {
                         type="submit"
                         className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-emerald py-2 px-4 text-sm font-medium text-black shadow-sm hover:bg-emerald-dark focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2"
                         onClick={() => {
-                          console.log(basicVerifiers)
+                          console.log("roleID", roleID)
+                          console.log("basicVerifierLogic", basicVerifiersLogic)
+                          console.log("basicVerifiers", basicVerifiers)
+                          // Validate Params
+                          createNewRoleVerifier(roleID, basicVerifiersLogic, basicVerifiers)
+                          setOpen(false)
+
                         }}
                       >
                         Save

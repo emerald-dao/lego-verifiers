@@ -85,7 +85,7 @@ export default function BasicVerifierEditor(props) {
             border border-emerald focus:border-emerald-dark
             outline-0 focus:outline-2 focus:outline-emerald-dark 
             placeholder:text-gray-300"
-                            value={parameter.value}
+                            value={parameter.value ?? ""}
                             onChange={(event) => {
                               updateVerifier(index, parameter.names.placeholder, event.target.value)
                             }}
