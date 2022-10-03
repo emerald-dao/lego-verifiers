@@ -24,6 +24,11 @@ export default function MultiRolesView(props) {
     }])
   }
 
+  const deleteRoleVerifier = (index) => {
+    const newVerifiers = roleVerifiers.filter((verifier, idx) => idx != index)
+    setRoleVerifiers(newVerifiers)
+  }
+
   return (
     <div className="flex flex-col gap-y-2">
       <div className="flex gap-x-5 justify-between">
@@ -44,13 +49,15 @@ export default function MultiRolesView(props) {
             return (
               <RoleView 
                 key={index}
+                index={index}
                 roleVerifier={roleVerifier}
+                deleteRoleVerifier={deleteRoleVerifier}
               />
             )
           })
         }
         <button className="
-            h-36 p-4 shrink-0
+            h-48 p-4 shrink-0
             shadow-lg bg-white
             ring-1 ring-black ring-opacity-5 rounded-2xl 
             flex flex-col gap-y-4 border-4 border-emerald border-dashed"
