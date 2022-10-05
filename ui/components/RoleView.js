@@ -47,9 +47,9 @@ export default function RoleView(props) {
             {/* </label> */}
             <div className="flex gap-x-1 items-center max-w-[120px] overflow-hidden">
               {
-                roleVerifier.basicVerifiers.map((bv) => {
+                roleVerifier.basicVerifiers.map((bv, index) => {
                   return (
-                    <div className="rounded-full overflow-hidden flex items-center">
+                    <div key={index} className="rounded-full overflow-hidden flex items-center">
                       <Image className="rounded-full" src={bv.logo} width={20} height={20}></Image>
                     </div>
                   )
