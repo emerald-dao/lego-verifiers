@@ -42,10 +42,7 @@ export default function RoleView(props) {
               <div className="shrink-0 rounded-full w-2 h-2 bg-green-500"></div>
               <label className="truncate shrink text-black font-flow font-bold">Basic Verifiers</label>
             </div>
-            {/* <label className="text-center text-green-800 bg-green-100 inline-flex rounded-full px-2 text-xs font-semibold leading-5"> */}
-            {/* Details */}
-            {/* </label> */}
-            <div className="flex gap-x-1 items-center max-w-[120px] overflow-hidden">
+            <div className="flex gap-x-1 items-center overflow-hidden">
               {
                 roleVerifier.basicVerifiers.map((bv, index) => {
                   return (

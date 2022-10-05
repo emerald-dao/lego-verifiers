@@ -40,6 +40,7 @@ export default function MultiRolesVerifierCreator(props) {
       return
     }
 
+    console.log(roleVerifiers)
     const script = generateScript(roleVerifiers)
     console.log(script)
 

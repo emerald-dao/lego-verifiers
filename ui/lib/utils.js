@@ -61,6 +61,8 @@ ${imports.join('\n')}
     return earnedRoles
   }
   `
+
+  return verifyScript
 }
 
 const generateImports = (roleVerifiers) => {

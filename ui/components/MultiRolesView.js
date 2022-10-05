@@ -43,7 +43,7 @@ export default function MultiRolesView(props) {
           Role Verifiers<span className="text-red-600">*</span>
         </label>
       </div>
-      <div className="mt-1 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-6 auto-rows-fr">
+      <div className="mt-1 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-6 auto-rows-fr">
         {
           roleVerifiers.map((roleVerifier, index) => {
             return (
