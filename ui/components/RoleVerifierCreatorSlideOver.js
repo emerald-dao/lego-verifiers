@@ -5,7 +5,7 @@ import RoleVerifierCreator from './RoleVerifierCreator'
 import DiscordRoleView from './DiscordRoleView'
 import LogicSelector, { BasicVerifiersLogic } from './LogicSelector'
 
-import { readOnlySelector, useRecoilState } from "recoil"
+import { useRecoilState } from "recoil"
 import {
   showBasicNotificationState,
   basicNotificationContentState
@@ -53,10 +53,10 @@ export default function RoleVerifierCreatorSlideOver(props) {
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
               <Transition.Child
                 as={Fragment}
-                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                enter="transform transition ease-in-out duration-500 sm:duration-500"
                 enterFrom="translate-x-full"
                 enterTo="translate-x-0"
-                leave="transform transition ease-in-out duration-500 sm:duration-700"
+                leave="transform transition ease-in-out duration-500 sm:duration-500"
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
@@ -109,10 +109,6 @@ export default function RoleVerifierCreatorSlideOver(props) {
                         type="submit"
                         className="h-12 w-24 items-center ml-4 inline-flex justify-center rounded-xl border border-transparent bg-emerald py-2 px-4 text-sm font-bold text-black shadow-sm hover:bg-emerald-dark focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2"
                         onClick={() => {
-                          console.log("roleID", roleID)
-                          console.log("basicVerifierLogic", basicVerifiersLogic)
-                          console.log("basicVerifiers", basicVerifiers)
-
                           const alertInvalidParams = () => {
                             setShowBasicNotification(true)
                             setBasicNotificationContent({ type: "exclamation", title: "INVALID PARAMS", detail: null })

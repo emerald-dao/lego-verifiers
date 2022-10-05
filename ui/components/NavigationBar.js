@@ -1,7 +1,6 @@
 import Image from "next/image"
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
 import * as fcl from "@onflow/fcl"
 import config from "../flow/config.js"
 import { LogoutIcon } from "@heroicons/react/outline"

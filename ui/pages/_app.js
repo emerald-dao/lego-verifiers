@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }) {
       <div className="bg-white text-black bg-[url('/bg.png')] bg-cover bg-center min-h-screen">
         <RecoilRoot>
           <Head>
-            <title>Link | NFT catalog link tool</title>
+            <title>Lego | Create Your Emerald Bot Verifier</title>
             <meta property="og:title" content="Link | NFT catalog link tool" key="title" />
           </Head>
           <NavigationBar user={user} />

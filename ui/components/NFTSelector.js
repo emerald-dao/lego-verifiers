@@ -3,19 +3,14 @@ import Image from "next/image"
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid"
 import { Combobox } from "@headlessui/react"
 import { useRecoilState } from "recoil"
-
 import {
   basicNotificationContentState,
   showBasicNotificationState,
   transactionInProgressState,
 } from "../lib/atoms"
-
 import { NFTList } from "../flow/nft-list"
 import publicConfig from "../publicConfig.js"
 import { classNames } from "../lib/utils"
-// import { getNFTDisplays } from "../../lib/mist-scripts"
-// import NFTCard from "./NFTCard"
-
 
 export default function NFTSelector(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)

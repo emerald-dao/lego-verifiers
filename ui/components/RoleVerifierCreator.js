@@ -1,13 +1,8 @@
-import { useState } from "react"
 import BasicVerifierSelector from "./BasicVerifierSelector"
 import BasicVerifierEditor from "./BasicVerifierEditor"
 
-const generateVerifierCreationCode = (verifiers) => {
-
-}
-
 export default function RoleVerifierCreator(props) {
-  const { basicVerifiers: verifiers, setBasicVerifiers: setVerifiers} = props
+  const { basicVerifiers: verifiers, setBasicVerifiers: setVerifiers } = props
 
   const createNewVerifier = () => {
     setVerifiers(oldVerifiers => [...oldVerifiers, 1])
@@ -30,12 +25,12 @@ export default function RoleVerifierCreator(props) {
         if (idx == index) {
           const newParameters = verifier.parameters.map((param) => {
             if (param.names.placeholder == paramName) {
-              return {...param, value: paramValue, isValid: validity}
+              return { ...param, value: paramValue, isValid: validity }
             }
             return param
           })
 
-          return {...verifier, parameters: newParameters}
+          return { ...verifier, parameters: newParameters }
         }
         return verifier
       })

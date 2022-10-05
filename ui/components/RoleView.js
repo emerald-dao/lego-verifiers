@@ -11,10 +11,10 @@ export default function RoleView(props) {
     ring-1 ring-black ring-opacity-5 rounded-2xl 
     flex flex-col relative
     "
-    onClick={() => {
-      editRoleVerifier(roleVerifier)
-    }}
-    >
+        onClick={() => {
+          editRoleVerifier(roleVerifier)
+        }}
+      >
         <div className="flex justify-between truncate shrink">
           <div className="flex gap-x-1 items-center truncate shrink">
             <label className="truncate shrink text-gray-400 font-flow font-normal">Role&nbsp;
@@ -43,18 +43,18 @@ export default function RoleView(props) {
               <label className="truncate shrink text-black font-flow font-bold">Basic Verifiers</label>
             </div>
             {/* <label className="text-center text-green-800 bg-green-100 inline-flex rounded-full px-2 text-xs font-semibold leading-5"> */}
-              {/* Details */}
+            {/* Details */}
             {/* </label> */}
             <div className="flex gap-x-1 items-center max-w-[120px] overflow-hidden">
-            {
-              roleVerifier.basicVerifiers.map((bv) => {
-                return (
-                  <div className="rounded-full overflow-hidden flex items-center">
-                    <Image className="rounded-full" src={bv.logo} width={20} height={20}></Image>
-                  </div>
-                )
-              })
-            }
+              {
+                roleVerifier.basicVerifiers.map((bv) => {
+                  return (
+                    <div className="rounded-full overflow-hidden flex items-center">
+                      <Image className="rounded-full" src={bv.logo} width={20} height={20}></Image>
+                    </div>
+                  )
+                })
+              }
             </div>
           </div>
         </div>

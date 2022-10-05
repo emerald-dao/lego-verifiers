@@ -30,6 +30,10 @@ export default function MultiRolesVerifierCreator(props) {
   const [imageSize, setImageSize] = useState(0)
   const [roleVerifiers, setRoleVerifiers] = useState([])
 
+  const canCreateLego = () => {
+    return !transactionInProgress && roleVerifiers.length > 0 && name.trim().length > 0
+  }
+
   const handleSubmit = async (event) => {
     if (!(props.user && props.user.loggedIn)) {
       fcl.authenticate()
@@ -111,19 +115,19 @@ export default function MultiRolesVerifierCreator(props) {
       />
 
       <div>
-      <button
-        type="button"
-        className={classNames(
-          (transactionInProgress) ? "bg-emerald-light" : "bg-emerald hover:bg-emerald-dark",
-          "mt-24 w-full h-[56px] text-lg font-semibold rounded-2xl text-black shadow-drizzle"
-        )}
-        disabled={transactionInProgress}
-        onClick={() => {
-          handleSubmit()
-        }}
-      >
-        {user.loggedIn ? "Create Lego Verifier" : "Connect Wallet"}
-      </button>
+        <button
+          type="button"
+          className={classNames(
+            !canCreateLego() ? "bg-emerald-light text-gray-500" : "bg-emerald hover:bg-emerald-dark text-black",
+            "mt-24 w-full h-[56px] text-lg font-semibold rounded-2xl shadow-drizzle"
+          )}
+          disabled={!canCreateLego()}
+          onClick={() => {
+            handleSubmit()
+          }}
+        >
+          {user.loggedIn ? "Create Lego Verifier" : "Connect Wallet"}
+        </button>
       </div>
 
     </div>

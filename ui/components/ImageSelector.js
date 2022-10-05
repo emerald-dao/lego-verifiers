@@ -12,7 +12,7 @@ export default function ImageSelector(props) {
   const handleImageChosen = (file) => {
     if (file.size > publicConfig.bannerSizeLimit) {
       setShowBasicNotification(true)
-      setBasicNotificationContent({ type: "exclamation", title: "Image too large", detail: "Should be less than 500KB"})
+      setBasicNotificationContent({ type: "exclamation", title: "Image too large", detail: "Should be less than 500KB" })
       return
     }
 
@@ -20,7 +20,6 @@ export default function ImageSelector(props) {
       const fileReader = new FileReader()
       fileReader.onloadend = (e) => {
         const content = fileReader.result
-        console.log(content)
         props.imageSelectedCallback(content, file.size)
       }
       fileReader.readAsDataURL(file)

@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { generateScript } from "../lib/utils";
 import RoleVerifierCreatorSlideOver from "./RoleVerifierCreatorSlideOver";
 import RoleView from "./RoleView";
-
 import { useRecoilState } from "recoil"
 import {
   showBasicNotificationState,
@@ -14,7 +12,7 @@ export default function MultiRolesView(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
 
-  const {roleVerifiers, setRoleVerifiers} = props
+  const { roleVerifiers, setRoleVerifiers } = props
   const [open, setOpen] = useState(false)
   const [verifierToBeEdit, setVerifierToBeEdit] = useState(null)
 
@@ -49,7 +47,7 @@ export default function MultiRolesView(props) {
         {
           roleVerifiers.map((roleVerifier, index) => {
             return (
-              <RoleView 
+              <RoleView
                 key={index}
                 index={index}
                 roleVerifier={roleVerifier}
@@ -71,8 +69,8 @@ export default function MultiRolesView(props) {
             setVerifierToBeEdit(null)
             setOpen(!open)
           }}
-          >
-            <PlusIcon className="text-emerald group-hover:text-emerald-dark" width={64} height={64} />
+        >
+          <PlusIcon className="text-emerald group-hover:text-emerald-dark" width={64} height={64} />
         </button>
       </div>
       <RoleVerifierCreatorSlideOver

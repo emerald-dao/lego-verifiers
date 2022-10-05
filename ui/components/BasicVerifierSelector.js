@@ -1,5 +1,3 @@
-
-import { PlusCircleIcon } from "@heroicons/react/outline"
 import Image from "next/image"
 import { PresetVerifiersList } from "../flow/preset_verifiers"
 import publicConfig from "../publicConfig"

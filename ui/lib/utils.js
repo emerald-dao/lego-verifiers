@@ -29,7 +29,6 @@ export const generateScript = (roleVerifiers) => {
     }
     for (let j = 0; j < rv.basicVerifiers.length; j++) {
       const bv = rv.basicVerifiers[j]
-      console.log(bv.script)
       let code = bv.script
       for (let k = 0; k < bv.parameters.length; k++) {
         const param = bv.parameters[k]
@@ -62,8 +61,6 @@ ${imports.join('\n')}
     return earnedRoles
   }
   `
-
-  console.log(verifyScript)
 }
 
 const generateImports = (roleVerifiers) => {

@@ -30,7 +30,7 @@ export default function DiscordRoleView(props) {
           placeholder={`Discord RoleID`}
           value={roleID ?? ""}
           className={classNames(
-            isValid ? `border-emerald` : `border-rose-500`, 
+            isValid ? `border-emerald` : `border-rose-500`,
             `bg-white block w-full font-flow text-lg rounded-2xl px-3 py-2 border
              focus:border-emerald-dark
             outline-0 focus:outline-2 focus:outline-emerald-dark 

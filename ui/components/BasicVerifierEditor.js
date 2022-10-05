@@ -82,7 +82,7 @@ export default function BasicVerifierEditor(props) {
                             required
                             placeholder={``}
                             className={classNames(
-                              parameter.isValid ? `border-emerald` : `border-rose-500`, 
+                              parameter.isValid ? `border-emerald` : `border-rose-500`,
                               `bg-white block w-full font-flow text-lg rounded-2xl px-3 py-2 border
                                focus:border-emerald-dark
                               outline-0 focus:outline-2 focus:outline-emerald-dark 
@@ -95,7 +95,7 @@ export default function BasicVerifierEditor(props) {
                                   updateVerifier(index, parameter.names.placeholder, event.target.value)
                                 }
                                 return
-                              } 
+                              }
                               updateVerifier(index, parameter.names.placeholder, event.target.value)
                             }}
                             onBlur={(event) => {

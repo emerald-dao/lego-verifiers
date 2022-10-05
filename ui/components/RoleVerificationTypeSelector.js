@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from "react"
-import Image from "next/image"
+import { useState, useEffect } from "react"
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid"
 import { Combobox } from "@headlessui/react"
 import { useRecoilState } from "recoil"
@@ -10,8 +9,6 @@ import {
   transactionInProgressState,
 } from "../lib/atoms"
 
-import { NFTList } from "../flow/nft-list"
-import publicConfig from "../publicConfig.js"
 import { classNames } from "../lib/utils"
 
 export default function RoleVerificationTypeSelector(props) {
