@@ -8,6 +8,7 @@ import {
   showBasicNotificationState,
   basicNotificationContentState
 } from "../lib/atoms.js"
+import { PlusIcon } from "@heroicons/react/outline";
 
 export default function MultiRolesView(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
@@ -57,16 +58,18 @@ export default function MultiRolesView(props) {
           })
         }
         <button className="
-            h-48 p-4 shrink-0
-            shadow-lg bg-white
-            ring-1 ring-black ring-opacity-5 rounded-2xl 
-            flex flex-col gap-y-4 border-4 border-emerald border-dashed"
+            group
+            h-[136px] p-4 shrink-0
+            rounded-2xl 
+            flex flex-col gap-y-4 
+            border-4 border-emerald hover:border-emerald-dark border-dashed
+            items-center justify-center
+            "
           onClick={() => {
             setOpen(!open)
           }}
           >
-
-          New Role Verifier
+            <PlusIcon className="text-emerald group-hover:text-emerald-dark" width={64} height={64} />
         </button>
       </div>
       <RoleVerifierCreatorSlideOver

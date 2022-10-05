@@ -20,6 +20,7 @@ export default function ImageSelector(props) {
       const fileReader = new FileReader()
       fileReader.onloadend = (e) => {
         const content = fileReader.result
+        console.log(content)
         props.imageSelectedCallback(content, file.size)
       }
       fileReader.readAsDataURL(file)

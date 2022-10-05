@@ -75,7 +75,7 @@ export default function NavigationBar(props) {
       <div className="flex items-center gap-x-2">
         <Link href="/">
           <div className="min-w-[40px]">
-            <Image src="/lego_verifiers.png" alt="" width={50} height={50} priority={true} />
+            <Image src="/lego.png" alt="" width={50} height={50} priority={true} />
           </div>
         </Link>
 

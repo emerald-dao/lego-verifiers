@@ -12,7 +12,7 @@ const DescriptionPlaceholder = "Details about this verifier"
 
 const BasicInfoMemoizeImage = React.memo(({ image }) => {
   return (
-    <div className="rounded-2xl shrink-0 h-[144px] aspect-square bg-white relative sm:max-w-[460px] ring-1 ring-black ring-opacity-10 overflow-hidden">
+    <div className="rounded-full shrink-0 h-[144px] aspect-square bg-white relative sm:max-w-[460px] ring-1 ring-black ring-opacity-10 overflow-hidden">
       <Image src={image} alt="" className="rounded-2xl" layout="fill" objectFit="cover" />
     </div>
   )
@@ -40,7 +40,7 @@ export default function MultiRolesVerifierCreator(props) {
             setImageSize(_imageSize)
           }} />
         </div>
-        <BasicInfoMemoizeImage image={image || "/image.png"} />
+        <BasicInfoMemoizeImage image={image || "/lego.png"} />
       </div>
 
       <div className="flex flex-col gap-y-2">
