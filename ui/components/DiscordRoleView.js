@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRecoilState } from "recoil"
 import {
   transactionInProgressState,
@@ -9,6 +9,12 @@ export default function DiscordRoleView(props) {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
   const { roleID, setRoleID } = props
   const [isValid, setIsValid] = useState(false)
+
+  useEffect(() => {
+    const valid = isValidRoleID(roleID)
+    setIsValid(valid)
+  })
+
   return (
     <div className="flex flex-col gap-y-2">
       <label className="block text-2xl font-bold font-flow">

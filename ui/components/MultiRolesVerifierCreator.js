@@ -4,6 +4,8 @@ import { useRecoilState } from "recoil"
 import {
   transactionInProgressState,
 } from "../lib/atoms"
+import * as fcl from "@onflow/fcl"
+import { classNames, generateScript } from "../lib/utils"
 import ImageSelector from "./ImageSelector"
 import MultiRolesView from "./MultiRolesView"
 
@@ -20,12 +22,25 @@ const BasicInfoMemoizeImage = React.memo(({ image }) => {
 BasicInfoMemoizeImage.displayName = "BasicInfoMemozieImage"
 
 export default function MultiRolesVerifierCreator(props) {
+  const { user } = props
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [image, setImage] = useState(null)
   const [imageSize, setImageSize] = useState(0)
   const [roleVerifiers, setRoleVerifiers] = useState([])
+
+  const handleSubmit = async (event) => {
+    if (!(props.user && props.user.loggedIn)) {
+      fcl.authenticate()
+      return
+    }
+
+    const script = generateScript(roleVerifiers)
+    console.log(script)
+
+
+  }
 
   return (
     <div className="flex flex-col gap-y-10">
@@ -90,10 +105,26 @@ export default function MultiRolesVerifierCreator(props) {
         </div>
       </div>
 
-      <MultiRolesView 
-        roleVerifiers={roleVerifiers} 
+      <MultiRolesView
+        roleVerifiers={roleVerifiers}
         setRoleVerifiers={setRoleVerifiers}
       />
+
+      <div>
+      <button
+        type="button"
+        className={classNames(
+          (transactionInProgress) ? "bg-emerald-light" : "bg-emerald hover:bg-emerald-dark",
+          "mt-24 w-full h-[56px] text-lg font-semibold rounded-2xl text-black shadow-drizzle"
+        )}
+        disabled={transactionInProgress}
+        onClick={() => {
+          handleSubmit()
+        }}
+      >
+        {user.loggedIn ? "Create Lego Verifier" : "Connect Wallet"}
+      </button>
+      </div>
 
     </div>
   )

@@ -16,18 +16,22 @@ export default function RoleVerifierCreatorSlideOver(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
 
-  const { open, setOpen, createNewRoleVerifier } = props
+  const { open, setOpen, createNewRoleVerifier, roleVerifierToBeEdit, updateRoleVerifier } = props
   const [roleID, setRoleID] = useState(null)
   const [basicVerifiersLogic, setBasicVerifiersLogic] = useState(BasicVerifiersLogic.AND)
   const [basicVerifiers, setBasicVerifiers] = useState([])
 
   useEffect(() => {
-    if (open) {
+    if (roleVerifierToBeEdit) {
+      setRoleID(roleVerifierToBeEdit.roleID)
+      setBasicVerifiersLogic(roleVerifierToBeEdit.basicVerifiersLogic)
+      setBasicVerifiers(roleVerifierToBeEdit.basicVerifiers)
+    } else if (open) {
       setRoleID(null)
       setBasicVerifiersLogic(BasicVerifiersLogic.AND)
       setBasicVerifiers([])
     }
-  }, [open])
+  }, [roleVerifierToBeEdit, open])
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -61,7 +65,7 @@ export default function RoleVerifierCreatorSlideOver(props) {
                     <div className="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6">
                       <div className="px-4 sm:px-6">
                         <div className="flex items-start justify-between">
-                          <Dialog.Title className="text-lg font-medium text-gray-900">Create Role Verifier</Dialog.Title>
+                          <Dialog.Title className="text-lg font-medium text-gray-900">{roleVerifierToBeEdit ? "Update Role Verifier" : "Create Role Verifier"}</Dialog.Title>
                           <div className="ml-3 flex h-7 items-center">
                             <button
                               type="button"
@@ -94,7 +98,7 @@ export default function RoleVerifierCreatorSlideOver(props) {
                     <div className="flex flex-shrink-0 justify-end px-4 py-4">
                       <button
                         type="button"
-                        className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-black shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2"
+                        className="h-12 w-24 rounded-xl border border-gray-300 bg-white py-2 px-4 text-sm font-bold text-black shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2"
                         onClick={() => {
                           setOpen(false)
                         }}
@@ -103,14 +107,20 @@ export default function RoleVerifierCreatorSlideOver(props) {
                       </button>
                       <button
                         type="submit"
-                        className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-emerald py-2 px-4 text-sm font-medium text-black shadow-sm hover:bg-emerald-dark focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2"
+                        className="h-12 w-24 items-center ml-4 inline-flex justify-center rounded-xl border border-transparent bg-emerald py-2 px-4 text-sm font-bold text-black shadow-sm hover:bg-emerald-dark focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2"
                         onClick={() => {
                           console.log("roleID", roleID)
                           console.log("basicVerifierLogic", basicVerifiersLogic)
                           console.log("basicVerifiers", basicVerifiers)
+
                           const alertInvalidParams = () => {
                             setShowBasicNotification(true)
                             setBasicNotificationContent({ type: "exclamation", title: "INVALID PARAMS", detail: null })
+                          }
+
+                          const alertEmptyBasicVerifiers = () => {
+                            setShowBasicNotification(true)
+                            setBasicNotificationContent({ type: "exclamation", title: "EMPTY VERIFIERS", detail: null })
                           }
 
                           if (!isValidRoleID(roleID)) {
@@ -130,12 +140,20 @@ export default function RoleVerifierCreatorSlideOver(props) {
                           }
 
                           if (basicVerifiers.length > 0) {
-                            createNewRoleVerifier(roleID, basicVerifiersLogic, basicVerifiers)
+                            if (roleVerifierToBeEdit) {
+                              roleVerifierToBeEdit.roleID = roleID
+                              roleVerifierToBeEdit.basicVerifiers = basicVerifiers
+                              roleVerifierToBeEdit.basicVerifiersLogic = basicVerifiersLogic
+                            } else {
+                              createNewRoleVerifier(roleID, basicVerifiersLogic, basicVerifiers)
+                            }
+                            setOpen(false)
+                          } else {
+                            alertEmptyBasicVerifiers()
                           }
-                          setOpen(false)
                         }}
                       >
-                        Save
+                        {roleVerifierToBeEdit ? "Update" : "Save"}
                       </button>
                     </div>
                   </div>

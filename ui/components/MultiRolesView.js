@@ -16,6 +16,7 @@ export default function MultiRolesView(props) {
 
   const {roleVerifiers, setRoleVerifiers} = props
   const [open, setOpen] = useState(false)
+  const [verifierToBeEdit, setVerifierToBeEdit] = useState(null)
 
   const createNewRoleVerifier = (roleID, basicVerifiersLogic, basicVerifiers) => {
     setRoleVerifiers(oldVerifiers => [...oldVerifiers, {
@@ -30,19 +31,19 @@ export default function MultiRolesView(props) {
     setRoleVerifiers(newVerifiers)
   }
 
+  const editRoleVerifier = (verifier) => {
+    if (verifier) {
+      setVerifierToBeEdit(verifier)
+      setOpen(true)
+    }
+  }
+
   return (
     <div className="flex flex-col gap-y-2">
       <div className="flex gap-x-5 justify-between">
         <label className="block text-2xl font-bold font-flow">
-          Role Verifiers
+          Role Verifiers<span className="text-red-600">*</span>
         </label>
-        <button
-          onClick={() => {
-            generateScript(roleVerifiers)
-          }}
-        >
-          Generate Script
-        </button>
       </div>
       <div className="mt-1 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-6 auto-rows-fr">
         {
@@ -52,6 +53,7 @@ export default function MultiRolesView(props) {
                 key={index}
                 index={index}
                 roleVerifier={roleVerifier}
+                editRoleVerifier={editRoleVerifier}
                 deleteRoleVerifier={deleteRoleVerifier}
               />
             )
@@ -59,13 +61,14 @@ export default function MultiRolesView(props) {
         }
         <button className="
             group
-            h-[136px] p-4 shrink-0
+            h-[128px] p-4 shrink-0
             rounded-2xl 
             flex flex-col gap-y-4 
             border-4 border-emerald hover:border-emerald-dark border-dashed
             items-center justify-center
             "
           onClick={() => {
+            setVerifierToBeEdit(null)
             setOpen(!open)
           }}
           >
@@ -75,6 +78,7 @@ export default function MultiRolesView(props) {
       <RoleVerifierCreatorSlideOver
         open={open}
         setOpen={setOpen}
+        roleVerifierToBeEdit={verifierToBeEdit}
         createNewRoleVerifier={createNewRoleVerifier}
       />
     </div>
