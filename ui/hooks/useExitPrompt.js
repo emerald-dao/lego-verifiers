@@ -18,7 +18,6 @@ export default function useExitPrompt(bool) {
   const [showExitPrompt, setShowExitPrompt] = useState(bool)
 
   if (typeof window !== "undefined") {
-    console.log("YYY")
     window.onload = function() {
       initBeforeUnLoad(showExitPrompt)
     }
@@ -26,7 +25,6 @@ export default function useExitPrompt(bool) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      console.log("YES")
       initBeforeUnLoad(showExitPrompt)
     }
   }, [showExitPrompt])
