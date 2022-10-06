@@ -65,7 +65,7 @@ export const testnetPresetVerifiersList = [
       }
     ],
     imports: [
-      "import Flovatar from 0x2d4c3caffbeab845"
+      "import Flovatar from 0x921ea449dffec68a"
     ],
     script: `
     if let collection = getAccount(user).getCapability(Flovatar.CollectionPublicPath).borrow<&{Flovatar.CollectionPublic}>() {
