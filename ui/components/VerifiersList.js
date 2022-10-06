@@ -8,12 +8,15 @@ import {
 import { classNames, getItemsInPage } from '../lib/utils'
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid"
 import { getModeFromRaw } from "./VerificationModeSelector"
+import ScriptModal from "./ScriptModal"
 
 export default function VerifiersList(props) {
   const [transactionInProgress] = useRecoilState(transactionInProgressState)
   const router = useRouter()
 
   const { verifiers, user } = props
+  const [openScript, setOpenScript] = useState(false)
+  const [currentScript, setCurrentScript] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 10
 
@@ -116,7 +119,14 @@ export default function VerifiersList(props) {
                             </div>
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {"SCRIPT"}
+                            <button
+                            className="text-blue-500 decoration-1 decoration-blue-500 underline"
+                            onClick={() => {
+                              setCurrentScript(verifier.scriptCode)
+                              setOpenScript(true)
+                            }}
+                            >Script Code
+                            </button>
                           </td>
                         </tr>
                     ))}
@@ -163,6 +173,7 @@ export default function VerifiersList(props) {
             {"You haven't created any verifier yet"}
           </label>
         </div>}
+        <ScriptModal open={openScript} setOpen={setOpenScript} script={currentScript} />
     </div>
   )
 }
