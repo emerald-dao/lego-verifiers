@@ -55,6 +55,49 @@ export const txHandler = async (
 
 const EmeraldBotVerifiersPath = "0xEmeraldBotVerifiers"
 
+export const deleteVerifier = async (
+  verifierID,
+  setTransactionInProgress,
+  setTransactionStatus 
+) => {
+  const txFunc = async () => {
+    return await doDeleteVerifier(verifierID)
+  }
+
+  return await txHandler(txFunc, setTransactionInProgress, setTransactionStatus)
+}
+
+const doDeleteVerifier = async (verifierID) => {
+  const code = `
+  import EmeraldBotVerifiers from 0xEmeraldBotVerifiers
+
+  transaction(verifierId: UInt64) {
+    let verifierCollection: &EmeraldBotVerifiers.VerifierCollection
+
+    prepare(signer: AuthAccount) {
+        self.verifierCollection = signer.borrow<&EmeraldBotVerifiers.VerifierCollection>(from: EmeraldBotVerifiers.VerifierCollectionStoragePath)
+            ?? panic("Could not borrow VerifierCollection from signer")
+    }
+
+    execute {
+        self.verifierCollection.deleteVerifier(verifierId: verifierId)
+    }
+}
+  `
+  .replace(EmeraldBotVerifiersPath, publicConfig.emeraldBotVerifiersAddress)
+
+  const transactionId = await fcl.mutate({
+    cadence: code,
+    args: (arg, t) => ([
+      arg(verifierID, t.UInt64)
+    ]),
+    proposer: fcl.currentUser,
+    payer: fcl.currentUser,
+    limit: 9999
+  })
+  return transactionId
+}
+
 export const addVerifier = async (
   name, description, image, script, roleIds, verificationMode,
   setTransactionInProgress,

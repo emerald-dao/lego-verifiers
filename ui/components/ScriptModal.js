@@ -3,7 +3,6 @@ import { Dialog, Transition } from '@headlessui/react'
 
 export default function ScriptModal(props) {
   const { open, setOpen, script} = props
-  console.log(script)
 
   return (
     <Transition.Root show={open} as={Fragment}>

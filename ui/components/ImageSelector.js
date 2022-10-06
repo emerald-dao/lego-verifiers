@@ -13,7 +13,7 @@ export default function ImageSelector(props) {
   const [transactionInProgress, ] = useRecoilState(transactionInProgressState)
 
   const handleImageChosen = (file) => {
-    if (file.size > publicConfig.bannerSizeLimit) {
+    if (file.size > publicConfig.imageSizeLimit) {
       setShowBasicNotification(true)
       setBasicNotificationContent({ type: "exclamation", title: "Image too large", detail: "Should be less than 500KB" })
       return

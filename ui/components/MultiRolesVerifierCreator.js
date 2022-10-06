@@ -11,6 +11,7 @@ import ImageSelector from "./ImageSelector"
 import MultiRolesView from "./MultiRolesView"
 import VerificationModeSelector, { ModeNormal } from "./VerificationModeSelector"
 import { addVerifier } from "../flow/transactions"
+import { useRouter } from "next/router"
 
 const NamePlaceholder = "Verifier's Name"
 const DescriptionPlaceholder = "Details about this verifier"
@@ -26,6 +27,7 @@ BasicInfoMemoizeImage.displayName = "BasicInfoMemozieImage"
 
 export default function MultiRolesVerifierCreator(props) {
   const { user } = props
+  const router = useRouter()
   const [transactionInProgress, setTransactionInProgress] = useRecoilState(transactionInProgressState)
   const [transactionStatus, setTransactionStatus] = useRecoilState(transactionStatusState)
 
@@ -46,36 +48,8 @@ export default function MultiRolesVerifierCreator(props) {
       return
     }
 
-    // TODO: verify image size
-
     const script = generateScript(roleVerifiers, mode)
     const roleIds = roleVerifiers.map((rv) => rv.roleID)
-    console.log("roleIds", roleIds)
-
-    if (imageSize > 500000) {
-      console.log("Image Size Exceed")
-      return
-    }
-
-    if (roleIds.length == 0) {
-      console.log("empty roles")
-      return
-    }
-
-    if (script.trim().length == 0) {
-      console.log("empty script")
-      return
-    }
-
-    console.log(
-      "ooo",
-      name, 
-      description || "", 
-      image || "", 
-      script, 
-      roleIds, 
-      mode.raw
-    )
 
     const res = await addVerifier(
       name, 
@@ -93,8 +67,7 @@ export default function MultiRolesVerifierCreator(props) {
 
   const handleCreationResponse = (res) => {
     if (res && res.status === 4 && res.statusCode === 0) {
-      // TODO: jump to verifiers page
-      console.log("jump to verifiers page")
+      router.push("/profile")
     }
   }
 

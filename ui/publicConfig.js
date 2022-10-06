@@ -19,6 +19,8 @@ if (!nftCatalogAddress) throw "Missing NEXT_PUBLIC_NFTCATALOG_ADDRESS"
 const emeraldBotVerifiersAddress = process.env.NEXT_PUBLIC_EMERALD_BOT_VERIFIERS_ADDRESS
 if (!emeraldBotVerifiersAddress) throw "Missing NEXT_PUBLIC_EMERALD_BOT_VERIFIERS_ADDRESS"
 
+const imageSizeLimit = 500000
+
 const publicConfig = {
   chainEnv,
   accessNodeAPI,
@@ -26,7 +28,8 @@ const publicConfig = {
   walletDiscovery,
   flowscanURL,
   nftCatalogAddress,
-  emeraldBotVerifiersAddress
+  emeraldBotVerifiersAddress,
+  imageSizeLimit
 }
 
 export default publicConfig

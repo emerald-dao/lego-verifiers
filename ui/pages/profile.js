@@ -22,17 +22,12 @@ const verifiersFetcher = async (funcName, address) => {
 
 export default function Profile(props) {
   const account = props.user && props.user.addr
-  console.log(account)
   const { data: verifiersData, error: verifiersError } = useSWR(
     account ? ["verifiersFetcher", account] : null, verifiersFetcher)
-
-  console.log(verifiersData)
-  console.log(verifiersError)
 
   const [verifiers, setVerifiers] = useState([])
 
   const showList = () => {
-    console.log("verifiers", verifiers)
     if (!verifiersData) {
       return (
         <div className="flex mt-10 h-[200px] justify-center">

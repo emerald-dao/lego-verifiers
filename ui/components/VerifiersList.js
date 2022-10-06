@@ -3,15 +3,19 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useRecoilState } from "recoil"
 import {
-  transactionInProgressState
+  transactionInProgressState,
+  transactionStatusState
 } from "../lib/atoms"
 import { classNames, getItemsInPage } from '../lib/utils'
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid"
 import { getModeFromRaw } from "./VerificationModeSelector"
 import ScriptModal from "./ScriptModal"
+import { deleteVerifier } from "../flow/transactions"
+import { useSWRConfig } from "swr"
 
 export default function VerifiersList(props) {
-  const [transactionInProgress] = useRecoilState(transactionInProgressState)
+  const [transactionInProgress, setTransactionInProgress] = useRecoilState(transactionInProgressState)
+  const [, setTransactionStatus] = useRecoilState(transactionStatusState)
   const router = useRouter()
 
   const { verifiers, user } = props
@@ -20,12 +24,14 @@ export default function VerifiersList(props) {
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 10
 
+  const { mutate } = useSWRConfig()
+
   return (
     <div className="p-2">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-2xl font-bold text-gray-900">
-            {`My Verifiers (${verifiers.length})`}
+            {`Verifiers (${verifiers.length})`}
           </h1>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -34,20 +40,20 @@ export default function VerifiersList(props) {
           <div hidden className="text-red-800 bg-red-100"></div>
           <div hidden className="text-yellow-800 bg-yellow-100"></div>
           {
-              <button
-                type="button"
-                disabled={transactionInProgress}
-                className={
-                  classNames(
-                    transactionInProgress ? "bg-emerald-light" : "bg-emerald hover:bg-emerald-dark",
-                    "inline-flex items-center rounded-2xl justify-center border border-transparent px-4 py-2 text-sm font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2 sm:w-auto"
-                  )}
-                onClick={() => {
-                  router.push("/")
-                }}
-              >
-                New Verifier
-              </button>
+            <button
+              type="button"
+              disabled={transactionInProgress}
+              className={
+                classNames(
+                  transactionInProgress ? "bg-emerald-light" : "bg-emerald hover:bg-emerald-dark",
+                  "inline-flex items-center rounded-2xl justify-center border border-transparent px-4 py-2 text-sm font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2 sm:w-auto"
+                )}
+              onClick={() => {
+                router.push("/")
+              }}
+            >
+              New Verifier
+            </button>
           }
         </div>
       </div>
@@ -75,6 +81,9 @@ export default function VerifiersList(props) {
                       <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                         Script
                       </th>
+                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
@@ -83,52 +92,69 @@ export default function VerifiersList(props) {
                       verifier.mode = mode
                       return verifier
                     }).map((verifier) => (
-                        <tr key={verifier.uuid}>
-                          <td className="py-4 px-3 text-sm">
-                            <div className="flex items-center">
-                              <div className="h-10 w-10 flex-shrink-0 relative">
-                                <Image className="rounded-lg" src={(verifier.image && verifier.image != "") ? verifier.image : "/lego.png"} alt="" layout="fill" objectFit="contain" />
-                              </div>
-                              <div className="flex flex-col ml-4">
-                                <label className="block font-medium text-gray-900 break-words max-w-[300px] min-w-[60px]">{verifier.name}</label>
-                                <label className="text-gray-500">{verifier.uuid}</label>
-                              </div>
+                      <tr key={verifier.uuid}>
+                        <td className="py-4 px-3 text-sm">
+                          <div className="flex items-center">
+                            <div className="h-10 w-10 flex-shrink-0 relative">
+                              <Image className="rounded-lg" src={(verifier.image && verifier.image != "") ? verifier.image : "/lego.png"} alt="" layout="fill" objectFit="contain" />
                             </div>
-                          </td>
-                          <td className="px-3 py-4 text-sm text-gray-500 min-w-[200px]">
-                            <div className="text-gray-500">
-                              {verifier.description}
+                            <div className="flex flex-col ml-4">
+                              <label className="block font-medium text-gray-900 break-words max-w-[300px] min-w-[60px]">{verifier.name}</label>
+                              <label className="text-gray-500">{verifier.uuid}</label>
                             </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          </div>
+                        </td>
+                        <td className="px-3 py-4 text-sm text-gray-500 min-w-[200px]">
+                          <div className="text-gray-500">
+                            {verifier.description}
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <label className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${verifier.mode.tagColor}`}>
                             {verifier.mode.name}
-                            </label>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <div className="flex flex-col gap-y-1 items-start">
+                          </label>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <div className="flex flex-col gap-y-1 items-start">
                             {
                               verifier.roleIds.map((id) => {
                                 return (
                                   <label className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 text-indigo-500 bg-indigo-100`}>
-                                  {id}
-                                  </label> 
+                                    {id}
+                                  </label>
                                 )
                               })
                             }
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <button
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <button
                             className="text-blue-500 decoration-1 decoration-blue-500 underline"
                             onClick={() => {
                               setCurrentScript(verifier.scriptCode)
                               setOpenScript(true)
                             }}
-                            >Script Code
-                            </button>
-                          </td>
-                        </tr>
+                          >Script Code
+                          </button>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <button
+                            type="button"
+                            disabled={transactionInProgress}
+                            className={
+                              classNames(
+                                transactionInProgress ? "bg-rose-400" : "bg-rose-400 hover:bg-rose-600",
+                                "inline-flex items-center rounded-2xl justify-center border border-transparent px-4 py-2 text-sm font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 sm:w-auto"
+                              )}
+                            onClick={async () => {
+                              await deleteVerifier(verifier.uuid, setTransactionInProgress, setTransactionStatus)
+                              mutate(["verifiersFetcher", user.addr])
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
                     ))}
                   </tbody>
                 </table>
@@ -173,7 +199,7 @@ export default function VerifiersList(props) {
             {"You haven't created any verifier yet"}
           </label>
         </div>}
-        <ScriptModal open={openScript} setOpen={setOpenScript} script={currentScript} />
+      <ScriptModal open={openScript} setOpen={setOpenScript} script={currentScript} />
     </div>
   )
 }
