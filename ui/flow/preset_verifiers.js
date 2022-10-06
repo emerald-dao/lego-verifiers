@@ -31,7 +31,7 @@ export const testnetPresetVerifiersList = [
       }
     ],
     imports: [
-      "import FLOAT from 0xFLOAT"
+      "import FLOAT from 0x2d4c3caffbeab845"
     ],
     script: `
     if let floatCollection = getAccount(user).getCapability(FLOAT.FLOATCollectionPublicPath).borrow<&FLOAT.Collection{FLOAT.CollectionPublic}>() {
@@ -40,8 +40,7 @@ export const testnetPresetVerifiersList = [
       if ids.length > 0 {
         SUCCESS
       }
-    }
-    `
+    }`
   },
   {
     id: 1,
@@ -66,7 +65,7 @@ export const testnetPresetVerifiersList = [
       }
     ],
     imports: [
-      "import Flovatar from 0x921ea449dffec68a"
+      "import Flovatar from 0x2d4c3caffbeab845"
     ],
     script: `
     if let collection = getAccount(user).getCapability(Flovatar.CollectionPublicPath).borrow<&{Flovatar.CollectionPublic}>() {
@@ -74,8 +73,7 @@ export const testnetPresetVerifiersList = [
       if collection.getIDs().length >= amount {
         SUCCESS
       }
-    }
-    `
+    }`
   },
   {
     id: 2,
@@ -95,8 +93,7 @@ export const testnetPresetVerifiersList = [
       if collection.getIDs().length >= 1 {
         SUCCESS
       }
-    }
-    `
+    }`
   }
 ]
 

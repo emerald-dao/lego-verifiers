@@ -1,4 +1,5 @@
 import Decimal from "decimal.js"
+import { ModeShortCircuit } from "../components/VerificationModeSelector"
 
 export const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
@@ -13,7 +14,7 @@ export const isValidRoleID = (roleID) => {
   }
 }
 
-export const generateScript = (roleVerifiers) => {
+export const generateScript = (roleVerifiers, verificationMode) => {
   const imports = generateImports(roleVerifiers)
   
   const checkNumber = 0
@@ -43,11 +44,19 @@ export const generateScript = (roleVerifiers) => {
       ifStatement.push(successNumber)
       checkNumber++
     }
-    totalMain += `
-    if ${ifStatement.join(` ${operator} `)} {
-      earnedRoles.append("${roleID}")
+
+    if (verificationMode.key == ModeShortCircuit.key) {
+      totalMain += `
+      if ${ifStatement.join(` ${operator} `)} {
+        earnedRoles.append("${roleID}")
+        return earnedRoles
+      }`
+    } else {
+      totalMain += `
+      if ${ifStatement.join(` ${operator} `)} {
+        earnedRoles.append("${roleID}")
+      }`
     }
-    `
   }
 
   const verifyScript = `
@@ -59,8 +68,7 @@ ${imports.join('\n')}
     ${totalMain}
 
     return earnedRoles
-  }
-  `
+  }`
 
   return verifyScript
 }

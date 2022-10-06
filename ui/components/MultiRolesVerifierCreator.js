@@ -8,6 +8,7 @@ import * as fcl from "@onflow/fcl"
 import { classNames, generateScript } from "../lib/utils"
 import ImageSelector from "./ImageSelector"
 import MultiRolesView from "./MultiRolesView"
+import VerificationModeSelector, { ModeNormal } from "./VerificationModeSelector"
 
 const NamePlaceholder = "Verifier's Name"
 const DescriptionPlaceholder = "Details about this verifier"
@@ -29,6 +30,7 @@ export default function MultiRolesVerifierCreator(props) {
   const [image, setImage] = useState(null)
   const [imageSize, setImageSize] = useState(0)
   const [roleVerifiers, setRoleVerifiers] = useState([])
+  const [mode, setMode] = useState(ModeNormal)
 
   const canCreateLego = () => {
     return !transactionInProgress && roleVerifiers.length > 0 && name.trim().length > 0
@@ -41,7 +43,7 @@ export default function MultiRolesVerifierCreator(props) {
     }
 
     console.log(roleVerifiers)
-    const script = generateScript(roleVerifiers)
+    const script = generateScript(roleVerifiers, mode)
     console.log(script)
 
 
@@ -108,6 +110,13 @@ export default function MultiRolesVerifierCreator(props) {
             onChange={(event) => { setDescription(event.target.value) }}
           />
         </div>
+      </div>
+
+      <div className="flex flex-col gap-y-2">
+        <label className="block text-2xl font-bold font-flow">
+          Verification Mode
+        </label>
+        <VerificationModeSelector mode={mode} setMode={setMode} />
       </div>
 
       <MultiRolesView

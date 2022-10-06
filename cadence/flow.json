@@ -8,7 +8,7 @@
         "EmeraldBotVerifiers": {
             "source": "./contracts/EmeraldBotVerifiers.cdc",
             "aliases": {
-                "testnet": "0xbca26f5091cd39ec"
+                "testnet": "0x2432e062f9f14295"
             }
         }
     },

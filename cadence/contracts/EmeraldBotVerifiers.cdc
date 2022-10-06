@@ -6,8 +6,13 @@ pub contract EmeraldBotVerifiers {
 
     pub event ContractInitialized()
 
-    pub event VerifierCreated(verifierId: UInt64, name: String, roleIds: [String])
+    pub event VerifierCreated(verifierId: UInt64, name: String, mode: UInt8, roleIds: [String])
     pub event VerifierDeleted(verifierId: UInt64)
+
+    pub enum VerificationMode: UInt8 {
+        pub case Normal
+        pub case ShortCircuit
+    }
 
     pub resource Verifier {
         pub let name: String
@@ -15,6 +20,7 @@ pub contract EmeraldBotVerifiers {
         pub let image: String
         pub let scriptCode: String
         pub let roleIds: [String]
+        pub let verificationMode: VerificationMode
         pub let extra: {String: AnyStruct}
 
         init(
@@ -23,6 +29,7 @@ pub contract EmeraldBotVerifiers {
             image: String, 
             scriptCode: String, 
             roleIds: [String],
+            verificationMode: VerificationMode,
             extra: {String: AnyStruct}
         ) {
             self.name = name
@@ -30,6 +37,7 @@ pub contract EmeraldBotVerifiers {
             self.image = image
             self.scriptCode = scriptCode
             self.roleIds = roleIds
+            self.verificationMode = verificationMode
             self.extra = extra
         }
     }
@@ -48,6 +56,7 @@ pub contract EmeraldBotVerifiers {
             image: String,
             scriptCode: String,
             roleIds: [String],
+            verificationMode: VerificationMode,
             extra: {String: AnyStruct}
         ) {
 
@@ -57,9 +66,10 @@ pub contract EmeraldBotVerifiers {
                 image: image, 
                 scriptCode: scriptCode, 
                 roleIds: roleIds,
+                verificationMode: verificationMode,
                 extra: extra
             )
-            emit VerifierCreated(verifierId: verifier.uuid, name: name, roleIds: roleIds)
+            emit VerifierCreated(verifierId: verifier.uuid, name: name, mode: verificationMode.rawValue, roleIds: roleIds)
             self.verifiers[verifier.uuid] <-! verifier
         }
 
