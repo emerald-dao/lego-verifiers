@@ -12,12 +12,16 @@ export const getVerifiers = async (address) => {
           getAccount(address)
           .getCapability(EmeraldBotVerifiers.VerifierCollectionPublicPath)
           .borrow<&EmeraldBotVerifiers.VerifierCollection>()
-          ?? panic("Could not borrow VerifierCollection from address")
-  
+          
       let res: {UInt64: &EmeraldBotVerifiers.Verifier} = {} 
-      let verifierIds = verifierCollection.getVerifierIds()
+
+      if verifierCollection == nil {
+        return res
+      }
+
+      let verifierIds = verifierCollection!.getVerifierIds()
       for id in verifierIds {
-          if let verifier = verifierCollection.getVerifierInfo(verifierId: id) {
+          if let verifier = verifierCollection!.getVerifierInfo(verifierId: id) {
               res[id] = verifier
           }
       }
