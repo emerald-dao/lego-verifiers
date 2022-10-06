@@ -11,7 +11,7 @@ export default function Home(props) {
   return (
     <div className="container mx-auto max-w-[920px] min-w-[380px] px-6">
       {!account ?
-        <div className="w-full h-[300px] mt-10 flex flex-col gap-y-8 items-center justify-center">
+        <div className="w-full mt-10 flex flex-col gap-y-8 items-center justify-center">
           <label className="font-flow font-bold text-3xl sm:text-5xl">Your Verifiers for</label>
           <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Your <span className="text-emerald">🤖️ Emerald Bot</span></label>
           <div className="-mt-2 flex flex-col justify-center items-center">

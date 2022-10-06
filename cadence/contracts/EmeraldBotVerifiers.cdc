@@ -1,75 +1,96 @@
- pub contract EmeraldBotVerifiers {
+pub contract EmeraldBotVerifiers {
 
-  pub resource Verifier {
-    pub let name: String
-    pub let description: String
-    pub let image: String
-    pub let scriptCode: String
-    pub let extra: {String: AnyStruct}
+    pub let VerifiersCollectionStoragePath: StoragePath
+    pub let VerifiersCollectionPublicPath: PublicPath
+    pub let VerifiersCollectionPrivatePath: PrivatePath
 
-    pub fun getRoleIds(): [String] {
-      return self.roleIdToVerifier.keys
+    pub event ContractInitialized()
+
+    pub event VerifierCreated(verifierId: UInt64, name: String, roleIds: [String])
+    pub event VerifierDeleted(verifierId: UInt64)
+
+    pub resource Verifier {
+        pub let name: String
+        pub let description: String
+        pub let image: String
+        pub let scriptCode: String
+        pub let roleIds: [String]
+        pub let extra: {String: AnyStruct}
+
+        init(
+            name: String, 
+            description: String, 
+            image: String, 
+            scriptCode: String, 
+            roleIds: [String],
+            extra: {String: AnyStruct}
+        ) {
+            self.name = name
+            self.description = description
+            self.image = image
+            self.scriptCode = scriptCode
+            self.roleIds = roleIds
+            self.extra = extra
+        }
     }
 
-    init(
-      name: String, 
-      description: String, 
-      image: String, 
-      scriptCode: String, 
-      extra: {String: AnyStruct}
-    ) {
-      self.name = name
-      self.description = description
-      self.image = image
-      self.scriptCode = scriptCode
-      self.extra = extra
-    }
-  }
-
-  pub resource interface VerifierCollectionPublic {
-    pub fun getVerifiers(): [UInt64]
-    pub fun getVerifierInfo(verifierId: UInt64): &Verifier?
-  }
-
-  pub resource VerifierCollection: VerifierCollectionPublic {
-    pub let verifiers: @{UInt64: Verifier}
-
-    pub fun addVerifier(
-      name: String, 
-      description: String, 
-      image: String, 
-      scriptCode: String,
-      extra: {String: AnyStruct}
-    ) {
-      let verifier <- create Verifier(
-        name: name, 
-        description: description, 
-        image: image, 
-        scriptCode: scriptCode, 
-        extra: extra
-      )
-      self.verifiers[verifier.uuid] <-! verifier
+    pub resource interface VerifierCollectionPublic {
+        pub fun getVerifiers(): [UInt64]
+        pub fun getVerifierInfo(verifierId: UInt64): &Verifier?
     }
 
-    pub fun deleteVerifier(verifierId: UInt64) {
-      destroy self.verifiers.remove(key: verifierId)
-    }
+    pub resource VerifierCollection: VerifierCollectionPublic {
+        pub let verifiers: @{UInt64: Verifier}
 
-    pub fun getVerifiers(): [UInt64] {
-      return self.verifiers.keys
-    }
+        pub fun addVerifier(
+            name: String, 
+            description: String, 
+            image: String,
+            scriptCode: String,
+            roleIds: [String],
+            extra: {String: AnyStruct}
+        ) {
 
-    pub fun getVerifierInfo(verifierId: UInt64): &Verifier? {
-      return &self.verifiers[verifierId] as &Verifier?
+            let verifier <- create Verifier(
+                name: name, 
+                description: description, 
+                image: image, 
+                scriptCode: scriptCode, 
+                roleIds: roleIds,
+                extra: extra
+            )
+            emit VerifierCreated(verifierId: verifier.uuid, name: name, roleIds: roleIds)
+            self.verifiers[verifier.uuid] <-! verifier
+        }
+
+        pub fun deleteVerifier(verifierId: UInt64) {
+            emit VerifierDeleted(verifierId: verifierId)
+            destroy self.verifiers.remove(key: verifierId)
+        }
+
+        pub fun getVerifiers(): [UInt64] {
+            return self.verifiers.keys
+        }
+
+        pub fun getVerifierInfo(verifierId: UInt64): &Verifier? {
+            return &self.verifiers[verifierId] as &Verifier?
+        }
+
+        init() {
+            self.verifiers <- {}
+        }
+
+        destroy() {
+            destroy self.verifiers
+        }
     }
 
     init() {
-      self.verifiers <- {}
-    }
+        self.VerifiersCollectionStoragePath = /storage/emeraldBotVerifiersCollection
+        self.VerifiersCollectionPublicPath = /public/emeraldBotVerifiersCollection
+        self.VerifiersCollectionPrivatePath = /private/emeraldBotVerifiersCollection
 
-    destroy() {
-      destroy self.verifiers
+        emit ContractInitialized()
     }
-  }
 }
  

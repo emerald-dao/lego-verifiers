@@ -16,13 +16,17 @@ if (!flowscanURL) throw "Missing NEXT_PUBLIC_FLOWSCAN_URL"
 const nftCatalogAddress = process.env.NEXT_PUBLIC_NFTCATALOG_ADDRESS
 if (!nftCatalogAddress) throw "Missing NEXT_PUBLIC_NFTCATALOG_ADDRESS"
 
+const emeraldBotVerifiersAddress = process.env.NEXT_PUBLIC_EMERALD_BOT_VERIFIERS_ADDRESS
+if (!emeraldBotVerifiersAddress) throw "Missing NEXT_PUBLIC_EMERALD_BOT_VERIFIERS_ADDRESS"
+
 const publicConfig = {
   chainEnv,
   accessNodeAPI,
   appURL,
   walletDiscovery,
   flowscanURL,
-  nftCatalogAddress
+  nftCatalogAddress,
+  emeraldBotVerifiersAddress
 }
 
 export default publicConfig
