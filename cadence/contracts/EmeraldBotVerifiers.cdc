@@ -1,8 +1,8 @@
 pub contract EmeraldBotVerifiers {
 
-    pub let VerifiersCollectionStoragePath: StoragePath
-    pub let VerifiersCollectionPublicPath: PublicPath
-    pub let VerifiersCollectionPrivatePath: PrivatePath
+    pub let VerifierCollectionStoragePath: StoragePath
+    pub let VerifierCollectionPublicPath: PublicPath
+    pub let VerifierCollectionPrivatePath: PrivatePath
 
     pub event ContractInitialized()
 
@@ -43,7 +43,7 @@ pub contract EmeraldBotVerifiers {
     }
 
     pub resource interface VerifierCollectionPublic {
-        pub fun getVerifiers(): [UInt64]
+        pub fun getVerifierIds(): [UInt64]
         pub fun getVerifierInfo(verifierId: UInt64): &Verifier?
     }
 
@@ -78,7 +78,7 @@ pub contract EmeraldBotVerifiers {
             destroy self.verifiers.remove(key: verifierId)
         }
 
-        pub fun getVerifiers(): [UInt64] {
+        pub fun getVerifierIds(): [UInt64] {
             return self.verifiers.keys
         }
 
@@ -95,10 +95,14 @@ pub contract EmeraldBotVerifiers {
         }
     }
 
+    pub fun createEmptyCollection(): @VerifierCollection {
+        return <- create VerifierCollection()
+    }
+
     init() {
-        self.VerifiersCollectionStoragePath = /storage/emeraldBotVerifiersCollection
-        self.VerifiersCollectionPublicPath = /public/emeraldBotVerifiersCollection
-        self.VerifiersCollectionPrivatePath = /private/emeraldBotVerifiersCollection
+        self.VerifierCollectionStoragePath = /storage/emeraldBotVerifierCollection
+        self.VerifierCollectionPublicPath = /public/emeraldBotVerifierCollection
+        self.VerifierCollectionPrivatePath = /private/emeraldBotVerifierCollection
 
         emit ContractInitialized()
     }

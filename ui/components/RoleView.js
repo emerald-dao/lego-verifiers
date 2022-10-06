@@ -1,8 +1,15 @@
 import { XCircleIcon } from "@heroicons/react/outline"
 import Image from "next/image"
+import { useRecoilState } from "recoil"
+import {
+  transactionInProgressState,
+} from "../lib/atoms"
+import { classNames } from "../lib/utils"
 
 export default function RoleView(props) {
   const { index, roleVerifier, editRoleVerifier, deleteRoleVerifier } = props
+  const [transactionInProgress,] = useRecoilState(transactionInProgressState)
+
   return (
     <div className="relative">
       <div className="
@@ -12,6 +19,9 @@ export default function RoleView(props) {
     flex flex-col relative
     "
         onClick={() => {
+          if (transactionInProgress) {
+            return
+          }
           editRoleVerifier(roleVerifier)
         }}
       >
@@ -59,12 +69,13 @@ export default function RoleView(props) {
 
       <button
         className="shrink-0 absolute right-4 top-4"
+        disabled={transactionInProgress}
         onClick={() => {
           deleteRoleVerifier(index)
         }}
       >
         <XCircleIcon
-          className="text-emerald hover:text-emerald-dark"
+          className={classNames(transactionInProgress ? "" : "hover:text-emerald-dark", "text-emerald")}
           width={24} height={24}
         />
       </button>

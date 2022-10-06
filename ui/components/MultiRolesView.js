@@ -4,13 +4,16 @@ import RoleView from "./RoleView";
 import { useRecoilState } from "recoil"
 import {
   showBasicNotificationState,
-  basicNotificationContentState
+  basicNotificationContentState,
+  transactionInProgressState
 } from "../lib/atoms.js"
 import { PlusIcon } from "@heroicons/react/outline";
+import { classNames } from "../lib/utils";
 
 export default function MultiRolesView(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
+  const [transactionInProgress, ] = useRecoilState(transactionInProgressState)
 
   const { roleVerifiers, setRoleVerifiers } = props
   const [open, setOpen] = useState(false)
@@ -57,20 +60,21 @@ export default function MultiRolesView(props) {
             )
           })
         }
-        <button className="
-            group
-            h-[128px] p-4 shrink-0
-            rounded-2xl 
-            flex flex-col gap-y-4 
-            border-4 border-emerald hover:border-emerald-dark border-dashed
-            items-center justify-center
-            "
+        <button className={classNames(
+          transactionInProgress ? "" : "hover:border-emerald-dark",
+          "group h-[128px] p-4 shrink-0 rounded-2xl flex flex-col gap-y-4 border-4 border-emerald border-dashed items-center justify-center"
+        )}
           onClick={() => {
+            if (transactionInProgress) {
+              return
+            }
             setVerifierToBeEdit(null)
             setOpen(!open)
           }}
         >
-          <PlusIcon className="text-emerald group-hover:text-emerald-dark" width={64} height={64} />
+          <PlusIcon className={classNames(transactionInProgress ? "" : "group-hover:text-emerald-dark", "text-emerald")} 
+            width={64} height={64} 
+          />
         </button>
       </div>
       <RoleVerifierCreatorSlideOver

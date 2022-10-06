@@ -1,14 +1,20 @@
 import { RadioGroup } from '@headlessui/react'
+import { useRecoilState } from "recoil"
+import {
+  transactionInProgressState
+} from "../lib/atoms"
 
 export const ModeNormal = {
   key: "Normal",
   name: 'Normal',
+  raw: 0,
   intro: 'User will get all the eligible roles',
 }
 
 export const ModeShortCircuit = {
   key: "ShortCircuit",
   name: 'Short Circuit',
+  raw: 1,
   intro: 'User will get the first eligible role',
 }
 
@@ -16,10 +22,11 @@ const modes = [ModeNormal, ModeShortCircuit]
 
 export default function VerificationModeSelector(props) {
   const { mode, setMode } = props
+  const [transactionInProgress,] = useRecoilState(transactionInProgressState)
 
   return (
     <div className="mx-auto w-full">
-      <RadioGroup value={mode} onChange={setMode}>
+      <RadioGroup disabled={transactionInProgress} value={mode} onChange={setMode}>
         <div className="grid grid-cols-1 gap-y-3 sm:grid-cols-2 sm:gap-x-4 auto-rows-fr">
           {modes.map((mode) => (
             <RadioGroup.Option

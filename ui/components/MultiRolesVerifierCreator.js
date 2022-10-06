@@ -3,12 +3,14 @@ import React, { useState } from "react"
 import { useRecoilState } from "recoil"
 import {
   transactionInProgressState,
+  transactionStatusState
 } from "../lib/atoms"
 import * as fcl from "@onflow/fcl"
 import { classNames, generateScript } from "../lib/utils"
 import ImageSelector from "./ImageSelector"
 import MultiRolesView from "./MultiRolesView"
 import VerificationModeSelector, { ModeNormal } from "./VerificationModeSelector"
+import { addVerifier } from "../flow/transactions"
 
 const NamePlaceholder = "Verifier's Name"
 const DescriptionPlaceholder = "Details about this verifier"
@@ -24,7 +26,9 @@ BasicInfoMemoizeImage.displayName = "BasicInfoMemozieImage"
 
 export default function MultiRolesVerifierCreator(props) {
   const { user } = props
-  const [transactionInProgress,] = useRecoilState(transactionInProgressState)
+  const [transactionInProgress, setTransactionInProgress] = useRecoilState(transactionInProgressState)
+  const [transactionStatus, setTransactionStatus] = useRecoilState(transactionStatusState)
+
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [image, setImage] = useState(null)
@@ -42,11 +46,56 @@ export default function MultiRolesVerifierCreator(props) {
       return
     }
 
-    console.log(roleVerifiers)
+    // TODO: verify image size
+
     const script = generateScript(roleVerifiers, mode)
-    console.log(script)
+    const roleIds = roleVerifiers.map((rv) => rv.roleID)
+    console.log("roleIds", roleIds)
 
+    if (imageSize > 500000) {
+      console.log("Image Size Exceed")
+      return
+    }
 
+    if (roleIds.length == 0) {
+      console.log("empty roles")
+      return
+    }
+
+    if (script.trim().length == 0) {
+      console.log("empty script")
+      return
+    }
+
+    console.log(
+      "ooo",
+      name, 
+      description || "", 
+      image || "", 
+      script, 
+      roleIds, 
+      mode.raw
+    )
+
+    const res = await addVerifier(
+      name, 
+      description || "", 
+      image || "",
+      script, 
+      roleIds, 
+      `${mode.raw}`,
+      setTransactionInProgress,
+      setTransactionStatus
+    )
+
+    handleCreationResponse(res)
+  }
+
+  const handleCreationResponse = (res) => {
+    if (res && res.status === 4 && res.statusCode === 0) {
+      // TODO: jump to verifiers page
+      console.log("jump to verifiers page")
+    }
   }
 
   return (
@@ -76,7 +125,7 @@ export default function MultiRolesVerifierCreator(props) {
             id="name"
             disabled={transactionInProgress}
             required
-            className="bg-white block w-full font-flow text-lg rounded-2xl px-3 py-2
+            className="block w-full font-flow text-lg rounded-2xl px-3 py-2
             border border-emerald focus:border-emerald-dark
             outline-0 focus:outline-2 focus:outline-emerald-dark 
             placeholder:text-gray-300"

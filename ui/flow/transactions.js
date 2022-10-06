@@ -1,4 +1,5 @@
 import * as fcl from "@onflow/fcl"
+import publicConfig from "../publicConfig"
 // Different from the response of FCL
 // We don't need to show every status to users
 export const TxStatus = {
@@ -22,36 +23,109 @@ export const TxStatus = {
   }
 }
 
-export const createVerifier = async (
-  name, description, script, roleIds,
+
+export const txHandler = async (
+  txFunc,
+  setTransactionInProgress,
+  setTransactionStatus
+) => {
+  let transactionId = null
+  setTransactionInProgress(true)
+  setTransactionStatus(TxStatus.initializing())
+
+  try {
+    transactionId = await txFunc()
+    setTransactionStatus(TxStatus.pending(transactionId))
+
+    let res = await fcl.tx(transactionId).onceSealed()
+    if (res.status === 4) {
+      if (res.statusCode === 0) {
+        setTransactionStatus(TxStatus.success(transactionId))
+      } else {
+        setTransactionStatus(TxStatus.failed(res.errorMessage, transactionId))
+      }
+      setTimeout(() => setTransactionInProgress(false), 3000)
+    }
+    return res
+  } catch (e) {
+    console.log(e)
+    setTransactionStatus(TxStatus.failed(e, null))
+    setTimeout(() => setTransactionInProgress(false), 3000)
+  }
+}
+
+const EmeraldBotVerifiersPath = "0xEmeraldBotVerifiers"
+
+export const addVerifier = async (
+  name, description, image, script, roleIds, verificationMode,
   setTransactionInProgress,
   setTransactionStatus
 ) => {
   const txFunc = async () => {
-    return await doCreateVerifier(metadata)
+    return await doAddVerifier(name, description, image, script, roleIds, verificationMode)
   }
 
   return await txHandler(txFunc, setTransactionInProgress, setTransactionStatus)
 }
 
-const doCreateVerifier = async (name, description, script, roleIds) => {
-  // const body = `
-  // transaction() {
-  //   prepare(signer: AuthAccount) {
-  //     if signer.borrow<&NonFungibleToken.Collection>(from: ${storagePath}) == nil {
-  //       signer.save(<- ${contractName}.createEmptyCollection(), to: ${storagePath})
-  //       signer.link<&${collectionType}{${interfaces}}>(${publicPath}, target: ${storagePath})
-  //     }
-  //   }
-  // }
-  // `
-  // const code = imports.concat(body)
+const doAddVerifier = async (name, description, image, scriptCode, roleIds, verificationMode) => {
+  const code = `
+  import EmeraldBotVerifiers from 0xEmeraldBotVerifiers
 
-  // const transactionId = await fcl.mutate({
-  //   cadence: code,
-  //   proposer: fcl.currentUser,
-  //   payer: fcl.currentUser,
-  //   limit: 9999
-  // })
-  // return transactionId
+transaction(
+    name: String,
+    description: String,
+    image: String,
+    scriptCode: String,
+    roleIds: [String],
+    rawVerificationMode: UInt8
+) {
+    let verifierCollection: &EmeraldBotVerifiers.VerifierCollection
+
+    prepare(signer: AuthAccount) {
+        if signer.borrow<&EmeraldBotVerifiers.VerifierCollection>(from: EmeraldBotVerifiers.VerifierCollectionStoragePath) == nil {
+            signer.save(<- EmeraldBotVerifiers.createEmptyCollection(), to: EmeraldBotVerifiers.VerifierCollectionStoragePath)
+            let cap = signer.link<&EmeraldBotVerifiers.VerifierCollection>(
+                EmeraldBotVerifiers.VerifierCollectionPublicPath, 
+                target: EmeraldBotVerifiers.VerifierCollectionStoragePath
+            ) ?? panic("Could not link VerifierCollection to PublicPath")
+        }
+
+        self.verifierCollection = signer.borrow<&EmeraldBotVerifiers.VerifierCollection>(from: EmeraldBotVerifiers.VerifierCollectionStoragePath)
+            ?? panic("Could not borrow VerifierCollection from signer")
+    }
+
+    execute {
+        let verificationMode = EmeraldBotVerifiers.VerificationMode(rawValue: rawVerificationMode) 
+            ?? panic("Invalid verification mode")
+
+        self.verifierCollection.addVerifier(
+            name: name,
+            description: description,
+            image: image,
+            scriptCode: scriptCode,
+            roleIds: roleIds,
+            verificationMode: verificationMode,
+            extra: {}
+        )
+    }
+}
+  `
+  .replace(EmeraldBotVerifiersPath, publicConfig.emeraldBotVerifiersAddress)
+
+  const transactionId = await fcl.mutate({
+    cadence: code,
+    args: (arg, t) => ([
+      arg(name, t.String),
+      arg(description, t.String),
+      arg(image, t.String),
+      arg(scriptCode, t.String),
+      arg(roleIds, t.Array(t.String)),
+      arg(verificationMode, t.UInt8)
+    ]),
+    proposer: fcl.currentUser,
+    payer: fcl.currentUser,
+    limit: 9999
+  })
+  return transactionId
 }
