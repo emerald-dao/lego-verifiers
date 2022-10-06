@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }) {
         <RecoilRoot>
           <Head>
             <title>Lego | Create Your Emerald Bot Verifier</title>
-            <meta property="og:title" content="Link | NFT catalog link tool" key="title" />
+            <meta property="og:title" content="Lego | Create Your Emerald Bot Verifier" key="title" />
           </Head>
           <NavigationBar user={user} />
           <Component {...pageProps} user={user} />
