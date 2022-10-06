@@ -36,7 +36,7 @@ export default function Profile(props) {
       )
     } else {
       return (
-        <div className="mt-10 flex flex-col gap-y-10">
+        <div className="flex flex-col gap-y-10">
           <VerifiersList verifiers={verifiers} user={props.user} /> 
         </div>
       )
