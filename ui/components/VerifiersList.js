@@ -117,9 +117,9 @@ export default function VerifiersList(props) {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <div className="flex flex-col gap-y-1 items-start">
                             {
-                              verifier.roleIds.map((id) => {
+                              verifier.roleIds.map((id, index) => {
                                 return (
-                                  <label className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 text-indigo-500 bg-indigo-100`}>
+                                  <label key={`role-${index}`} className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 text-indigo-500 bg-indigo-100`}>
                                     {id}
                                   </label>
                                 )
