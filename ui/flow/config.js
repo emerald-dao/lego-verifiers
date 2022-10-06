@@ -6,6 +6,6 @@ config({
   "accessNode.api": publicConfig.accessNodeAPI,
   "discovery.wallet": publicConfig.walletDiscovery,
   "sdk.transport": httpSend,
-  "app.detail.title": "LegoVerifiers",
-  "app.detail.icon": "https://i.imgur.com/DwLTaWe.png"
+  "app.detail.title": "Lego",
+  "app.detail.icon": "https://imgur.com/QbxspcR"
 })
