@@ -9,6 +9,7 @@ export const ModeNormal = {
   name: 'Normal',
   raw: 0,
   intro: 'User will get all the eligible roles',
+  tagColor: "text-green-800 bg-green-100"
 }
 
 export const ModeShortCircuit = {
@@ -16,6 +17,17 @@ export const ModeShortCircuit = {
   name: 'Short Circuit',
   raw: 1,
   intro: 'User will get the first eligible role',
+  tagColor: "text-blue-800 bg-blue-100"
+}
+
+export const getModeFromRaw = (raw) => {
+  if (raw == 0) {
+    return ModeNormal
+  }
+
+  if (raw == 1) {
+    return ModeShortCircuit
+  }
 }
 
 const modes = [ModeNormal, ModeShortCircuit]

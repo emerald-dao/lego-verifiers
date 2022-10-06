@@ -23,7 +23,6 @@ export const TxStatus = {
   }
 }
 
-
 export const txHandler = async (
   txFunc,
   setTransactionInProgress,

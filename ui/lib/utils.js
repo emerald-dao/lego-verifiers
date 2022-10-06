@@ -85,3 +85,8 @@ const generateImports = (roleVerifiers) => {
   const uniqueImports = [...new Set(imports)]
   return uniqueImports.map((i) => i.trim())
 }
+
+export const getItemsInPage = (totalItems, page, pageSize) => {
+  const items = totalItems.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize)
+  return items
+}

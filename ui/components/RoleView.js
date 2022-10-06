@@ -39,10 +39,10 @@ export default function RoleView(props) {
         <div className="truncate shrink mt-5 flex flex-col gap-y-3 text-sm">
           <div className="truncate shrink flex justify-between h-5 gap-x-2">
             <div className="truncate shrink flex gap-x-1 items-center">
-              <div className="shrink-0 rounded-full w-2 h-2 bg-yellow-500"></div>
-              <label className="truncate shrink text-black font-flow font-bold">Verify Logic</label>
+              <div className={`shrink-0 rounded-full w-2 h-2 ${roleVerifier.basicVerifiersLogic == "AND" ? "bg-blue-500" : "bg-yellow-500"}`}></div>
+              <label className="truncate shrink text-black font-flow font-bold">Verification Logic</label>
             </div>
-            <label className="text-center text-yellow-800 bg-yellow-100 inline-flex rounded-full px-2 text-xs font-semibold leading-5">
+            <label className={`text-center ${roleVerifier.basicVerifiersLogic == "AND" ? "text-blue-800 bg-blue-100" : "text-yellow-800 bg-yellow-100"} inline-flex rounded-full px-2 text-xs font-semibold leading-5`}>
               {roleVerifier.basicVerifiersLogic}
             </label>
           </div>
