@@ -35,6 +35,7 @@ export default function MultiRolesVerifierCreator(props) {
   const [description, setDescription] = useState("")
   const [image, setImage] = useState(null)
   const [imageSize, setImageSize] = useState(0)
+  const [guildId, setGuildId] = useState(0);
   const [roleVerifiers, setRoleVerifiers] = useState([])
   const [mode, setMode] = useState(ModeNormal)
 
@@ -56,6 +57,7 @@ export default function MultiRolesVerifierCreator(props) {
       description || "", 
       image || "",
       script, 
+      guildId,
       roleIds, 
       `${mode.raw}`,
       setTransactionInProgress,

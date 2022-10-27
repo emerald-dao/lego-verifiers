@@ -5,6 +5,7 @@ transaction(
     description: String,
     image: String,
     scriptCode: String,
+    guildId: String,
     roleIds: [String],
     rawVerificationMode: UInt8
 ) {
@@ -32,6 +33,7 @@ transaction(
             description: description,
             image: image,
             scriptCode: scriptCode,
+            guildId: guildId,
             roleIds: roleIds,
             verificationMode: verificationMode,
             extra: {}

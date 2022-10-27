@@ -99,18 +99,18 @@ const doDeleteVerifier = async (verifierID) => {
 }
 
 export const addVerifier = async (
-  name, description, image, script, roleIds, verificationMode,
+  name, description, image, script, guildId, roleIds, verificationMode,
   setTransactionInProgress,
   setTransactionStatus
 ) => {
   const txFunc = async () => {
-    return await doAddVerifier(name, description, image, script, roleIds, verificationMode)
+    return await doAddVerifier(name, description, image, script, guildId, roleIds, verificationMode)
   }
 
   return await txHandler(txFunc, setTransactionInProgress, setTransactionStatus)
 }
 
-const doAddVerifier = async (name, description, image, scriptCode, roleIds, verificationMode) => {
+const doAddVerifier = async (name, description, image, scriptCode, guildId, roleIds, verificationMode) => {
   const code = `
   import EmeraldBotVerifiers from 0xEmeraldBotVerifiers
 
@@ -119,6 +119,7 @@ transaction(
     description: String,
     image: String,
     scriptCode: String,
+    guildId: String,
     roleIds: [String],
     rawVerificationMode: UInt8
 ) {
@@ -146,6 +147,7 @@ transaction(
             description: description,
             image: image,
             scriptCode: scriptCode,
+            guildId: guildId,
             roleIds: roleIds,
             verificationMode: verificationMode,
             extra: {}
@@ -162,6 +164,7 @@ transaction(
       arg(description, t.String),
       arg(image, t.String),
       arg(scriptCode, t.String),
+      arg(guildId, t.String),
       arg(roleIds, t.Array(t.String)),
       arg(verificationMode, t.UInt8)
     ]),
