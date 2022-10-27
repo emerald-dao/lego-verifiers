@@ -10,7 +10,7 @@ pub fun main(address: Address): {UInt64: &EmeraldBotVerifiers.Verifier} {
     let res: {UInt64: &EmeraldBotVerifiers.Verifier} = {} 
     let verifierIds = verifierCollection.getVerifierIds()
     for id in verifierIds {
-        if let verifier = verifierCollection.getVerifierInfo(verifierId: id) {
+        if let verifier = verifierCollection.getVerifier(verifierId: id) {
             res[id] = verifier
         }
     }

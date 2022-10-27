@@ -6,7 +6,7 @@ pub contract EmeraldBotVerifiers {
 
     pub event ContractInitialized()
 
-    pub event VerifierCreated(verifierId: UInt64, name: String, mode: UInt8, roleIds: [String])
+    pub event VerifierCreated(verifierId: UInt64, name: String, mode: UInt8, guildId: String, roleIds: [String])
     pub event VerifierDeleted(verifierId: UInt64)
 
     pub enum VerificationMode: UInt8 {
@@ -19,6 +19,7 @@ pub contract EmeraldBotVerifiers {
         pub let description: String
         pub let image: String
         pub let scriptCode: String
+        pub let guildId: String
         pub let roleIds: [String]
         pub let verificationMode: VerificationMode
         pub let extra: {String: AnyStruct}
@@ -28,6 +29,7 @@ pub contract EmeraldBotVerifiers {
             description: String, 
             image: String, 
             scriptCode: String, 
+            guildId: String,
             roleIds: [String],
             verificationMode: VerificationMode,
             extra: {String: AnyStruct}
@@ -36,6 +38,7 @@ pub contract EmeraldBotVerifiers {
             self.description = description
             self.image = image
             self.scriptCode = scriptCode
+            self.guildId = guildId
             self.roleIds = roleIds
             self.verificationMode = verificationMode
             self.extra = extra
@@ -44,7 +47,8 @@ pub contract EmeraldBotVerifiers {
 
     pub resource interface VerifierCollectionPublic {
         pub fun getVerifierIds(): [UInt64]
-        pub fun getVerifierInfo(verifierId: UInt64): &Verifier?
+        pub fun getVerifier(verifierId: UInt64): &Verifier?
+        pub fun getVerifiersByGuildId(guildId: String): [&Verifier?]
     }
 
     pub resource VerifierCollection: VerifierCollectionPublic {
@@ -55,6 +59,7 @@ pub contract EmeraldBotVerifiers {
             description: String, 
             image: String,
             scriptCode: String,
+            guildId: String,
             roleIds: [String],
             verificationMode: VerificationMode,
             extra: {String: AnyStruct}
@@ -65,11 +70,12 @@ pub contract EmeraldBotVerifiers {
                 description: description, 
                 image: image, 
                 scriptCode: scriptCode, 
+                guildId: guildId,
                 roleIds: roleIds,
                 verificationMode: verificationMode,
                 extra: extra
             )
-            emit VerifierCreated(verifierId: verifier.uuid, name: name, mode: verificationMode.rawValue, roleIds: roleIds)
+            emit VerifierCreated(verifierId: verifier.uuid, name: name, mode: verificationMode.rawValue, guildId: guildId, roleIds: roleIds)
             self.verifiers[verifier.uuid] <-! verifier
         }
 
@@ -82,8 +88,20 @@ pub contract EmeraldBotVerifiers {
             return self.verifiers.keys
         }
 
-        pub fun getVerifierInfo(verifierId: UInt64): &Verifier? {
+        pub fun getVerifier(verifierId: UInt64): &Verifier? {
             return &self.verifiers[verifierId] as &Verifier?
+        }
+
+        pub fun getVerifiersByGuildId(guildId: String): [&Verifier?] {
+            let response: [&Verifier?] = []
+            for id in self.getVerifierIds() {
+                let verifier = self.getVerifier(verifierId: id)!
+                if verifier.guildId == guildId {
+                    response.append(verifier)
+                }
+            }
+
+            return response
         }
 
         init() {
