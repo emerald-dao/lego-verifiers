@@ -13,7 +13,8 @@ import VerificationModeSelector, { ModeNormal } from "./VerificationModeSelector
 import { addVerifier } from "../flow/transactions"
 import { useRouter } from "next/router"
 
-const NamePlaceholder = "Verifier's Name"
+const NamePlaceholder = "Verifier's Name";
+const GuildIdPlaceholder = "906264258189332541";
 const DescriptionPlaceholder = "Details about this verifier"
 
 const BasicInfoMemoizeImage = React.memo(({ image }) => {
@@ -87,6 +88,29 @@ export default function MultiRolesVerifierCreator(props) {
           }} />
         </div>
         <BasicInfoMemoizeImage image={image || "/lego.png"} />
+      </div>
+
+      <div className="flex flex-col gap-y-2">
+        <label className="block text-2xl font-bold font-flow">
+          Guild Id<span className="text-red-600">*</span>
+        </label>
+        <div className="mt-1">
+          <input
+            type="text"
+            name="guildid"
+            id="guildid"
+            disabled={transactionInProgress}
+            required
+            className="block w-full font-flow text-lg rounded-2xl px-3 py-2
+            border border-emerald focus:border-emerald-dark
+            outline-0 focus:outline-2 focus:outline-emerald-dark 
+            placeholder:text-gray-300"
+            placeholder={GuildIdPlaceholder}
+            onChange={(event) => {
+              setGuildId(event.target.value)
+            }}
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-y-2">
