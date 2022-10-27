@@ -33,7 +33,7 @@ async function generateScript(data) {
     if ${ifStatement.join(' && ')} {
       earnedRoles.append("${roleId}")
     }
-    `;
+    `
   }
 
   const verifyScript = `
@@ -45,9 +45,7 @@ async function generateScript(data) {
 
     return earnedRoles
   }
-  `;
-
-  console.log(verifyScript)
+  `
 }
 
 const sampleData = {
