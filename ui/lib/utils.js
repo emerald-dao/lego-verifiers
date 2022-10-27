@@ -62,12 +62,17 @@ export const generateScript = (roleVerifiers, verificationMode) => {
   const verifyScript = `
 ${imports.join('\n')}
 
-  pub fun main(user: Address): [String] {
-    var earnedRoles: [String] = []
+  pub fun main(users: [Address]): {Address: [String]} {
+    let response: {Address: [String]} = {}
+    for user in users {
+      var earnedRoles: [String] = []
 
-    ${totalMain}
+      ${totalMain}
 
-    return earnedRoles
+      response[user] = earnedRoles
+    }
+
+    return response
   }`
 
   return verifyScript
