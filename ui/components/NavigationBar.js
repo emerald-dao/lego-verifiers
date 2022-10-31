@@ -16,8 +16,32 @@ import {
 export default function NavigationBar(props) {
   const user = props.user
   const router = useRouter()
+  const { code } = router.query;
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
+
+  useEffect(() => {
+    if (code) {
+      checkDiscordName(code);
+    }
+  }, [code]);
+
+  async function checkDiscordName(code) {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/getDiscord/${encodeURIComponent(code)}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        },
+      )
+      const res = await response.json();
+      // FOR LANFORD: This logs all data about Discord Guilds that the user is in
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("message", async (d) => {
@@ -62,6 +86,7 @@ export default function NavigationBar(props) {
   const UnauthenticatedState = () => {
     return (
       <div>
+        <a className="hidden sm:block" href="https://discord.com/api/oauth2/authorize?client_id=1036698700875051039&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code&scope=identify%20guilds">Discord Login</a>
         <button
           type="button"
           className="h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
