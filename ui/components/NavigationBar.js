@@ -86,7 +86,7 @@ export default function NavigationBar(props) {
   const UnauthenticatedState = () => {
     return (
       <div>
-        <a className="hidden sm:block" href="https://discord.com/api/oauth2/authorize?client_id=1036698700875051039&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code&scope=identify%20guilds">Discord Login</a>
+        {/* <a target="_blank" className="hidden sm:block" href="https://discord.com/api/oauth2/authorize?client_id=1036698700875051039&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code&scope=identify%20guilds">Discord Login</a> */}
         <button
           type="button"
           className="h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"

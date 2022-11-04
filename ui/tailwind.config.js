@@ -9,7 +9,9 @@ module.exports = {
       colors: {
         'emerald': '#38E8C6',
         'emerald-light': '#68FADE',
-        'emerald-dark': '#09BC99'
+        'emerald-dark': '#09BC99',
+        'discord': '#5865F2',
+        'discord-dark': '#3a47cd'
       },
       fontFamily: {
         'flow': ['sans-serif'],
