@@ -55,7 +55,7 @@ export default function RoleView(props) {
                 roleVerifier.basicVerifiers.map((bv, index) => {
                   return (
                     <div key={index} className="rounded-full overflow-hidden flex items-center">
-                      <Image className="rounded-full" src={bv.logo} width={20} height={20}></Image>
+                      <Image className="rounded-full" alt="" src={bv.logo} width={20} height={20}></Image>
                     </div>
                   )
                 })

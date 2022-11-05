@@ -1,25 +1,14 @@
 import { useState, useEffect } from "react"
-import Image from "next/image"
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid"
 import { Combobox } from "@headlessui/react"
-import { useRecoilState } from "recoil"
-import {
-  basicNotificationContentState,
-  showBasicNotificationState,
-  transactionInProgressState,
-} from "../lib/atoms"
 import { classNames, discordColorPalette } from "../lib/utils"
 import { useSession } from 'next-auth/react'
 
 export default function DiscordRoleSelector(props) {
-  const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
-  const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
-  const [transactionInProgress] = useRecoilState(transactionInProgressState)
-
   const { data: session } = useSession()
 
   const [query, setQuery] = useState("")
-  const {selectedRole, setSelectedRole} = props
+  const { selectedRole, setSelectedRole } = props
   const [filteredRoles, setFilteredRoles] = useState([])
   const [roles, setRoles] = useState([])
 
@@ -52,7 +41,7 @@ export default function DiscordRoleSelector(props) {
 
   return (
     <div className="flex flex-col gap-y-2">
-            <div>
+      <div>
         {/* Discord Colors */}
         <div className='text-[#000000] hidden'></div>
         <div className='text-[#1ABC9C] hidden'></div>

@@ -1,19 +1,18 @@
 import Image from "next/image"
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { useRecoilState } from "recoil"
 import {
   transactionInProgressState,
-  transactionStatusState
 } from "../lib/atoms"
 
 export default function DiscordAccountView(props) {
-  const [transactionInProgress, ] = useRecoilState(transactionInProgressState)
+  const [transactionInProgress,] = useRecoilState(transactionInProgressState)
   const { data: session } = useSession()
 
   if (!session) {
     return <></>
   }
-  
+
   return (
     <div className="w-full flex flex-col gap-y-2">
       <label className="block text-2xl font-bold font-flow">
