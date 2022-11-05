@@ -34,7 +34,7 @@ describe("Lego", () => {
 
     const Alice = await getAccountAddress("Alice")
     const [result, error] = await addVerifier(
-      Alice, "TEST", "", "", "import Hello from 0xWorld", ["1", "2"], 0
+      Alice, "TEST", "", "", "import Hello from 0xWorld", "1234", ["1", "2"], 0
     )
     expect(error).toBeNull()
 

@@ -8,11 +8,11 @@ export const deployByName = async (deployer, contractName, args) => {
 }
 
 export const addVerifier = (
-  signer, verifierName, description, image, scriptCode, roleIds, verificationMode
+  signer, verifierName, description, image, scriptCode, guildId, roleIds, verificationMode
 ) => {
   const signers = [signer]
   const name = "add_verifier"
-  const args = [verifierName, description, image, scriptCode, roleIds, verificationMode]
+  const args = [verifierName, description, image, scriptCode, guildId, roleIds, verificationMode]
   return sendTransaction({ name: name, args: args, signers: signers })
 }
 

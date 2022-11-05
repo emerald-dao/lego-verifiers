@@ -2,46 +2,60 @@ import { useEffect, useState } from "react"
 import { SpinnerCircular } from "spinners-react"
 import useSWR from "swr"
 import VerifiersList from "../components/VerifiersList"
-import { getVerifiers } from "../flow/scripts"
-import { signIn, signOut, useSession } from 'next-auth/react'
-import Image from "next/image"
-import { useRecoilState } from "recoil"
-import {
-  transactionInProgressState,
-} from "../lib/atoms"
+import { getVerifiersByGuildId } from "../flow/scripts"
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { classNames } from "../lib/utils"
+import { discordColorPalette } from "../lib/utils"
+import DiscordAccountView from "../components/DiscordAccountView"
+import DiscordGuildView from "../components/DiscordGuildView"
 
-const convertVerifiers = (verifierMaps) => {
+const convertVerifiers = (verifierMaps, guild) => {
   const verifierIDs = Object.keys(verifierMaps)
   let verifiers = []
+
+  const guildRoleNameMap = {}
+  for (let i = 0; i < guild.roles.length; i++) {
+    const role = guild.roles[i]
+    guildRoleNameMap[role.id] = role
+  }
+
   for (let i = 0; i < verifierIDs.length; i++) {
     const verifierID = verifierIDs[i]
     const verifier = verifierMaps[verifierID]
-    verifiers.push(verifier)
+    if (verifier.guildId == guild.id) {
+      const roles = []
+      for (let j = 0; j < verifier.roleIds.length; j++) {
+        const roleId = verifier.roleIds[j]
+        const role = guildRoleNameMap[roleId] || {name: "Unknown", twTextColor: "text-indigo-500", twBgColor: "bg-indigo-100"}
+        if (role.name != "Unknown") {
+          const hex = discordColorPalette[role.color] ? discordColorPalette[role.color].hex : '#000000'
+          role.twBgColor = `bg-[${hex}]/10`
+          role.twTextColor = `text-[${hex}]`
+        }
+        roles.push(role)
+      }
+      verifier.guildName = guild.name
+      verifier.roles = roles
+      verifiers.push(verifier)
+    }
   }
 
   return verifiers.sort((a, b) => b.uuid - a.uuid)
 }
 
-const verifiersFetcher = async (funcName, address) => {
-  return await getVerifiers(address)
+const verifiersFetcher = async (funcName, address, guildId) => {
+  return await getVerifiersByGuildId(address, guildId)
 }
 
 export default function Profile(props) {
-  const [transactionInProgress, setTransactionInProgress] = useRecoilState(transactionInProgressState)
   const router = useRouter()
+  const { data: session } = useSession()
 
   const account = props.user && props.user.addr
   const { data: verifiersData, error: verifiersError } = useSWR(
-    account ? ["verifiersFetcher", account] : null, verifiersFetcher)
+    account && session ? ["verifiersFetcher", account, session.guild.id] : null, verifiersFetcher)
 
-  const { data: session } = useSession()
   const [verifiers, setVerifiers] = useState([])
-
-  if (session) {
-    console.log("image:", session.user.image)
-  }
 
   const showList = () => {
     if (!verifiersData) {
@@ -53,7 +67,7 @@ export default function Profile(props) {
     } else {
       return (
         <div className="flex flex-col gap-y-10">
-          <VerifiersList verifiers={verifiers} user={props.user} />
+          <VerifiersList verifiers={verifiers} user={props.user} guildId={session.guild.id} />
         </div>
       )
     }
@@ -61,77 +75,29 @@ export default function Profile(props) {
 
   useEffect(() => {
     if (verifiersData) {
-      setVerifiers(convertVerifiers(verifiersData))
+      setVerifiers(convertVerifiers(verifiersData, session.guild))
     }
   }, [verifiersData])
 
+  const [calledPush, setCalledPush] = useState(false)
+
+  useEffect(() => {
+    if (!session && !calledPush) {
+      setCalledPush(true)
+      router.push("/")
+    }
+  }, [session])
+
   return (
     <div className="container mx-auto max-w-[920px] min-w-[380px] px-6">
-      <div className="flex flex-col gap-y-12">
-
-        <div>
-          <label className="mb-5 block text-2xl font-bold font-flow">
-            Discord
-          </label>
-          {
-            session ?
-              <div className="flex gap-x-2 justify-between items-center">
-                <div className="flex gap-x-3 items-center">
-                  <div className="rounded-full shrink-0 h-[64px] aspect-square bg-white relative sm:max-w-[64px] ring-1 ring-black ring-opacity-10 overflow-hidden">
-                    <Image src={session.user.image} alt="" className="rounded-2xl" layout="fill" objectFit="cover" />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="font-bold text-lg">{session.user.name}</label>
-                    <label>#{session.user.discriminator}</label>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  className="h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-white bg-discord hover:bg-discord-dark"
-                  onClick={() => {
-                    signOut()
-                  }}>
-                  Disconnect
-                </button>
-
-              </div> :
-              <button
-                type="button"
-                className="mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-white bg-discord hover:bg-discord-dark"
-                onClick={() => {
-                  signIn('discord')
-                }}
-              >
-                <label>Connect Discord</label>
-              </button>
-          }
-        </div>
-        <div className="sm:flex sm:items-center">
-          <div className="sm:flex-auto">
-            <h1 className="text-2xl font-bold text-gray-900">
-              {`Verifiers (${verifiers.length})`}
-            </h1>
+      <div className="flex flex-col gap-y-10">
+        <DiscordAccountView />
+        <DiscordGuildView />
+        <div className="w-full justify-between flex gap-x-2 items-center">
+            <div className="w-full h-[1px] bg-gray-200"></div>
+            <label className="shrink-0 text-gray-400 text-sm">⬇️ VERIFIERS FOR THIS GUILD ⬇️</label>
+            <div className="w-full h-[1px] bg-gray-200"></div>
           </div>
-          <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            {
-              <button
-                type="button"
-                disabled={transactionInProgress}
-                className={
-                  classNames(
-                    transactionInProgress ? "bg-emerald-light" : "bg-emerald hover:bg-emerald-dark",
-                    "inline-flex items-center rounded-2xl justify-center border border-transparent px-4 py-2 text-sm font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2 sm:w-auto"
-                  )}
-                onClick={() => {
-                  router.push("/")
-                }}
-              >
-                New Verifier
-              </button>
-            }
-          </div>
-        </div>
         {showList()}
       </div>
     </div>

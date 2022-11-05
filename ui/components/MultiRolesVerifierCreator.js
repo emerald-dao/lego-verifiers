@@ -12,13 +12,11 @@ import MultiRolesView from "./MultiRolesView"
 import VerificationModeSelector, { ModeNormal } from "./VerificationModeSelector"
 import { addVerifier } from "../flow/transactions"
 import { useRouter } from "next/router"
-import DiscordGuildSelector from "./DiscordGuildSelector"
 import DiscordAccountView from "./DiscordAccountView"
 import { useSession } from 'next-auth/react'
 import DiscordGuildView from "./DiscordGuildView"
 
 const NamePlaceholder = "Verifier's Name";
-const GuildIdPlaceholder = "906264258189332541";
 const DescriptionPlaceholder = "Details about this verifier"
 
 const BasicInfoMemoizeImage = React.memo(({ image }) => {
@@ -40,7 +38,6 @@ export default function MultiRolesVerifierCreator(props) {
   const [description, setDescription] = useState("")
   const [image, setImage] = useState(null)
   const [imageSize, setImageSize] = useState(0)
-  const [selectedGuild, setSelectedGuild] = useState(null);
   const [roleVerifiers, setRoleVerifiers] = useState([])
   const [mode, setMode] = useState(ModeNormal)
 
@@ -57,14 +54,14 @@ export default function MultiRolesVerifierCreator(props) {
     }
 
     const script = generateScript(roleVerifiers, mode)
-    const roleIds = roleVerifiers.map((rv) => rv.roleID)
+    const roleIds = roleVerifiers.map((rv) => rv.role.id)
 
     const res = await addVerifier(
       name,
       description || "",
       image || "",
       script,
-      guildId,
+      session.guild.id,
       roleIds,
       `${mode.raw}`,
       setTransactionInProgress,
@@ -87,9 +84,9 @@ export default function MultiRolesVerifierCreator(props) {
       {session ?
         <>
           <div className="w-full justify-between flex gap-x-2 items-center">
-          <div className="w-full h-[1px] bg-gray-200"></div>
-          <label className="shrink-0 text-gray-400 text-sm">⬇️ BUILD YOU LEGO ⬇️</label>
-          <div className="w-full h-[1px] bg-gray-200"></div>
+            <div className="w-full h-[1px] bg-gray-200"></div>
+            <label className="shrink-0 text-gray-400 text-sm">⬇️ BUILD YOU LEGO ⬇️</label>
+            <div className="w-full h-[1px] bg-gray-200"></div>
           </div>
           <div className="flex flex-row justify-between gap-x-10">
             <div className="flex flex-col justify-between">
@@ -162,7 +159,6 @@ export default function MultiRolesVerifierCreator(props) {
           <MultiRolesView
             roleVerifiers={roleVerifiers}
             setRoleVerifiers={setRoleVerifiers}
-            selectedGuild={selectedGuild}
           />
 
           <div>

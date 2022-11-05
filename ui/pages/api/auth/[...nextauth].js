@@ -14,7 +14,6 @@ export const authOptions = {
   ],
   callbacks: {
     async session({ session, token, user }) {
-      console.log("user:", user)
       session.accessToken = token.accessToken
       session.user.id = token.id
       session.user.discriminator = token.discriminator
@@ -23,9 +22,6 @@ export const authOptions = {
       return session
     },
     async jwt({ token, account, profile }) {
-      console.log("profile", profile)
-      console.log("token", token)
-      console.log("account", account)
       if (account) {
         token.accessToken = account.access_token
         token.id = profile.id

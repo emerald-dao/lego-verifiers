@@ -10,31 +10,25 @@ import {
   showBasicNotificationState,
   basicNotificationContentState
 } from "../lib/atoms.js"
-import { isValidRoleID } from '../lib/utils'
-
-
 
 export default function RoleVerifierCreatorSlideOver(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
 
   const { open, setOpen, 
-    createNewRoleVerifier, roleVerifierToBeEdit, updateRoleVerifier,
-    selectedGuild
-  } = props
-  const [roleID, setRoleID] = useState(null)
-  const [role, selectedRole] = useState(null)
+    createNewRoleVerifier, roleVerifierToBeEdit, updateRoleVerifier } = props
+  const [selectedRole, setSelectedRole] = useState(null)
 
   const [basicVerifiersLogic, setBasicVerifiersLogic] = useState(BasicVerifiersLogic.AND)
   const [basicVerifiers, setBasicVerifiers] = useState([])
 
   useEffect(() => {
     if (roleVerifierToBeEdit) {
-      setRoleID(roleVerifierToBeEdit.roleID)
+      setSelectedRole(roleVerifierToBeEdit.role)
       setBasicVerifiersLogic(roleVerifierToBeEdit.basicVerifiersLogic)
       setBasicVerifiers(roleVerifierToBeEdit.basicVerifiers)
     } else if (open) {
-      setRoleID(null)
+      setSelectedRole(null)
       setBasicVerifiersLogic(BasicVerifiersLogic.AND)
       setBasicVerifiers([])
     }
@@ -87,11 +81,7 @@ export default function RoleVerifierCreatorSlideOver(props) {
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
                         <div className="flex flex-col gap-y-8">
-                          <DiscordRoleSelector selectedGuild={selectedGuild} />
-                          {/* <DiscordRoleView
-                            roleID={roleID}
-                            setRoleID={setRoleID}
-                          /> */}
+                          <DiscordRoleSelector selectedRole={selectedRole} setSelectedRole={setSelectedRole} />
                           <LogicSelector
                             basicVerifiersLogic={basicVerifiersLogic}
                             setBasicVerifiersLogic={setBasicVerifiersLogic}
@@ -117,9 +107,9 @@ export default function RoleVerifierCreatorSlideOver(props) {
                         type="submit"
                         className="h-12 w-24 items-center ml-4 inline-flex justify-center rounded-xl border border-transparent bg-emerald py-2 px-4 text-sm font-bold text-black shadow-sm hover:bg-emerald-dark focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2"
                         onClick={() => {
-                          const alertInvalidParams = () => {
+                          const alertInvalidParams = (detail) => {
                             setShowBasicNotification(true)
-                            setBasicNotificationContent({ type: "exclamation", title: "INVALID PARAMS", detail: null })
+                            setBasicNotificationContent({ type: "exclamation", title: "INVALID PARAMS", detail: detail })
                           }
 
                           const alertEmptyBasicVerifiers = () => {
@@ -127,8 +117,8 @@ export default function RoleVerifierCreatorSlideOver(props) {
                             setBasicNotificationContent({ type: "exclamation", title: "EMPTY VERIFIERS", detail: null })
                           }
 
-                          if (!isValidRoleID(roleID)) {
-                            alertInvalidParams()
+                          if (!selectedRole) {
+                            alertInvalidParams("No Selected Role")
                             return
                           }
 
@@ -145,11 +135,11 @@ export default function RoleVerifierCreatorSlideOver(props) {
 
                           if (basicVerifiers.length > 0) {
                             if (roleVerifierToBeEdit) {
-                              roleVerifierToBeEdit.roleID = roleID
+                              roleVerifierToBeEdit.role = selectedRole
                               roleVerifierToBeEdit.basicVerifiers = basicVerifiers
                               roleVerifierToBeEdit.basicVerifiersLogic = basicVerifiersLogic
                             } else {
-                              createNewRoleVerifier(roleID, basicVerifiersLogic, basicVerifiers)
+                              createNewRoleVerifier(selectedRole, basicVerifiersLogic, basicVerifiers)
                             }
                             setOpen(false)
                           } else {

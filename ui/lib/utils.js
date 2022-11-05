@@ -5,15 +5,6 @@ export const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
 }
 
-export const isValidRoleID = (roleID) => {
-  try {
-    const v = new Decimal(roleID)
-    return v.isInteger() && v.isPositive() && !v.isZero()
-  } catch (e) {
-    return false
-  }
-}
-
 export const generateScript = (roleVerifiers, verificationMode) => {
   const imports = generateImports(roleVerifiers)
 
@@ -21,7 +12,7 @@ export const generateScript = (roleVerifiers, verificationMode) => {
   const totalMain = ""
   for (let i = 0; i < roleVerifiers.length; i++) {
     const rv = roleVerifiers[i]
-    const roleID = rv.roleID
+    const roleId = rv.role.id
     let ifStatement = []
 
     let operator = "&&"
@@ -48,13 +39,14 @@ export const generateScript = (roleVerifiers, verificationMode) => {
     if (verificationMode.key == ModeShortCircuit.key) {
       totalMain += `
       if ${ifStatement.join(` ${operator} `)} {
-        earnedRoles.append("${roleID}")
-        return earnedRoles
+        earnedRoles.append("${roleId}")
+        response[user] = earnedRoles
+        continue
       }`
     } else {
       totalMain += `
       if ${ifStatement.join(` ${operator} `)} {
-        earnedRoles.append("${roleID}")
+        earnedRoles.append("${roleId}")
       }`
     }
   }

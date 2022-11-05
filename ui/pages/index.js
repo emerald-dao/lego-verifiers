@@ -1,34 +1,104 @@
 import MultiRolesVerifierCreator from "../components/MultiRolesVerifierCreator";
 import useExitPrompt from "../hooks/useExitPrompt";
 import * as fcl from "@onflow/fcl"
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 export default function Home(props) {
   // useExitPrompt(true)
 
   const { user } = props
+  const { data: session } = useSession()
   const account = user && user.loggedIn ? user.addr : null
+  const homePage = () => {
+    if (!account) {
+      return (
+        <div className="w-full mt-10 flex flex-col gap-y-8 items-center justify-center">
+        <label className="font-flow font-bold text-3xl sm:text-5xl">Your Verifiers for</label>
+        <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Your <span className="text-emerald">🤖️ Emerald Bot</span></label>
+        <div className="-mt-2 flex flex-col justify-center items-center">
+          <label className="font-flow text-base sm:text-lg">Build unique Emerald Bot verifiers</label>
+          <label className="font-flow text-base sm:text-lg">for the roles in your community</label>
+        </div>
+
+        <button
+          type="button"
+          className="mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
+          onClick={fcl.logIn}
+        >
+          <label>Connect Wallet</label>
+        </button>
+      </div>
+      )
+    }
+
+    if (!session) {
+      return (
+        <div className="w-full mt-10 flex flex-col gap-y-8 items-center justify-center">
+        <label className="font-flow font-bold text-3xl sm:text-5xl">Your Verifiers for</label>
+        <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Your <span className="text-emerald">🤖️ Emerald Bot</span></label>
+        <div className="-mt-2 flex flex-col justify-center items-center">
+          <label className="font-flow text-base sm:text-lg">You need to connect discord account</label>
+          <label className="font-flow text-base sm:text-lg">to create Lego verifiers for your server</label>
+        </div>
+  
+        <button
+          type="button"
+          className="mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-white bg-discord hover:bg-discord-dark"
+          onClick={() => {
+            signIn('discord')}
+          }
+        >
+          <label>Connect Discord</label>
+        </button>
+      </div>
+      )
+    }
+
+    return <MultiRolesVerifierCreator user={user} />
+  }
 
   return (
     <div className="container mx-auto max-w-[920px] min-w-[380px] px-6">
-      {!account ?
-        <div className="w-full mt-10 flex flex-col gap-y-8 items-center justify-center">
-          <label className="font-flow font-bold text-3xl sm:text-5xl">Your Verifiers for</label>
-          <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Your <span className="text-emerald">🤖️ Emerald Bot</span></label>
-          <div className="-mt-2 flex flex-col justify-center items-center">
-            <label className="font-flow text-base sm:text-lg">Build unique Emerald Bot verifiers</label>
-            <label className="font-flow text-base sm:text-lg">for the roles in your community</label>
-          </div>
-
-          <button
-            type="button"
-            className="mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
-            onClick={fcl.logIn}
-          >
-            <label>Connect Wallet</label>
-          </button>
-        </div>
-        : <MultiRolesVerifierCreator user={user} />
-      }
+      {homePage()}
+      <div>
+        {/* Discord Colors */}
+        <div className='text-[#000000] bg-[#000000] bg-[#000000]/10 hidden'></div>
+        <div className='text-[#1ABC9C] bg-[#1ABC9C] bg-[#1ABC9C]/10 hidden'></div>
+        <div className='text-[#57F287] bg-[#57F287] bg-[#57F287]/10 hidden'></div>
+        <div className='text-[#1F8B4C] bg-[#1F8B4C] bg-[#1F8B4C]/10 hidden'></div>
+        <div className='text-[#3498DB] bg-[#3498DB] bg-[#3498DB]/10 hidden'></div>
+        <div className='text-[#206694] bg-[#206694] bg-[#206694]/10 hidden'></div>
+        <div className='text-[#9B59B6] bg-[#9B59B6] bg-[#9B59B6]/10 hidden'></div>
+        <div className='text-[#71368A] bg-[#71368A] bg-[#71368A]/10 hidden'></div>
+        <div className='text-[#E91E63] bg-[#E91E63] bg-[#E91E63]/10 hidden'></div>
+        <div className='text-[#AD1457] bg-[#AD1457] bg-[#AD1457]/10 hidden'></div>
+        <div className='text-[#F1C40F] bg-[#F1C40F] bg-[#F1C40F]/10 hidden'></div>
+        <div className='text-[#C27C0E] bg-[#C27C0E] bg-[#C27C0E]/10 hidden'></div>
+        <div className='text-[#E67E22] bg-[#E67E22] bg-[#E67E22]/10 hidden'></div>
+        <div className='text-[#A84300] bg-[#A84300] bg-[#A84300]/10 hidden'></div>
+        <div className='text-[#ED4245] bg-[#ED4245] bg-[#ED4245]/10 hidden'></div>
+        <div className='text-[#992D22] bg-[#992D22] bg-[#992D22]/10 hidden'></div>
+        <div className='text-[#95A5A6] bg-[#95A5A6] bg-[#95A5A6]/10 hidden'></div>
+        <div className='text-[#979C9F] bg-[#979C9F] bg-[#979C9F]/10 hidden'></div>
+        <div className='text-[#7F8C8D] bg-[#7F8C8D] bg-[#7F8C8D]/10 hidden'></div>
+        <div className='text-[#BCC0C0] bg-[#BCC0C0] bg-[#BCC0C0]/10 hidden'></div>
+        <div className='text-[#34495E] bg-[#34495E] bg-[#34495E]/10 hidden'></div>
+        <div className='text-[#2C3E50] bg-[#2C3E50] bg-[#2C3E50]/10 hidden'></div>
+        <div className='text-[#FFFF00] bg-[#FFFF00] bg-[#FFFF00]/10 hidden'></div>
+        <div className='text-[#FFFFFF] bg-[#FFFFFF] bg-[#FFFFFF]/10 hidden'></div>
+        <div className='text-[#99AAb5] bg-[#99AAb5] bg-[#99AAb5]/10 hidden'></div>
+        <div className='text-[#23272A] bg-[#23272A] bg-[#23272A]/10 hidden'></div>
+        <div className='text-[#2C2F33] bg-[#2C2F33] bg-[#2C2F33]/10 hidden'></div>
+        <div className='text-[#23272A] bg-[#23272A] bg-[#23272A]/10 hidden'></div>
+        <div className='text-[#5865F2] bg-[#5865F2] bg-[#5865F2]/10 hidden'></div>
+        <div className='text-[#57F287] bg-[#57F287] bg-[#57F287]/10 hidden'></div>
+        <div className='text-[#FEE75C] bg-[#FEE75C] bg-[#FEE75C]/10 hidden'></div>
+        <div className='text-[#EB459E] bg-[#EB459E] bg-[#EB459E]/10 hidden'></div>
+        <div className='text-[#ED4245] bg-[#ED4245] bg-[#ED4245]/10 hidden'></div>
+        <div className='text-[#607D8B] bg-[#607D8B] bg-[#607D8B]/10 hidden'></div>
+        <div className='text-[#546E7A] bg-[#546E7A] bg-[#546E7A]/10 hidden'></div>
+        <div className='text-[#36393F] bg-[#36393F] bg-[#36393F]/10 hidden'></div>
+      </div>
     </div>
   )
 }
