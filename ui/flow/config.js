@@ -7,5 +7,5 @@ config({
   "discovery.wallet": publicConfig.walletDiscovery,
   "sdk.transport": httpSend,
   "app.detail.title": "Lego",
-  "app.detail.icon": "https://imgur.com/QbxspcR"
+  "app.detail.icon": "https://i.imgur.com/QbxspcR.png"
 })
