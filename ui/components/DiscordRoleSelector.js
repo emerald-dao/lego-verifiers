@@ -8,18 +8,8 @@ import {
   showBasicNotificationState,
   transactionInProgressState,
 } from "../lib/atoms"
-import { classNames } from "../lib/utils"
+import { classNames, discordColorPalette } from "../lib/utils"
 import { useSession } from 'next-auth/react'
-import useSWR from "swr"
-
-const discordRolesFetcher = async (funcName, guildID, accessToken) => {
-  const data = await fetch(`https://discord.com/api/guilds/${guildID}/roles`, {
-    headers: {
-      authorization: `Bearer ${accessToken}`,
-    }
-  })
-  return data.json()
-}
 
 export default function DiscordRoleSelector(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
@@ -29,24 +19,26 @@ export default function DiscordRoleSelector(props) {
   const { data: session } = useSession()
 
   const [query, setQuery] = useState("")
-  const { selectedGuild } = props
-  const [ selectedRole, setSelectedRole ] = useState(null)
+  const [selectedRole, setSelectedRole] = useState(null)
   const [filteredRoles, setFilteredRoles] = useState([])
   const [roles, setRoles] = useState([])
 
-  const { data: rolesData, error: rolesError} = useSWR(
-    session && selectedGuild ? ["discordRolesFetcher", selectedGuild.id, session.accessToken] : null, discordRolesFetcher)
-
-  console.log("accessToken", session.accessToken)
-  console.log("selectedGuild", selectedGuild)
-  console.log("rolesError", rolesError)
-
   useEffect(() => {
-    if (rolesData) {
-      console.log(rolesData)
-      setRoles(rolesData)
+    if (session) {
+      const availableRoles = session.guild.roles.filter((role) => {
+        return role.name != "@everyone" && !role.tags
+      })
+      for (let i = 0; i < availableRoles.length; i++) {
+        const r = availableRoles[i]
+        const hex = discordColorPalette[r.color] ? discordColorPalette[r.color].hex : '#000000'
+        r.hexColor = hex
+        r.twTextColor = `text-[${hex}]`
+        r.twBgColor = `bg-[${hex}]`
+      }
+      console.log(availableRoles)
+      setRoles(availableRoles)
     }
-  }, [rolesData])
+  }, [session])
 
   useEffect(() => {
     setFilteredRoles(
@@ -60,15 +52,19 @@ export default function DiscordRoleSelector(props) {
 
 
   return (
+    <div className="flex flex-col gap-y-2">
+      <label className="block text-2xl font-bold font-flow">
+        Role
+      </label>
       <Combobox as="div" className={props.className} value={props.user && props.user.loggedIn && selectedRole} onChange={async (role) => {
-        if (!selectedRole || role.name != selectedRole.name) {
+        if (!selectedRole || role.id != selectedRole.id) {
           setSelectedRole(role)
         }
       }}>
 
         <div className="relative mt-1">
           <Combobox.Input
-            className="w-full h-[50px] text-lg font-flow rounded-2xl border border-emerald bg-white py-2 pl-3 pr-10  focus:border-emerald-dark focus:outline-none focus:ring-1 focus:ring-emerald-dark"
+            className={`w-full h-[50px] text-lg font-flow rounded-2xl border border-emerald bg-white py-2 pl-3 pr-10  focus:border-emerald-dark focus:outline-none focus:ring-1 focus:ring-emerald-dark`}
             onChange={(event) => {
               setQuery(event.target.value)
             }}
@@ -94,10 +90,8 @@ export default function DiscordRoleSelector(props) {
                   {({ active, selected }) => (
                     <>
                       <div className="flex items-center">
-                        <div className="w-6 h-6 relative">
-                          {/* <Image src={guild.logoURL} alt="" layout="fill" objectFit="cover" className="rounded-full" /> */}
-                        </div>
-                        <span className={classNames("ml-3 truncate", selected && "font-semibold")}>{`${role.name}`}</span>
+                        <div className={`${role.twBgColor} rounded-full h-4 w-4`}></div>
+                        <span className={classNames(`ml-3 truncate ${role.twColor}`, selected && "font-semibold")}>{`${role.name}`}</span>
                       </div>
 
                       {selected && (
@@ -117,6 +111,47 @@ export default function DiscordRoleSelector(props) {
             </Combobox.Options>
           )}
         </div>
+
       </Combobox>
+      <div>
+        {/* Discord Colors */}
+        <div className='text-[#000000] hidden'></div>
+        <div className='text-[#1ABC9C] hidden'></div>
+        <div className='text-[#57F287] hidden'></div>
+        <div className='text-[#1F8B4C] hidden'></div>
+        <div className='text-[#3498DB] hidden'></div>
+        <div className='text-[#206694] hidden'></div>
+        <div className='text-[#9B59B6] hidden'></div>
+        <div className='text-[#71368A] hidden'></div>
+        <div className='text-[#E91E63] hidden'></div>
+        <div className='text-[#AD1457] hidden'></div>
+        <div className='text-[#F1C40F] hidden'></div>
+        <div className='text-[#C27C0E] hidden'></div>
+        <div className='text-[#E67E22] hidden'></div>
+        <div className='text-[#A84300] hidden'></div>
+        <div className='text-[#ED4245] hidden'></div>
+        <div className='text-[#992D22] hidden'></div>
+        <div className='text-[#95A5A6] hidden'></div>
+        <div className='text-[#979C9F] hidden'></div>
+        <div className='text-[#7F8C8D] hidden'></div>
+        <div className='text-[#BCC0C0] hidden'></div>
+        <div className='text-[#34495E] hidden'></div>
+        <div className='text-[#2C3E50] hidden'></div>
+        <div className='text-[#FFFF00] hidden'></div>
+        <div className='text-[#FFFFFF] hidden'></div>
+        <div className='text-[#99AAb5] hidden'></div>
+        <div className='text-[#23272A] hidden'></div>
+        <div className='text-[#2C2F33] hidden'></div>
+        <div className='text-[#23272A] hidden'></div>
+        <div className='text-[#5865F2] hidden'></div>
+        <div className='text-[#57F287] hidden'></div>
+        <div className='text-[#FEE75C] hidden'></div>
+        <div className='text-[#EB459E] hidden'></div>
+        <div className='text-[#ED4245] hidden'></div>
+        <div className='text-[#607D8B] hidden'></div>
+        <div className='text-[#546E7A] hidden'></div>
+        <div className='text-[#36393F] hidden'></div>
+      </div>
+    </div>
   )
 }

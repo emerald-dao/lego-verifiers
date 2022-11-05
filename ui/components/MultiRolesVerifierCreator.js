@@ -13,6 +13,9 @@ import VerificationModeSelector, { ModeNormal } from "./VerificationModeSelector
 import { addVerifier } from "../flow/transactions"
 import { useRouter } from "next/router"
 import DiscordGuildSelector from "./DiscordGuildSelector"
+import DiscordAccountView from "./DiscordAccountView"
+import { useSession } from 'next-auth/react'
+import DiscordGuildView from "./DiscordGuildView"
 
 const NamePlaceholder = "Verifier's Name";
 const GuildIdPlaceholder = "906264258189332541";
@@ -41,6 +44,8 @@ export default function MultiRolesVerifierCreator(props) {
   const [roleVerifiers, setRoleVerifiers] = useState([])
   const [mode, setMode] = useState(ModeNormal)
 
+  const { data: session } = useSession()
+
   const canCreateLego = () => {
     return !transactionInProgress && roleVerifiers.length > 0 && name.trim().length > 0
   }
@@ -55,12 +60,12 @@ export default function MultiRolesVerifierCreator(props) {
     const roleIds = roleVerifiers.map((rv) => rv.roleID)
 
     const res = await addVerifier(
-      name, 
-      description || "", 
+      name,
+      description || "",
       image || "",
-      script, 
+      script,
       guildId,
-      roleIds, 
+      roleIds,
       `${mode.raw}`,
       setTransactionInProgress,
       setTransactionStatus
@@ -77,103 +82,106 @@ export default function MultiRolesVerifierCreator(props) {
 
   return (
     <div className="flex flex-col gap-y-10">
-      <div className="flex flex-row justify-between gap-x-10">
-        <div className="flex flex-col justify-between">
-          <label className="block text-2xl font-bold font-flow">
-            Image
-          </label>
-          <label className="block text-md font-flow leading-6 mt-2 mb-2">Should not be larger than 500 KB.</label>
-          <ImageSelector imageSelectedCallback={(_image, _imageSize) => {
-            setImage(_image)
-            setImageSize(_imageSize)
-          }} />
-        </div>
-        <BasicInfoMemoizeImage image={image || "/lego.png"} />
-      </div>
+      <DiscordAccountView />
+      <DiscordGuildView />
+      {session ?
+        <>
+          <div className="w-full justify-between flex gap-x-2 items-center">
+          <div className="w-full h-[1px] bg-gray-200"></div>
+          <label className="shrink-0 text-gray-400 text-sm">⬇️ BUILD YOU LEGO ⬇️</label>
+          <div className="w-full h-[1px] bg-gray-200"></div>
+          </div>
+          <div className="flex flex-row justify-between gap-x-10">
+            <div className="flex flex-col justify-between">
+              <label className="block text-2xl font-bold font-flow">
+                Image
+              </label>
+              <label className="block text-md font-flow leading-6 mt-2 mb-2">Should not be larger than 500 KB.</label>
+              <ImageSelector imageSelectedCallback={(_image, _imageSize) => {
+                setImage(_image)
+                setImageSize(_imageSize)
+              }} />
+            </div>
+            <BasicInfoMemoizeImage image={image || "/lego.png"} />
+          </div>
 
-      <div className="flex flex-col gap-y-2">
-        <label className="block text-2xl font-bold font-flow">
-          Guilds<span className="text-red-600">*</span>
-        </label>
-        <DiscordGuildSelector selectedGuild={selectedGuild} setSelectedGuild={setSelectedGuild} />
-      </div>
-
-      <div className="flex flex-col gap-y-2">
-        <label className="block text-2xl font-bold font-flow">
-          Name<span className="text-red-600">*</span>
-        </label>
-        <div className="mt-1">
-          <input
-            type="text"
-            name="name"
-            id="name"
-            disabled={transactionInProgress}
-            required
-            className="block w-full font-flow text-lg rounded-2xl px-3 py-2
+          <div className="flex flex-col gap-y-2">
+            <label className="block text-2xl font-bold font-flow">
+              Name<span className="text-red-600">*</span>
+            </label>
+            <div className="mt-1">
+              <input
+                type="text"
+                name="name"
+                id="name"
+                disabled={transactionInProgress}
+                required
+                className="block w-full font-flow text-lg rounded-2xl px-3 py-2
             border border-emerald focus:border-emerald-dark
             outline-0 focus:outline-2 focus:outline-emerald-dark 
             placeholder:text-gray-300"
-            placeholder={NamePlaceholder}
-            onChange={(event) => {
-              setName(event.target.value)
-            }}
-          />
-        </div>
-      </div>
+                placeholder={NamePlaceholder}
+                onChange={(event) => {
+                  setName(event.target.value)
+                }}
+              />
+            </div>
+          </div>
 
-      {/** description */}
-      <div className="flex flex-col gap-y-2">
-        <label className="block text-2xl font-bold font-flow">
-          Description
-        </label>
-        <div className="mt-1">
-          <textarea
-            rows={4}
-            name="description"
-            id="description"
-            disabled={transactionInProgress}
-            className="focus:ring-emerald-dark rounded-2xl px-3 py-2
+          {/** description */}
+          <div className="flex flex-col gap-y-2">
+            <label className="block text-2xl font-bold font-flow">
+              Description
+            </label>
+            <div className="mt-1">
+              <textarea
+                rows={4}
+                name="description"
+                id="description"
+                disabled={transactionInProgress}
+                className="focus:ring-emerald-dark rounded-2xl px-3 py-2
                 bg-emerald-ultralight resize-none block w-full font-flow text-lg placeholder:text-gray-300
                 border border-emerald focus:border-emerald-dark
                 outline-0 focus:outline-2 focus:outline-emerald-dark"
 
-            defaultValue={''}
-            spellCheck={false}
-            placeholder={DescriptionPlaceholder}
-            onChange={(event) => { setDescription(event.target.value) }}
+                defaultValue={''}
+                spellCheck={false}
+                placeholder={DescriptionPlaceholder}
+                onChange={(event) => { setDescription(event.target.value) }}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-y-2">
+            <label className="block text-2xl font-bold font-flow">
+              Verification Mode
+            </label>
+            <VerificationModeSelector mode={mode} setMode={setMode} />
+          </div>
+
+          <MultiRolesView
+            roleVerifiers={roleVerifiers}
+            setRoleVerifiers={setRoleVerifiers}
+            selectedGuild={selectedGuild}
           />
-        </div>
-      </div>
 
-      <div className="flex flex-col gap-y-2">
-        <label className="block text-2xl font-bold font-flow">
-          Verification Mode
-        </label>
-        <VerificationModeSelector mode={mode} setMode={setMode} />
-      </div>
-
-      <MultiRolesView
-        roleVerifiers={roleVerifiers}
-        setRoleVerifiers={setRoleVerifiers}
-        selectedGuild={selectedGuild}
-      />
-
-      <div>
-        <button
-          type="button"
-          className={classNames(
-            !canCreateLego() ? "bg-emerald-light text-gray-500" : "bg-emerald hover:bg-emerald-dark text-black",
-            "mt-24 w-full h-[56px] text-lg font-semibold rounded-2xl shadow-drizzle"
-          )}
-          disabled={!canCreateLego()}
-          onClick={() => {
-            handleSubmit()
-          }}
-        >
-          {user.loggedIn ? "Create Lego Verifier" : "Connect Wallet"}
-        </button>
-      </div>
-
+          <div>
+            <button
+              type="button"
+              className={classNames(
+                !canCreateLego() ? "bg-emerald-light text-gray-500" : "bg-emerald hover:bg-emerald-dark text-black",
+                "mt-24 w-full h-[56px] text-lg font-semibold rounded-2xl shadow-drizzle"
+              )}
+              disabled={!canCreateLego()}
+              onClick={() => {
+                handleSubmit()
+              }}
+            >
+              {user.loggedIn ? "Create Lego Verifier" : "Connect Wallet"}
+            </button>
+          </div>
+        </> : null
+      }
     </div>
   )
 }

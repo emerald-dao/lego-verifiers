@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import DiscordProvider from "next-auth/providers/discord"
 
-const scopes = ['identify', 'guilds'].join(' ')
+const scopes = ['identify', 'guilds', 'bot'].join(' ')
 
 export const authOptions = {
   providers: [
@@ -18,6 +18,8 @@ export const authOptions = {
       session.accessToken = token.accessToken
       session.user.id = token.id
       session.user.discriminator = token.discriminator
+      session.guild = token.guild
+      session.token_type = token.token_type
       return session
     },
     async jwt({ token, account, profile }) {
@@ -28,6 +30,8 @@ export const authOptions = {
         token.accessToken = account.access_token
         token.id = profile.id
         token.discriminator = profile.discriminator
+        token.token_type = account.token_type
+        token.guild = account.guild
       }
       return token
     }
