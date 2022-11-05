@@ -41,45 +41,6 @@ export default function DiscordRoleSelector(props) {
 
   return (
     <div className="flex flex-col gap-y-2">
-      <div>
-        {/* Discord Colors */}
-        <div className='text-[#000000] hidden'></div>
-        <div className='text-[#1ABC9C] hidden'></div>
-        <div className='text-[#57F287] hidden'></div>
-        <div className='text-[#1F8B4C] hidden'></div>
-        <div className='text-[#3498DB] hidden'></div>
-        <div className='text-[#206694] hidden'></div>
-        <div className='text-[#9B59B6] hidden'></div>
-        <div className='text-[#71368A] hidden'></div>
-        <div className='text-[#E91E63] hidden'></div>
-        <div className='text-[#AD1457] hidden'></div>
-        <div className='text-[#F1C40F] hidden'></div>
-        <div className='text-[#C27C0E] hidden'></div>
-        <div className='text-[#E67E22] hidden'></div>
-        <div className='text-[#A84300] hidden'></div>
-        <div className='text-[#ED4245] hidden'></div>
-        <div className='text-[#992D22] hidden'></div>
-        <div className='text-[#95A5A6] hidden'></div>
-        <div className='text-[#979C9F] hidden'></div>
-        <div className='text-[#7F8C8D] hidden'></div>
-        <div className='text-[#BCC0C0] hidden'></div>
-        <div className='text-[#34495E] hidden'></div>
-        <div className='text-[#2C3E50] hidden'></div>
-        <div className='text-[#FFFF00] hidden'></div>
-        <div className='text-[#FFFFFF] hidden'></div>
-        <div className='text-[#99AAb5] hidden'></div>
-        <div className='text-[#23272A] hidden'></div>
-        <div className='text-[#2C2F33] hidden'></div>
-        <div className='text-[#23272A] hidden'></div>
-        <div className='text-[#5865F2] hidden'></div>
-        <div className='text-[#57F287] hidden'></div>
-        <div className='text-[#FEE75C] hidden'></div>
-        <div className='text-[#EB459E] hidden'></div>
-        <div className='text-[#ED4245] hidden'></div>
-        <div className='text-[#607D8B] hidden'></div>
-        <div className='text-[#546E7A] hidden'></div>
-        <div className='text-[#36393F] hidden'></div>
-      </div>
       <label className="block text-2xl font-bold font-flow">
         Role
       </label>
@@ -95,7 +56,7 @@ export default function DiscordRoleSelector(props) {
             onChange={(event) => {
               setQuery(event.target.value)
             }}
-            displayValue={(role) => role && `${role.name}`}
+            displayValue={() => selectedRole && `${selectedRole.name}`}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
             <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -138,9 +99,7 @@ export default function DiscordRoleSelector(props) {
             </Combobox.Options>
           )}
         </div>
-
       </Combobox>
-
     </div>
   )
 }

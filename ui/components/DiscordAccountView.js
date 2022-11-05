@@ -40,10 +40,8 @@ export default function DiscordAccountView(props) {
             }}>
             Disconnect
           </button>
-
         </div>
       </div>
-
     </div>
   )
 }
