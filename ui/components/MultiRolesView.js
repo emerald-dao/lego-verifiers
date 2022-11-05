@@ -15,7 +15,7 @@ export default function MultiRolesView(props) {
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
   const [transactionInProgress, ] = useRecoilState(transactionInProgressState)
 
-  const { roleVerifiers, setRoleVerifiers } = props
+  const { roleVerifiers, setRoleVerifiers, selectedGuild } = props
   const [open, setOpen] = useState(false)
   const [verifierToBeEdit, setVerifierToBeEdit] = useState(null)
 
@@ -82,6 +82,7 @@ export default function MultiRolesView(props) {
         setOpen={setOpen}
         roleVerifierToBeEdit={verifierToBeEdit}
         createNewRoleVerifier={createNewRoleVerifier}
+        selectedGuild={selectedGuild}
       />
     </div>
   )

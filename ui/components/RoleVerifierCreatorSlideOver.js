@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import RoleVerifierCreator from './RoleVerifierCreator'
-import DiscordRoleView from './DiscordRoleView'
+import DiscordRoleSelector from './DiscordRoleSelector'
 import LogicSelector, { BasicVerifiersLogic } from './LogicSelector'
 
 import { useRecoilState } from "recoil"
@@ -12,12 +12,19 @@ import {
 } from "../lib/atoms.js"
 import { isValidRoleID } from '../lib/utils'
 
+
+
 export default function RoleVerifierCreatorSlideOver(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
 
-  const { open, setOpen, createNewRoleVerifier, roleVerifierToBeEdit, updateRoleVerifier } = props
+  const { open, setOpen, 
+    createNewRoleVerifier, roleVerifierToBeEdit, updateRoleVerifier,
+    selectedGuild
+  } = props
   const [roleID, setRoleID] = useState(null)
+  const [role, selectedRole] = useState(null)
+
   const [basicVerifiersLogic, setBasicVerifiersLogic] = useState(BasicVerifiersLogic.AND)
   const [basicVerifiers, setBasicVerifiers] = useState([])
 
@@ -80,10 +87,11 @@ export default function RoleVerifierCreatorSlideOver(props) {
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
                         <div className="flex flex-col gap-y-8">
-                          <DiscordRoleView
+                          <DiscordRoleSelector selectedGuild={selectedGuild} />
+                          {/* <DiscordRoleView
                             roleID={roleID}
                             setRoleID={setRoleID}
-                          />
+                          /> */}
                           <LogicSelector
                             basicVerifiersLogic={basicVerifiersLogic}
                             setBasicVerifiersLogic={setBasicVerifiersLogic}

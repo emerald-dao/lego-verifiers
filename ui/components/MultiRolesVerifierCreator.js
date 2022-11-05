@@ -12,6 +12,7 @@ import MultiRolesView from "./MultiRolesView"
 import VerificationModeSelector, { ModeNormal } from "./VerificationModeSelector"
 import { addVerifier } from "../flow/transactions"
 import { useRouter } from "next/router"
+import DiscordGuildSelector from "./DiscordGuildSelector"
 
 const NamePlaceholder = "Verifier's Name";
 const GuildIdPlaceholder = "906264258189332541";
@@ -36,7 +37,7 @@ export default function MultiRolesVerifierCreator(props) {
   const [description, setDescription] = useState("")
   const [image, setImage] = useState(null)
   const [imageSize, setImageSize] = useState(0)
-  const [guildId, setGuildId] = useState(0);
+  const [selectedGuild, setSelectedGuild] = useState(null);
   const [roleVerifiers, setRoleVerifiers] = useState([])
   const [mode, setMode] = useState(ModeNormal)
 
@@ -92,25 +93,9 @@ export default function MultiRolesVerifierCreator(props) {
 
       <div className="flex flex-col gap-y-2">
         <label className="block text-2xl font-bold font-flow">
-          Guild Id<span className="text-red-600">*</span>
+          Guilds<span className="text-red-600">*</span>
         </label>
-        <div className="mt-1">
-          <input
-            type="text"
-            name="guildid"
-            id="guildid"
-            disabled={transactionInProgress}
-            required
-            className="block w-full font-flow text-lg rounded-2xl px-3 py-2
-            border border-emerald focus:border-emerald-dark
-            outline-0 focus:outline-2 focus:outline-emerald-dark 
-            placeholder:text-gray-300"
-            placeholder={GuildIdPlaceholder}
-            onChange={(event) => {
-              setGuildId(event.target.value)
-            }}
-          />
-        </div>
+        <DiscordGuildSelector selectedGuild={selectedGuild} setSelectedGuild={setSelectedGuild} />
       </div>
 
       <div className="flex flex-col gap-y-2">
@@ -170,6 +155,7 @@ export default function MultiRolesVerifierCreator(props) {
       <MultiRolesView
         roleVerifiers={roleVerifiers}
         setRoleVerifiers={setRoleVerifiers}
+        selectedGuild={selectedGuild}
       />
 
       <div>

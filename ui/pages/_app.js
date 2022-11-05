@@ -10,13 +10,15 @@ import Footer from '../components/Footer'
 import TransactionNotification from '../components/common/TransactionNotification'
 import BasicNotification from '../components/common/BasicNotification'
 import publicConfig from '../publicConfig'
+import { SessionProvider } from "next-auth/react"
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
   const [user, setUser] = useState({ loggedIn: null })
   useEffect(() => fcl.currentUser.subscribe(setUser), [])
 
   return (
       <div className="bg-white text-black bg-[url('/bg.png')] bg-cover bg-center min-h-screen">
+        <SessionProvider session={session}>
         <RecoilRoot>
           <Head>
             <title>Lego | Create Your Emerald Bot Verifier</title>
@@ -28,6 +30,7 @@ function MyApp({ Component, pageProps }) {
           <TransactionNotification />
           <BasicNotification />
         </RecoilRoot>
+        </SessionProvider>
       </div>
   )
 }

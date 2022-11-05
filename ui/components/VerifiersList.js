@@ -1,6 +1,5 @@
 import { useState } from "react"
 import Image from 'next/image'
-import { useRouter } from 'next/router'
 import { useRecoilState } from "recoil"
 import {
   transactionInProgressState,
@@ -16,7 +15,6 @@ import { useSWRConfig } from "swr"
 export default function VerifiersList(props) {
   const [transactionInProgress, setTransactionInProgress] = useRecoilState(transactionInProgressState)
   const [, setTransactionStatus] = useRecoilState(transactionStatusState)
-  const router = useRouter()
 
   const { verifiers, user } = props
   const [openScript, setOpenScript] = useState(false)
@@ -28,36 +26,10 @@ export default function VerifiersList(props) {
 
   return (
     <div className="p-2">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-2xl font-bold text-gray-900">
-            {`Verifiers (${verifiers.length})`}
-          </h1>
-        </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <div hidden className="text-green-800 bg-green-100"></div>
-          <div hidden className="text-blue-800 bg-blue-100"></div>
-          <div hidden className="text-red-800 bg-red-100"></div>
-          <div hidden className="text-yellow-800 bg-yellow-100"></div>
-          {
-            <button
-              type="button"
-              disabled={transactionInProgress}
-              className={
-                classNames(
-                  transactionInProgress ? "bg-emerald-light" : "bg-emerald hover:bg-emerald-dark",
-                  "inline-flex items-center rounded-2xl justify-center border border-transparent px-4 py-2 text-sm font-medium text-black shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2 sm:w-auto"
-                )}
-              onClick={() => {
-                router.push("/")
-              }}
-            >
-              New Verifier
-            </button>
-          }
-        </div>
-      </div>
-
+      <div hidden className="text-green-800 bg-green-100"></div>
+      <div hidden className="text-blue-800 bg-blue-100"></div>
+      <div hidden className="text-red-800 bg-red-100"></div>
+      <div hidden className="text-yellow-800 bg-yellow-100"></div>
       {verifiers.length > 0 ?
         <div className="mt-3 flex flex-col w-full">
           <div className="px-1 overflow-x-auto">
