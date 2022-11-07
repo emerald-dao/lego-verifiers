@@ -16,6 +16,7 @@
     "autoprefixer": "^10.4.8",
     "decimal.js": "^10.4.1",
     "next": "12.2.5",
+    "next-auth": "^4.15.1",
     "postcss": "^8.4.16",
     "react": "18.2.0",
     "react-dom": "18.2.0",

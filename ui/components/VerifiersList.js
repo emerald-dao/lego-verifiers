@@ -18,7 +18,7 @@ export default function VerifiersList(props) {
   const [, setTransactionStatus] = useRecoilState(transactionStatusState)
   const router = useRouter()
 
-  const { verifiers, user } = props
+  const { verifiers, user, guildId } = props
   const [openScript, setOpenScript] = useState(false)
   const [currentScript, setCurrentScript] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
@@ -76,7 +76,7 @@ export default function VerifiersList(props) {
                         Mode
                       </th>
                       <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                        Role IDs
+                        Roles
                       </th>
                       <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                         Script
@@ -100,11 +100,11 @@ export default function VerifiersList(props) {
                             </div>
                             <div className="flex flex-col ml-4">
                               <label className="block font-medium text-gray-900 break-words max-w-[300px] min-w-[60px]">{verifier.name}</label>
-                              <label className="text-gray-500">{verifier.uuid}</label>
+                              <label className="shrink-0 truncate text-gray-500 text-xs">UUID: {verifier.uuid}</label>
                             </div>
                           </div>
                         </td>
-                        <td className="px-3 py-4 text-sm text-gray-500 min-w-[200px]">
+                        <td className="px-3 py-4 text-sm text-gray-500 min-w-[140px]">
                           <div className="text-gray-500">
                             {verifier.description}
                           </div>
@@ -117,10 +117,10 @@ export default function VerifiersList(props) {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <div className="flex flex-col gap-y-1 items-start">
                             {
-                              verifier.roleIds.map((id, index) => {
+                              verifier.roles.map((role, index) => {
                                 return (
-                                  <label key={`role-${index}`} className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 text-indigo-500 bg-indigo-100`}>
-                                    {id}
+                                  <label key={`role-${index}`} className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${role.twBgColor} ${role.twTextColor}`}>
+                                    {role.name}
                                   </label>
                                 )
                               })
@@ -148,7 +148,7 @@ export default function VerifiersList(props) {
                               )}
                             onClick={async () => {
                               await deleteVerifier(verifier.uuid, setTransactionInProgress, setTransactionStatus)
-                              mutate(["verifiersFetcher", user.addr])
+                              mutate(["verifiersFetcher", user.addr, guildId])
                             }}
                           >
                             Delete

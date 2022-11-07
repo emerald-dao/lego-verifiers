@@ -33,7 +33,6 @@ export default function Footer() {
         </a>
         <label className="font-flow text-sm whitespace-pre">2022. All rights reserved.</label>
       </div>
-
     </footer>
   )
 }

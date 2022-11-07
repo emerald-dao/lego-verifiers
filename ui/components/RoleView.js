@@ -27,16 +27,14 @@ export default function RoleView(props) {
       >
         <div className="flex justify-between truncate shrink">
           <div className="flex gap-x-1 items-center truncate shrink">
-            <label className="truncate shrink text-gray-400 font-flow font-normal">Role&nbsp;
-              <label className="truncate shrink text-indigo-500 text-lg font-bold leading-5">
-                {roleVerifier.roleID}
+              <label className={`truncate shrink ${roleVerifier.role.twTextColor} text-lg font-bold`}>
+                {roleVerifier.role.name}
               </label>
-            </label>
           </div>
           <div className="w-6 h-6"></div>
         </div>
 
-        <div className="truncate shrink mt-5 flex flex-col gap-y-3 text-sm">
+        <div className="truncate shrink mt-4 flex flex-col gap-y-3 text-sm">
           <div className="truncate shrink flex justify-between h-5 gap-x-2">
             <div className="truncate shrink flex gap-x-1 items-center">
               <div className={`shrink-0 rounded-full w-2 h-2 ${roleVerifier.basicVerifiersLogic == "AND" ? "bg-blue-500" : "bg-yellow-500"}`}></div>
@@ -57,7 +55,7 @@ export default function RoleView(props) {
                 roleVerifier.basicVerifiers.map((bv, index) => {
                   return (
                     <div key={index} className="rounded-full overflow-hidden flex items-center">
-                      <Image className="rounded-full" src={bv.logo} width={20} height={20}></Image>
+                      <Image className="rounded-full" alt="" src={bv.logo} width={20} height={20}></Image>
                     </div>
                   )
                 })
