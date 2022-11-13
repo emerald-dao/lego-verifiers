@@ -7,6 +7,49 @@ export const PresetVerifiersList = (network) => {
   return testnetPresetVerifiersList
 }
 
+const paramsAmount = {
+  names: {placeholder: "AMOUNT", display: "Amount"},
+  value: null,
+  regex: /^(0|[1-9]\d*)$/,
+  isValid: false,
+  validate: (value) => {
+    try {
+      const v = new Decimal(value)
+      return v.isInteger() && v.isPositive() && !v.isZero()
+    } catch (e) {
+      return false
+    }
+  }
+}
+
+const paramsEvent = {
+  names: {placeholder: "EVENT_ID", display: "Event ID"},
+  value: null,
+  regex: /^(0|[1-9]\d*)$/,
+  isValid: false,
+  validate: (value) => {
+    try {
+      const v = new Decimal(value)
+      return v.isInteger() && v.isPositive() && !v.isZero()
+    } catch (e) {
+      return false
+    }
+  }
+}
+
+export const catalogTemplate =  {
+  id: 0,
+  name: "NFT Catalog",
+  description: "Create customize verifiers for NFTs in NFT Catalog",
+  logo: "/nft-catalog.png",
+  parameters: [
+    paramsAmount
+  ],
+  imports: [
+  ],
+  script: ``
+}
+
 export const testnetPresetVerifiersList = [
   {
     id: 0,
@@ -15,20 +58,7 @@ export const testnetPresetVerifiersList = [
     logo: "/float.png",
     cadence: "owns_float.cdc",
     parameters: [
-      {
-        names: {placeholder: "EVENT_ID", display: "Event ID"},
-        value: null,
-        regex: /^(0|[1-9]\d*)$/,
-        isValid: false,
-        validate: (value) => {
-          try {
-            const v = new Decimal(value)
-            return v.isInteger() && v.isPositive() && !v.isZero()
-          } catch (e) {
-            return false
-          }
-        }
-      }
+      paramsEvent
     ],
     imports: [
       "import FLOAT from 0x2d4c3caffbeab845"
@@ -49,20 +79,7 @@ export const testnetPresetVerifiersList = [
     logo: "/flovatar.jpeg",
     cadence: "owns_x_flovatars.cdc",
     parameters: [
-      {
-        names: {placeholder: "AMOUNT", display: "Amount"},
-        value: null,
-        regex: /^(0|[1-9]\d*)$/,
-        isValid: false,
-        validate: (value) => {
-          try {
-            const v = new Decimal(value)
-            return v.isInteger() && v.isPositive() && !v.isZero()
-          } catch (e) {
-            return false
-          }
-        }
-      }
+      paramsAmount
     ],
     imports: [
       "import Flovatar from 0x921ea449dffec68a"

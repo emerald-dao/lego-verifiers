@@ -1,5 +1,16 @@
-import Decimal from "decimal.js"
 import { ModeShortCircuit } from "../components/VerificationModeSelector"
+
+export const getIPFSFileURL = (cid, path) => {
+  if (!cid || !path) { return }
+  return `https://gateway.pinata.cloud/ipfs/${cid}/${path}`
+}
+
+export const getIPFSFileURLByURL = (url) => {
+  if (!url.includes("ipfs://")) { return }
+  const newURL = url.replace("ipfs://", "")
+  return `https://gateway.pinata.cloud/ipfs/${newURL}`
+}
+
 
 export const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
@@ -8,8 +19,8 @@ export const classNames = (...classes) => {
 export const generateScript = (roleVerifiers, verificationMode) => {
   const imports = generateImports(roleVerifiers)
 
-  const checkNumber = 0
-  const totalMain = ""
+  let checkNumber = 0
+  let totalMain = ""
   for (let i = 0; i < roleVerifiers.length; i++) {
     const rv = roleVerifiers[i]
     const roleId = rv.role.id
@@ -125,5 +136,26 @@ export const discordColorPalette = {
   6323595: { hex: '#607D8B', name: 'Unnamed role color 1' },
   5533306: { hex: '#546E7A', name: 'Unnamed role color 2' },
   3553599: { hex: '#36393F', name: 'Background black color' },
+}
+
+export const getCatalogImageSrc = (metadata) => {
+  let src = null
+  let squareImageFile = metadata.collectionDisplay.squareImage.file
+  if (squareImageFile.url && squareImageFile.url.trim() != '' && !squareImageFile.url.includes("ipfs://")) {
+    src = squareImageFile.url.trim()
+    return src
+  } else if (squareImageFile.url.includes("ipfs://")) {
+    return getIPFSFileURLByURL(squareImageFile.url)
+  } else if (squareImageFile.cid
+    && squareImageFile.cid.trim() != ''
+    && squareImageFile.path
+    && squareImageFile.path.trim() != '') {
+    const imageCID = squareImageFile.cid.trim()
+    const imagePath = squareImageFile.path.trim()
+    return getIPFSFileURL(imageCID, imagePath)
+  } else {
+    console.log("squareImageFile:", squareImageFile)
+    return "/nft-catalog.png"
+  }
 }
 

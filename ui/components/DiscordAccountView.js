@@ -23,7 +23,7 @@ export default function DiscordAccountView(props) {
         <div className="shrink truncate py-3 px-5 shadow-md rounded-2xl bg-emerald/30 flex flex-col sm:flex-row gap-y-3 sm:gap-x-2 sm:justify-between sm:items-center">
           <div className="flex gap-x-3 items-center">
             <div className="rounded-full shrink-0 h-[64px] aspect-square bg-white relative sm:max-w-[64px] ring-1 ring-black ring-opacity-10 overflow-hidden">
-              <Image src={session.user.image} alt="" className="rounded-2xl" layout="fill" objectFit="cover" />
+              <Image src={session.user.image} alt="" className="rounded-2xl object-cover" fill sizes="33vw" /> 
             </div>
             <div className="shrink truncate flex flex-col">
               <label className="shrink truncate font-bold text-lg">{session.user.name}</label>

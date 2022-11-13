@@ -7,6 +7,7 @@ import {
   basicNotificationContentState,
   showBasicNotificationState,
   transactionInProgressState,
+  nftCatalogState
 } from "../lib/atoms"
 import { NFTList } from "../flow/nft-list"
 import publicConfig from "../publicConfig.js"
@@ -20,8 +21,11 @@ export default function NFTSelector(props) {
   const [query, setQuery] = useState("")
   const { selectedNFT, setSelectedNFT } = props
   const [filteredNFTs, setFilteredNFTs] = useState([])
+  const [nftCatalog, setNFTCatalog] = useRecoilState(nftCatalogState)
+  console.log("selectedNFT", selectedNFT)
 
-  const NFTs = NFTList(publicConfig.chainEnv)
+  // const NFTs = NFTList(publicConfig.chainEnv)
+  const NFTs = nftCatalog
 
   useEffect(() => {
     setFilteredNFTs(
@@ -60,7 +64,7 @@ export default function NFTSelector(props) {
             <Combobox.Options className="absolute z-10 rounded-2xl mt-1 max-h-56 w-full overflow-auto  bg-white py-1 text-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               {filteredNFTs.map((nft) => (
                 <Combobox.Option
-                  key={nft.name}
+                  key={`${nft.name}${nft.contractName}`}
                   value={nft}
                   className={({ active }) =>
                     classNames(
@@ -72,8 +76,8 @@ export default function NFTSelector(props) {
                   {({ active, selected }) => (
                     <>
                       <div className="flex items-center">
-                        <div className="w-6 h-6 relative">
-                          <Image src={nft.logoURL} alt="" layout="fill" objectFit="cover" className="rounded-full" />
+                        <div className="rounded-full ring-1 ring-emerald w-6 h-6 relative shrink-0">
+                          <Image src={nft.logoURL} alt="" fill sizes="33vw" className="rounded-full object-contain" />
                         </div>
                         <span className={classNames("ml-3 truncate", selected && "font-semibold")}>{`${nft.name}`}</span>
                       </div>

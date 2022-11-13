@@ -20,7 +20,7 @@ export default function DiscordGuildView(props) {
         <label>You are creating verifiers for</label>
         <div className="py-3 px-5 shadow-md rounded-2xl bg-emerald/30 flex gap-x-3 items-center">
           <div className="rounded-full shrink-0 h-[64px] aspect-square bg-white relative sm:max-w-[64px] ring-1 ring-black ring-opacity-10 overflow-hidden">
-            <Image src={logoURL} alt="" className="rounded-2xl" layout="fill" objectFit="cover" />
+            <Image src={logoURL} alt="" className="rounded-2xl object-cover" fill sizes="33vw" /> 
           </div>
           <div className="flex flex-col">
             <label className="font-bold text-lg">{guild.name}</label>

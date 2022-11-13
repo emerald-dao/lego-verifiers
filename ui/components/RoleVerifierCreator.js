@@ -1,11 +1,14 @@
 import BasicVerifierSelector from "./BasicVerifierSelector"
 import BasicVerifierEditor from "./BasicVerifierEditor"
+import { catalogTemplate } from "../flow/preset_verifiers"
 
 export default function RoleVerifierCreator(props) {
   const { basicVerifiers: verifiers, setBasicVerifiers: setVerifiers } = props
 
   const createNewVerifier = () => {
-    setVerifiers(oldVerifiers => [...oldVerifiers, 1])
+    const verifier = Object.assign({}, catalogTemplate) 
+    verifier.isPreset = false
+    setVerifiers(oldVerifiers => [...oldVerifiers, verifier])
   }
 
   const createPresetVerifier = (verifierInfo) => {
@@ -67,6 +70,7 @@ export default function RoleVerifierCreator(props) {
                 key={index}
                 index={index}
                 isPreset={false}
+                verifierInfo={verifier}
                 updateVerifier={updateVerifier}
                 deleteVerifier={deleteVerifier}
               />

@@ -19,3 +19,8 @@ export const basicNotificationContentState = atom({
   key: "basicNotificationContentState",
   default: null
 })
+
+export const nftCatalogState = atom({
+  key: "nftCatalogState",
+  default: []
+})
