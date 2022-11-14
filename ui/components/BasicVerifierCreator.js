@@ -24,7 +24,7 @@ export default function BasicVerifierCreator(props) {
     if (!selectedNFT) { return }
     const nftName = selectedNFT.name
     setLogo(selectedNFT.logoURL)
-    setName(`Owns X ${nftName}`)
+    setName(`Owns _ ${nftName}`)
     setDescription(`Checks to see if a user owns AMOUNT ${nftName}`)
   }
 

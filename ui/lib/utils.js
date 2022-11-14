@@ -18,7 +18,7 @@ export const classNames = (...classes) => {
 }
 
 const generateImportsAndScript = (basicVerifier) => {
-  if (!basicVerifier.isPreset && basicVerifier.name == "Owns X NFTs") {
+  if (!basicVerifier.isPreset && basicVerifier.name == "Owns _ NFT(s)") {
     const nft = basicVerifier.nft
     const publicPath = `/${nft.collectionData.publicPath.domain}/${nft.collectionData.publicPath.identifier}`
     const imports = [
@@ -43,7 +43,7 @@ export const generateScript = (roleVerifiers, verificationMode) => {
     for (let j = 0; j < rv.basicVerifiers.length; j++) {
       const bv = rv.basicVerifiers[j]
       // generate codes for AMOUNT
-      if (!bv.isPreset && bv.name == "Owns X NFTs") {
+      if (!bv.isPreset && bv.name == "Owns _ NFT(s)") {
         const { imports, script } = generateImportsAndScript(bv);
         bv.imports = {[publicConfig.chainEnv]: imports};
         bv.script = script;

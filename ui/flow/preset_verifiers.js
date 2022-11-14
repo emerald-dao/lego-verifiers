@@ -30,9 +30,23 @@ const paramsEvent = {
   }
 }
 
+const paramsNFLAllDayRarity = {
+  names: {placeholder: "RARITY", display: "Rarity"},
+  value: null,
+  regex: null,
+  isValid: false,
+  validate: (value) => {
+    try {
+      return value == "COMMON" || value == "RARE" || value == "LEGENDARY" || value == "ULTIMATE"
+    } catch (e) {
+      return false
+    }
+  }
+}
+
 export const catalogTemplate =  {
   isPreset: false,
-  name: "Owns X NFTs",
+  name: "Owns _ NFT(s)",
   description: "Create customize verifiers for NFTs in NFT Catalog",
   logo: "/nft-catalog.png",
   parameters: [
@@ -71,42 +85,29 @@ export const presetVerifiersList = [
   },
   {
     isPreset: true,
-    name: "Owns X Flovatars",
-    description: "Checks to see if a user owns AMOUNT Flovatars",
-    logo: "/flovatar.jpeg",
-    cadence: "owns_x_flovatars.cdc",
+    name: "Owns _ NFL All Day with Rarity",
+    description: "Checks to see if a user owns a specific number of moments that have a certain rarity.",
+    logo: "/nfl-all-day.jpg",
+    cadence: "owns_nflallday_with_rarity.cdc",
     parameters: [
-      paramsAmount
+      paramsAmount,
+      paramsNFLAllDayRarity
     ],
     imports: {
-      testnet: [],
-      mainnet: ["import Flovatar from 0x921ea449dffec68a"]
+      testnet: ["import AllDay from 0x4dfd62c88d1b6462"],
+      mainnet: ["import AllDay from 0xe4cf4bdc1751c65d"]
     },
     script: `
-    if let collection = getAccount(user).getCapability(Flovatar.CollectionPublicPath).borrow<&{Flovatar.CollectionPublic}>() {
-      let amount: Int = AMOUNT
-      if collection.getIDs().length >= amount {
-        SUCCESS
+    if let allDayCollection = getAccount(user).getCapability(AllDay.CollectionPublicPath).borrow<&AllDay.Collection{AllDay.MomentNFTCollectionPublic}>() {
+      let count: {String: Int} = {"COMMON": 0, "RARE": 0, "LEGENDARY": 0, "ULTIMATE": 0}
+
+      for id in allDayCollection.getIDs() {
+        let moment = allDayCollection.borrowMomentNFT(id: id)!
+        let editionData = AllDay.getEditionData(id: moment.editionID)
+        count[editionData.tier] = (count[editionData.tier] ?? 0) + 1
       }
-    }`
-  },
-  {
-    isPreset: true,
-    name: "Owns Flovatar",
-    description: "Checks to see if a user owns at least 1 Flovatar",
-    logo: "/flovatar.jpeg",
-    cadence: "owns_flovatar.cdc",
-    parameters: [],
-    validateParameters: () => {
-      return true
-    },
-    imports: {
-      testnet: [],
-      mainnet: ["import Flovatar from 0x921ea449dffec68a"]
-    },
-    script: `
-    if let collection = getAccount(user).getCapability(Flovatar.CollectionPublicPath).borrow<&{Flovatar.CollectionPublic}>() {
-      if collection.getIDs().length >= 1 {
+
+      if count["RARITY"]! >= AMOUNT {
         SUCCESS
       }
     }`
