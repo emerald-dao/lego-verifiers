@@ -25,7 +25,7 @@ const DescriptionPlaceholder = "Details about this verifier"
 const BasicInfoMemoizeImage = React.memo(({ image }) => {
   return (
     <div className="rounded-full shrink-0 h-[144px] aspect-square bg-white relative sm:max-w-[460px] ring-1 ring-black ring-opacity-10 overflow-hidden">
-      <Image src={image} alt="" className="rounded-2xl object-cover" fill sizes="33vw" /> 
+      <Image src={image} alt="" className="rounded-2xl object-cover" fill sizes="33vw" />
     </div>
   )
 })
@@ -64,8 +64,6 @@ const filterCatalog = (catalog) => {
     displayNames[metadata.collectionDisplay.name] = displayNameNum
   }
 
-  console.log(contractNames)
-
   for (let metadata of Object.values(catalog)) {
     if (contractNames[metadata.contractName] != 1) {
       continue
@@ -79,9 +77,7 @@ const filterCatalog = (catalog) => {
     catalogArray.push(copyMetadata)
   }
 
-  const result = catalogArray.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
-  console.log("result", result)
-  return result
+  return catalogArray.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
 }
 
 export default function MultiRolesVerifierCreator(props) {
@@ -100,7 +96,6 @@ export default function MultiRolesVerifierCreator(props) {
 
   const { data: session } = useSession()
   const { data: catalogData, error: catalogError } = useSWR(user && session ? ["catalogFetcher"] : null, catalogFetcher)
-  console.log(catalogError)
 
   useEffect(() => {
     if (catalogData) {

@@ -4,27 +4,16 @@ import { CheckIcon, SelectorIcon } from "@heroicons/react/solid"
 import { Combobox } from "@headlessui/react"
 import { useRecoilState } from "recoil"
 import {
-  basicNotificationContentState,
-  showBasicNotificationState,
-  transactionInProgressState,
   nftCatalogState
 } from "../lib/atoms"
-import { NFTList } from "../flow/nft-list"
-import publicConfig from "../publicConfig.js"
 import { classNames } from "../lib/utils"
 
 export default function NFTSelector(props) {
-  const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
-  const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
-  const [transactionInProgress] = useRecoilState(transactionInProgressState)
-
   const [query, setQuery] = useState("")
   const { selectedNFT, setSelectedNFT } = props
   const [filteredNFTs, setFilteredNFTs] = useState([])
   const [nftCatalog, setNFTCatalog] = useRecoilState(nftCatalogState)
-  console.log("selectedNFT", selectedNFT)
 
-  // const NFTs = NFTList(publicConfig.chainEnv)
   const NFTs = nftCatalog
 
   useEffect(() => {
@@ -37,12 +26,11 @@ export default function NFTSelector(props) {
         }))
   }, [query, NFTs])
 
-
   return (
     <div className={"flex flex-col"}>
       <label className="block text-base font-flow font-bold">NFT<span className="text-red-600">*</span></label>
 
-      <Combobox as="div" className={props.className} value={props.user && props.user.loggedIn && selectedNFT} onChange={async (nft) => {
+      <Combobox as="div" className={props.className} value={selectedNFT} onChange={async (nft) => {
         if (!selectedNFT || nft.contractName != selectedNFT.contractName) {
           setSelectedNFT(nft)
         }
@@ -50,11 +38,24 @@ export default function NFTSelector(props) {
 
         <div className="relative mt-1">
           <Combobox.Input
-            className="w-full h-[50px] text-lg font-flow rounded-2xl border border-emerald bg-white py-2 pl-3 pr-10  focus:border-emerald-dark focus:outline-none focus:ring-1 focus:ring-emerald-dark"
+            className={
+              classNames(
+                selectedNFT ? `border-emerald` : `border-rose-500`,
+                "w-full h-[50px] text-lg font-flow rounded-2xl border bg-white py-2 pl-3 pr-10  focus:border-emerald-dark focus:outline-none focus:ring-1 focus:ring-emerald-dark"
+              )
+            }
+
             onChange={(event) => {
               setQuery(event.target.value)
             }}
-            displayValue={(nft) => nft && `${nft.name}`}
+            displayValue={(nft) => {
+              return nft && `${nft.name}`
+            }}
+            onBlur={(event) => {
+              if (!selectedNFT) {
+                setQuery("")
+              }
+            }}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
             <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />

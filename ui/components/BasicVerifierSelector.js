@@ -10,7 +10,7 @@ export default function BasicVerifierSelector(props) {
 
   return (
     <div className={`
-    h-[524px]
+    h-[424px]
     shadow-lg bg-emerald
     ring-1 ring-black ring-opacity-5 rounded-2xl 
     flex flex-col gap-y-4
@@ -28,10 +28,10 @@ export default function BasicVerifierSelector(props) {
             w-full bg-white 
             rounded-2xl shadow-md
             flex gap-x-2 shrink-0
-            p-2 pb-3
+          p-2 pb-3
             `}
               onClick={() => {
-                if (verifier.name == "NFT Catalog") {
+                if (!verifier.isPreset) {
                   createNewVerifier()
                   return
                 }

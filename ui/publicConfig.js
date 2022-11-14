@@ -16,6 +16,9 @@ if (!flowscanURL) throw "Missing NEXT_PUBLIC_FLOWSCAN_URL"
 const nftCatalogAddress = process.env.NEXT_PUBLIC_NFTCATALOG_ADDRESS
 if (!nftCatalogAddress) throw "Missing NEXT_PUBLIC_NFTCATALOG_ADDRESS"
 
+const nonFungibleTokenAddress = process.env.NEXT_PUBLIC_NON_FUNGIBLE_TOKEN_ADDRESS
+if (!nonFungibleTokenAddress) throw "Missing NEXT_PUBLIC_NON_FUNGIBLE_TOKEN_ADDRESS"
+
 const emeraldBotVerifiersAddress = process.env.NEXT_PUBLIC_EMERALD_BOT_VERIFIERS_ADDRESS
 if (!emeraldBotVerifiersAddress) throw "Missing NEXT_PUBLIC_EMERALD_BOT_VERIFIERS_ADDRESS"
 
@@ -28,6 +31,7 @@ const publicConfig = {
   walletDiscovery,
   flowscanURL,
   nftCatalogAddress,
+  nonFungibleTokenAddress,
   emeraldBotVerifiersAddress,
   imageSizeLimit
 }

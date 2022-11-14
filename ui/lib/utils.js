@@ -1,4 +1,5 @@
 import { ModeShortCircuit } from "../components/VerificationModeSelector"
+import publicConfig from "../publicConfig"
 
 export const getIPFSFileURL = (cid, path) => {
   if (!cid || !path) { return }
@@ -16,7 +17,39 @@ export const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
 }
 
+const generateImportsAndScript = (basicVerifier) => {
+  if (!basicVerifier.isPreset && basicVerifier.name == "Owns X NFTs") {
+    const nft = basicVerifier.nft
+    const publicPath = `/${nft.collectionData.publicPath.domain}/${nft.collectionData.publicPath.identifier}`
+    const imports = [
+      `import ${nft.contractName} from ${nft.contractAddress}`,
+      `import NonFungibleToken from ${publicConfig.nonFungibleTokenAddress}`
+    ]
+    const script = `
+  if let collection = getAccount(user).getCapability(${publicPath}).borrow<&{NonFungibleToken.CollectionPublic}>() {
+    let amount: Int = AMOUNT
+    if collection.getIDs().length >= amount {
+      SUCCESS
+    }
+  }`
+    return { imports, script }
+  }
+}
+
 export const generateScript = (roleVerifiers, verificationMode) => {
+  for (let i = 0; i < roleVerifiers.length; i++) {
+    const rv = roleVerifiers[i]
+    for (let j = 0; j < rv.basicVerifiers.length; j++) {
+      const bv = rv.basicVerifiers[j]
+      // generate codes for AMOUNT
+      if (!bv.isPreset && bv.name == "Owns X NFTs") {
+        const { imports, script } = generateImportsAndScript(bv)
+        bv.imports = imports
+        bv.script = script
+      }
+    }
+  }
+
   const imports = generateImports(roleVerifiers)
 
   let checkNumber = 0
@@ -154,7 +187,6 @@ export const getCatalogImageSrc = (metadata) => {
     const imagePath = squareImageFile.path.trim()
     return getIPFSFileURL(imageCID, imagePath)
   } else {
-    console.log("squareImageFile:", squareImageFile)
     return "/nft-catalog.png"
   }
 }

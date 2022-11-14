@@ -4,7 +4,6 @@ import { XIcon } from '@heroicons/react/outline'
 import RoleVerifierCreator from './RoleVerifierCreator'
 import DiscordRoleSelector from './DiscordRoleSelector'
 import LogicSelector, { BasicVerifiersLogic } from './LogicSelector'
-
 import { useRecoilState } from "recoil"
 import {
   showBasicNotificationState,
@@ -15,8 +14,8 @@ export default function RoleVerifierCreatorSlideOver(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
 
-  const { open, setOpen, 
-    createNewRoleVerifier, roleVerifierToBeEdit, updateRoleVerifier } = props
+  const { open, setOpen,
+    createNewRoleVerifier, roleVerifierToBeEdit } = props
   const [selectedRole, setSelectedRole] = useState(null)
 
   const [basicVerifiersLogic, setBasicVerifiersLogic] = useState(BasicVerifiersLogic.AND)
@@ -124,6 +123,12 @@ export default function RoleVerifierCreatorSlideOver(props) {
 
                           for (let i = 0; i < basicVerifiers.length; i++) {
                             const bv = basicVerifiers[i]
+                            if (!bv.isPreset) {
+                              if (!bv.nft) {
+                                alertInvalidParams("No Selected NFT")
+                                return
+                              }
+                            }
                             for (let j = 0; j < bv.parameters.length; j++) {
                               const param = bv.parameters[j]
                               if (!param.isValid) {

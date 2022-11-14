@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { classNames } from "../lib/utils";
 import NFTSelector from "./NFTSelector"
 import { useRecoilState } from "recoil"
@@ -7,30 +7,59 @@ import {
   transactionInProgressState,
 } from "../lib/atoms"
 
-
 export default function BasicVerifierCreator(props) {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
-  const { index, verifierInfo, updateVerifier} = props
+  const { index, verifierInfo, updateVerifierParam, updateNFTCatalogVerifier } = props
   const [selectedNFT, setSelectedNFT] = useState(null)
 
-  const logo = selectedNFT ? selectedNFT.logoURL : verifierInfo.logo
-  const name = selectedNFT ? selectedNFT.name : verifierInfo.name
-  const description = selectedNFT ? selectedNFT.description : verifierInfo.description
+  const [logo, setLogo] = useState(verifierInfo.logo)
+  const [name, setName] = useState(verifierInfo.name)
+  const [description, setDescription] = useState(verifierInfo.description)
+
+  // Only support AMOUNT now
+  // const [parameter, setParameter] = useState(verifierInfo.parameters[0])
   const parameter = verifierInfo.parameters[0]
-  console.log(verifierInfo)
 
-  // const getDescription = (selectedNFT) => {
+  const updateInfo = (selectedNFT) => {
+    if (!selectedNFT) { return }
+    const nftName = selectedNFT.name
+    setLogo(selectedNFT.logoURL)
+    setName(`Owns X ${nftName}`)
+    setDescription(`Checks to see if a user owns AMOUNT ${nftName}`)
+  }
 
-  // }
+  useEffect(() => {
+    if (verifierInfo.nft && selectedNFT) {
+      if (verifierInfo.nft.contractName != selectedNFT.contractName) {
+        setSelectedNFT(verifierInfo.nft)
+      }
+      return
+    }
+
+    if (verifierInfo.nft) {
+      setSelectedNFT(verifierInfo.nft)
+    }
+  }, [verifierInfo])
+
+  useEffect(() => {
+    if (selectedNFT) {
+      updateNFTCatalogVerifier(index, selectedNFT)
+      updateInfo(selectedNFT)
+    }
+  }, [selectedNFT])
 
   return (
-    <div className="flex flex-col gap-y-2 h-full justify-between font-flow p-1">
-      <div className="flex flex-col gap-y-1 font-flow p-1">
-        <div className="w-20 h-20 flex items-center rounded-full py-1 text-base font-bold text-black relative ring-emerald ring-2">
-          <Image className="rounded-full object-contain" src={logo} alt="" fill sizes="33vw" />
+    <div className={`flex flex-col h-full justify-between font-flow p-1`}>
+      <div className="flex flex-col gap-y-1 font-flow">
+        <div className="flex bg-gray-100 items-center rounded-full py-1 text-base font-bold text-black w-20 h-20 relative">
+          {
+            logo ?
+              <Image className="rounded-full object-contain" src={logo} alt="" fill sizes="33vw" />
+              : null
+          }
         </div>
-        <label className="cursor-pointer text-left text-2xl font-bold">{name}</label>
-        <label className="cursor-pointer text-left text-sm">{description}</label>
+        <label className="cursor-pointer truncate text-left text-2xl font-bold">{name}</label>
+        <label className="cursor-pointer truncate text-left text-sm">{description}</label>
       </div>
 
       <div className="flex flex-col gap-y-2 justify-end pb-4">
@@ -58,26 +87,20 @@ export default function BasicVerifierCreator(props) {
               onChange={(event) => {
                 if (parameter.regex) {
                   if (event.target.value === '' || parameter.regex.test(event.target.value)) {
-                    updateVerifier(index, parameter.names.placeholder, event.target.value)
+                    updateVerifierParam(index, parameter.names.placeholder, event.target.value)
                   }
                   return
                 }
-                updateVerifier(index, parameter.names.placeholder, event.target.value)
+                updateVerifierParam(index, parameter.names.placeholder, event.target.value)
               }}
               onBlur={(event) => {
                 const isValid = parameter.validate(parameter.value)
-                updateVerifier(index, parameter.names.placeholder, event.target.value, isValid)
+                updateVerifierParam(index, parameter.names.placeholder, event.target.value, isValid)
               }}
             />
           </div>
         </div>
-
       </div>
-      {/* <VerificationTypeSelector */}
-      {/* verificationTypes={verificationTypes} */}
-      {/* verificationType={verificationType} */}
-      {/* setVerificationType={setVerificationType} */}
-      {/* /> */}
     </div>
   )
 }

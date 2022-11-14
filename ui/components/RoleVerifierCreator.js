@@ -1,12 +1,12 @@
 import BasicVerifierSelector from "./BasicVerifierSelector"
-import BasicVerifierEditor from "./BasicVerifierEditor"
+import BasicVerifierView from "./BasicVerifierView"
 import { catalogTemplate } from "../flow/preset_verifiers"
 
 export default function RoleVerifierCreator(props) {
   const { basicVerifiers: verifiers, setBasicVerifiers: setVerifiers } = props
 
   const createNewVerifier = () => {
-    const verifier = Object.assign({}, catalogTemplate) 
+    const verifier = Object.assign({}, catalogTemplate)
     verifier.isPreset = false
     setVerifiers(oldVerifiers => [...oldVerifiers, verifier])
   }
@@ -18,11 +18,25 @@ export default function RoleVerifierCreator(props) {
   }
 
   const deleteVerifier = (index) => {
-    const newVerifiers = verifiers.filter((verifier, idx) => idx != index)
+    const newVerifiers = verifiers.filter((verifier, idx) => {
+      return idx != index
+    })
     setVerifiers(newVerifiers)
   }
 
-  const updateVerifier = (index, paramName, paramValue, validity = true) => {
+  const updateNFTCatalogVerifier = (index, nft) => {
+    setVerifiers(oldVerifiers => {
+      const newVerifiers = oldVerifiers.map((verifier, idx) => {
+        if (idx == index) {
+          return { ...verifier, nft: nft }
+        }
+        return verifier
+      })
+      return newVerifiers
+    })
+  }
+
+  const updateVerifierParam = (index, paramName, paramValue, validity = true) => {
     setVerifiers(oldVerifiers => {
       const newVerifiers = oldVerifiers.map((verifier, idx) => {
         if (idx == index) {
@@ -55,23 +69,24 @@ export default function RoleVerifierCreator(props) {
           verifiers.map((verifier, index) => {
             if (verifier.isPreset) {
               return (
-                <BasicVerifierEditor
+                <BasicVerifierView
                   key={index}
                   index={index}
                   isPreset={true}
                   verifierInfo={verifier}
-                  updateVerifier={updateVerifier}
+                  updateVerifierParam={updateVerifierParam}
                   deleteVerifier={deleteVerifier}
                 />
               )
             }
             return (
-              <BasicVerifierEditor
+              <BasicVerifierView
                 key={index}
                 index={index}
                 isPreset={false}
                 verifierInfo={verifier}
-                updateVerifier={updateVerifier}
+                updateNFTCatalogVerifier={updateNFTCatalogVerifier}
+                updateVerifierParam={updateVerifierParam}
                 deleteVerifier={deleteVerifier}
               />
             )

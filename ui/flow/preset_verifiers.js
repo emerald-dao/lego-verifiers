@@ -38,8 +38,8 @@ const paramsEvent = {
 }
 
 export const catalogTemplate =  {
-  id: 0,
-  name: "NFT Catalog",
+  isPreset: false,
+  name: "Owns X NFTs",
   description: "Create customize verifiers for NFTs in NFT Catalog",
   logo: "/nft-catalog.png",
   parameters: [
@@ -47,12 +47,13 @@ export const catalogTemplate =  {
   ],
   imports: [
   ],
-  script: ``
+  script: ``,
+  nft: null
 }
 
 export const testnetPresetVerifiersList = [
   {
-    id: 0,
+    isPreset: true,
     name: "Owns FLOAT",
     description: "Checks to see if a user owns a FLOAT from a specific event.",
     logo: "/float.png",
@@ -61,7 +62,7 @@ export const testnetPresetVerifiersList = [
       paramsEvent
     ],
     imports: [
-      "import FLOAT from 0x2d4c3caffbeab845"
+      "import FLOAT from 0x0afe396ebc8eee65"
     ],
     script: `
     if let floatCollection = getAccount(user).getCapability(FLOAT.FLOATCollectionPublicPath).borrow<&FLOAT.Collection{FLOAT.CollectionPublic}>() {
@@ -73,7 +74,7 @@ export const testnetPresetVerifiersList = [
     }`
   },
   {
-    id: 1,
+    isPreset: true,
     name: "Owns X Flovatars",
     description: "Checks to see if a user owns AMOUNT Flovatars",
     logo: "/flovatar.jpeg",
@@ -93,7 +94,7 @@ export const testnetPresetVerifiersList = [
     }`
   },
   {
-    id: 2,
+    isPreset: true,
     name: "Owns Flovatar",
     description: "Checks to see if a user owns at least 1 Flovatar",
     logo: "/flovatar.jpeg",
