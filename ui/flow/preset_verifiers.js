@@ -1,12 +1,5 @@
 import Decimal from "decimal.js"
 
-export const PresetVerifiersList = (network) => {
-  if (network === "mainnet") {
-    return mainnetPresetVerifiersList
-  }
-  return testnetPresetVerifiersList
-}
-
 const paramsAmount = {
   names: {placeholder: "AMOUNT", display: "Amount"},
   value: null,
@@ -45,13 +38,15 @@ export const catalogTemplate =  {
   parameters: [
     paramsAmount
   ],
-  imports: [
-  ],
+  imports: {
+    testnet: [],
+    mainnet: []
+  },
   script: ``,
   nft: null
 }
 
-export const testnetPresetVerifiersList = [
+export const presetVerifiersList = [
   {
     isPreset: true,
     name: "Owns FLOAT",
@@ -61,9 +56,10 @@ export const testnetPresetVerifiersList = [
     parameters: [
       paramsEvent
     ],
-    imports: [
-      "import FLOAT from 0x0afe396ebc8eee65"
-    ],
+    imports: {
+      testnet: ["import FLOAT from 0x0afe396ebc8eee65"],
+      mainnet: ["import FLOAT from 0x2d4c3caffbeab845"]
+    },
     script: `
     if let floatCollection = getAccount(user).getCapability(FLOAT.FLOATCollectionPublicPath).borrow<&FLOAT.Collection{FLOAT.CollectionPublic}>() {
       let eventId: UInt64 = EVENT_ID
@@ -82,9 +78,10 @@ export const testnetPresetVerifiersList = [
     parameters: [
       paramsAmount
     ],
-    imports: [
-      "import Flovatar from 0x921ea449dffec68a"
-    ],
+    imports: {
+      testnet: [],
+      mainnet: ["import Flovatar from 0x921ea449dffec68a"]
+    },
     script: `
     if let collection = getAccount(user).getCapability(Flovatar.CollectionPublicPath).borrow<&{Flovatar.CollectionPublic}>() {
       let amount: Int = AMOUNT
@@ -103,9 +100,10 @@ export const testnetPresetVerifiersList = [
     validateParameters: () => {
       return true
     },
-    imports: [
-      "import Flovatar from 0x921ea449dffec68a"
-    ],
+    imports: {
+      testnet: [],
+      mainnet: ["import Flovatar from 0x921ea449dffec68a"]
+    },
     script: `
     if let collection = getAccount(user).getCapability(Flovatar.CollectionPublicPath).borrow<&{Flovatar.CollectionPublic}>() {
       if collection.getIDs().length >= 1 {
@@ -114,5 +112,3 @@ export const testnetPresetVerifiersList = [
     }`
   }
 ]
-
-export const mainnetPresetVerifiersList = testnetPresetVerifiersList

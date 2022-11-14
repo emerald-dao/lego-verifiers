@@ -1,11 +1,10 @@
 import { PlusCircleIcon } from "@heroicons/react/outline"
 import Image from "next/image"
-import { catalogTemplate, PresetVerifiersList } from "../flow/preset_verifiers"
-import publicConfig from "../publicConfig"
+import { catalogTemplate, presetVerifiersList } from "../flow/preset_verifiers"
 
 export default function BasicVerifierSelector(props) {
 
-  const presetVerifiers = [catalogTemplate].concat(PresetVerifiersList(publicConfig.chainEnv))
+  const presetVerifiers = [catalogTemplate].concat(presetVerifiersList)
   const { createNewVerifier, createPresetVerifier } = props
 
   return (

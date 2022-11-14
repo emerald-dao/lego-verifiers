@@ -26,12 +26,13 @@ const generateImportsAndScript = (basicVerifier) => {
       `import NonFungibleToken from ${publicConfig.nonFungibleTokenAddress}`
     ]
     const script = `
-  if let collection = getAccount(user).getCapability(${publicPath}).borrow<&{NonFungibleToken.CollectionPublic}>() {
-    let amount: Int = AMOUNT
-    if collection.getIDs().length >= amount {
-      SUCCESS
+    if let collection = getAccount(user).getCapability(${publicPath}).borrow<&{NonFungibleToken.CollectionPublic}>() {
+      let amount: Int = AMOUNT
+      if collection.getIDs().length >= amount {
+        SUCCESS
+      }
     }
-  }`
+    `;
     return { imports, script }
   }
 }
@@ -43,9 +44,9 @@ export const generateScript = (roleVerifiers, verificationMode) => {
       const bv = rv.basicVerifiers[j]
       // generate codes for AMOUNT
       if (!bv.isPreset && bv.name == "Owns X NFTs") {
-        const { imports, script } = generateImportsAndScript(bv)
-        bv.imports = imports
-        bv.script = script
+        const { imports, script } = generateImportsAndScript(bv);
+        bv.imports = {[publicConfig.chainEnv]: imports};
+        bv.script = script;
       }
     }
   }
@@ -119,8 +120,9 @@ const generateImports = (roleVerifiers) => {
   for (let i = 0; i < roleVerifiers.length; i++) {
     const rv = roleVerifiers[i]
     for (let j = 0; j < rv.basicVerifiers.length; j++) {
-      const bv = rv.basicVerifiers[j]
-      imports.push(...bv.imports)
+      const bv = rv.basicVerifiers[j];
+      const chainImports = bv.imports[publicConfig.chainEnv];
+      imports.push(...chainImports);
     }
   }
   const uniqueImports = [...new Set(imports)]
