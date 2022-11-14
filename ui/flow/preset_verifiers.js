@@ -30,14 +30,28 @@ const paramsEvent = {
   }
 }
 
-const paramsNFLAllDayRarity = {
-  names: {placeholder: "RARITY", display: "Rarity"},
+const paramsNFLAllDayTier = {
+  names: {placeholder: "TIER", display: "Tier"},
   value: null,
   regex: null,
   isValid: false,
   validate: (value) => {
     try {
       return value == "COMMON" || value == "RARE" || value == "LEGENDARY" || value == "ULTIMATE"
+    } catch (e) {
+      return false
+    }
+  }
+}
+
+const paramsUFCStrikeTier = {
+  names: {placeholder: "TIER", display: "Tier"},
+  value: null,
+  regex: null,
+  isValid: false,
+  validate: (value) => {
+    try {
+      return value == "CHALLENGER" || value == "CONTENDER" || value == "CHAMPION" || value == "FANDOM"
     } catch (e) {
       return false
     }
@@ -84,12 +98,12 @@ export const presetVerifiersList = [
   },
   {
     isPreset: true,
-    name: "Owns _ NFL All Day with Rarity",
-    description: "Checks to see if a user owns a specific number of moments that have a certain rarity.",
+    name: "Owns _ NFL All Day with Tier",
+    description: "Checks to see if a user owns a specific number of moments that have a certain tier.",
     logo: "/nfl-all-day.jpg",
     parameters: [
       paramsAmount,
-      paramsNFLAllDayRarity
+      paramsNFLAllDayTier
     ],
     imports: {
       testnet: ["import AllDay from 0x4dfd62c88d1b6462"],
@@ -105,7 +119,36 @@ export const presetVerifiersList = [
         count[editionData.tier] = (count[editionData.tier] ?? 0) + 1
       }
 
-      if count["RARITY"]! >= AMOUNT {
+      if count["TIER"]! >= AMOUNT {
+        SUCCESS
+      }
+    }`
+  },
+  {
+    isPreset: true,
+    name: "Owns _ UFC Strike with Tier",
+    description: "Checks to see if a user owns a specific number of moments that have a certain tier.",
+    logo: "/ufc-strike.jpg",
+    parameters: [
+      paramsAmount,
+      paramsUFCStrikeTier
+    ],
+    imports: {
+      testnet: ["import UFC_NFT from 0x04625c28593d9408"],
+      mainnet: ["import UFC_NFT from 0x329feb3ab062d289"]
+    },
+    script: `
+    if let ufcStrikeCollection = getAccount(user).getCapability(UFC_NFT.CollectionPublicPath).borrow<&UFC_NFT.Collection{UFC_NFT.UFC_NFTCollectionPublic}>() {
+      let count: {String: Int} = {"CHAMPION": 0, "CONTENDER": 0, "CHALLENGER": 0, "FANDOM": 0}
+
+      for id in ufcStrikeCollection.getIDs() {
+        let moment = collection.borrowUFC_NFT(id: id)!
+        let setId: UInt32 = moment.setId
+        let metadata = UFC_NFT.getSetMetadata(setId: setId)!
+        count[metadata["TIER"]?.toUpper()] = count[metadata["TIER"]?.toUpper()] + 1
+      }
+
+      if count["TIER"]! >= AMOUNT {
         SUCCESS
       }
     }`
