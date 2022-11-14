@@ -145,7 +145,7 @@ export default function MultiRolesVerifierCreator(props) {
         <>
           <div className="w-full justify-between flex gap-x-2 items-center">
             <div className="w-full h-[1px] bg-gray-200"></div>
-            <label className="shrink-0 text-gray-400 text-sm">⬇️ BUILD YOU LEGO ⬇️</label>
+            <label className="shrink-0 text-gray-400 text-sm">⬇️ BUILD YOUR LEGO ⬇️</label>
             <div className="w-full h-[1px] bg-gray-200"></div>
           </div>
           <div className="flex flex-row justify-between gap-x-10">
