@@ -1,10 +1,11 @@
+import { PlusCircleIcon } from "@heroicons/react/outline"
 import Image from "next/image"
-import { PresetVerifiersList } from "../flow/preset_verifiers"
+import { catalogTemplate, PresetVerifiersList } from "../flow/preset_verifiers"
 import publicConfig from "../publicConfig"
 
 export default function BasicVerifierSelector(props) {
 
-  const presetVerifiers = PresetVerifiersList(publicConfig.chainEnv)
+  const presetVerifiers = [catalogTemplate].concat(PresetVerifiersList(publicConfig.chainEnv))
   const { createNewVerifier, createPresetVerifier } = props
 
   return (
@@ -15,24 +16,6 @@ export default function BasicVerifierSelector(props) {
     flex flex-col gap-y-4
     p-4 overflow-auto
     `}>
-      {/* <button className={`
-        w-full h-[96px] bg-white
-        rounded-2xl shadow-sm p-4 shrink-0
-        flex items-center justify-center cursor-pointer
-      `}
-        onClick={() => {
-          createNewVerifier()
-        }}
-      >
-        <div
-          className="flex gap-x-1 items-center"
-        >
-          <PlusCircleIcon className="text-emerald" width={32} height={32} />
-          <label className="cursor-pointer font-bold font-flow text-black text-xl">New Verifier</label>
-        </div>
-      </button>
-
-      */}
       <label className="font-flow text-black text-lg font-bold">
         Templates
       </label>
@@ -45,17 +28,23 @@ export default function BasicVerifierSelector(props) {
             w-full bg-white 
             rounded-2xl shadow-md
             flex gap-x-2 shrink-0
-            p-2 pb-3
+          p-2 pb-3
             `}
               onClick={() => {
+                if (!verifier.isPreset) {
+                  createNewVerifier()
+                  return
+                }
                 createPresetVerifier(verifier)
               }}>
               <div className={`flex flex-col gap-y-1 font-flow p-1`}>
-                <div className="flex items-center rounded-full py-1 text-lg font-bold text-black">
-                  <Image className="rounded-full" src={verifier.logo} alt="" layout="intrinsic" width={20} height={20} objectFit="cover" />&nbsp;&nbsp;{verifier.name}
+                <div className="flex gap-x-1 items-center py-1 text-lg font-bold text-black">
+                  <div className="w-5 h-5 relative">
+                    <Image className="rounded-full object-cover" src={verifier.logo} alt="" fill sizes="33vw" />
+                  </div>
+                  <label>{verifier.name}</label>
                 </div>
                 <label className="cursor-pointer text-left text-sm">{verifier.description}</label>
-
               </div>
             </button>
           )

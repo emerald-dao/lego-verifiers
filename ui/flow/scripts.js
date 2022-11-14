@@ -2,6 +2,24 @@ import publicConfig from "../publicConfig"
 import * as fcl from "@onflow/fcl"
 
 const EmeraldBotVerifiersPath = "0xEmeraldBotVerifiers"
+const NFTCatalogPath = "0xNFTCatalog"
+
+export const getNFTCatalog = async () => {
+  const code = `
+  import NFTCatalog from 0xNFTCatalog
+
+  pub fun main(): {String : NFTCatalog.NFTCatalogMetadata} {
+      return NFTCatalog.getCatalog()
+  }
+  `
+  .replace(NFTCatalogPath, publicConfig.nftCatalogAddress)
+
+  const catalog = await fcl.query({
+    cadence: code
+  }) 
+
+  return catalog
+}
 
 export const getVerifiersByGuildId = async (address, guildId) => {
   const code = `

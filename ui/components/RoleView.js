@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil"
 import {
   transactionInProgressState,
 } from "../lib/atoms"
-import { classNames } from "../lib/utils"
+import { classNames, getCatalogImageSrc } from "../lib/utils"
 
 export default function RoleView(props) {
   const { index, roleVerifier, editRoleVerifier, deleteRoleVerifier } = props
@@ -27,9 +27,9 @@ export default function RoleView(props) {
       >
         <div className="flex justify-between truncate shrink">
           <div className="flex gap-x-1 items-center truncate shrink">
-              <label className={`truncate shrink ${roleVerifier.role.twTextColor} text-lg font-bold`}>
-                {roleVerifier.role.name}
-              </label>
+            <label className={`truncate shrink ${roleVerifier.role.twTextColor} text-lg font-bold`}>
+              {roleVerifier.role.name}
+            </label>
           </div>
           <div className="w-6 h-6"></div>
         </div>
@@ -53,9 +53,13 @@ export default function RoleView(props) {
             <div className="flex gap-x-1 items-center overflow-hidden">
               {
                 roleVerifier.basicVerifiers.map((bv, index) => {
+                  let logo = bv.logo
+                  if (bv.nft && !bv.isPreset) {
+                    logo = getCatalogImageSrc(bv.nft)
+                  }
                   return (
-                    <div key={index} className="rounded-full overflow-hidden flex items-center">
-                      <Image className="rounded-full" alt="" src={bv.logo} width={20} height={20}></Image>
+                    <div key={index} className="bg-gray-100 rounded-full overflow-hidden flex items-center">
+                      <Image className="rounded-full" alt="" src={logo} width={20} height={20}></Image>
                     </div>
                   )
                 })

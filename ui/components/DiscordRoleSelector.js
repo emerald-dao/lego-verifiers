@@ -52,11 +52,21 @@ export default function DiscordRoleSelector(props) {
 
         <div className="relative mt-1">
           <Combobox.Input
-            className={`w-full h-[50px] text-lg font-flow rounded-2xl border border-emerald bg-white py-2 pl-3 pr-10  focus:border-emerald-dark focus:outline-none focus:ring-1 focus:ring-emerald-dark`}
+            className={
+              classNames(
+                selectedRole ? `border-emerald` : `border-rose-500`,
+                "w-full h-[50px] text-lg font-flow rounded-2xl border bg-white py-2 pl-3 pr-10  focus:border-emerald-dark focus:outline-none focus:ring-1 focus:ring-emerald-dark"
+              )
+            }
             onChange={(event) => {
               setQuery(event.target.value)
             }}
             displayValue={() => selectedRole && `${selectedRole.name}`}
+            onBlur={(event) => {
+              if (!selectedRole) {
+                setQuery("")
+              }
+            }}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
             <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />

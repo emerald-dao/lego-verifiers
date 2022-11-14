@@ -3,6 +3,7 @@ import useExitPrompt from "../hooks/useExitPrompt";
 import * as fcl from "@onflow/fcl"
 import { signIn, signOut, useSession } from 'next-auth/react'
 
+
 export default function Home(props) {
   // useExitPrompt(true)
 

@@ -1,12 +1,13 @@
 import Image from "next/image"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRecoilState } from "recoil"
 import {
+  nftCatalogState,
   transactionInProgressState,
   transactionStatusState
 } from "../lib/atoms"
 import * as fcl from "@onflow/fcl"
-import { classNames, generateScript } from "../lib/utils"
+import { classNames, generateScript, getCatalogImageSrc } from "../lib/utils"
 import ImageSelector from "./ImageSelector"
 import MultiRolesView from "./MultiRolesView"
 import VerificationModeSelector, { ModeNormal } from "./VerificationModeSelector"
@@ -15,6 +16,8 @@ import { useRouter } from "next/router"
 import DiscordAccountView from "./DiscordAccountView"
 import { useSession } from 'next-auth/react'
 import DiscordGuildView from "./DiscordGuildView"
+import { getNFTCatalog } from "../flow/scripts"
+import useSWR from "swr"
 
 const NamePlaceholder = "Verifier's Name";
 const DescriptionPlaceholder = "Details about this verifier"
@@ -22,17 +25,67 @@ const DescriptionPlaceholder = "Details about this verifier"
 const BasicInfoMemoizeImage = React.memo(({ image }) => {
   return (
     <div className="rounded-full shrink-0 h-[144px] aspect-square bg-white relative sm:max-w-[460px] ring-1 ring-black ring-opacity-10 overflow-hidden">
-      <Image src={image} alt="" className="rounded-2xl" layout="fill" objectFit="cover" />
+      <Image src={image} alt="" className="rounded-2xl object-cover" fill sizes="33vw" />
     </div>
   )
 })
 BasicInfoMemoizeImage.displayName = "BasicInfoMemozieImage"
+
+const catalogFetcher = async (funcName) => {
+  return await getNFTCatalog()
+}
+
+// There are some projects with duplicate contractName/displayName
+// to avoid confusion, we don't hanle those projects
+const filterCatalog = (catalog) => {
+  let catalogArray = []
+  let contractNames = {}
+  let displayNames = {}
+  for (let metadata of Object.values(catalog)) {
+    if (metadata.collectionDisplay.name.trim() == "") {
+      continue
+    }
+
+    let contractNameNum = contractNames[metadata.contractName]
+    if (contractNameNum) {
+      contractNameNum = contractNameNum + 1
+    } else {
+      contractNameNum = 1
+    }
+    contractNames[metadata.contractName] = contractNameNum
+
+    let displayNameNum = displayNames[metadata.collectionDisplay.name]
+    if (displayNameNum) {
+      displayNameNum = displayNameNum + 1
+    } else {
+      displayNameNum = 1
+    }
+
+    displayNames[metadata.collectionDisplay.name] = displayNameNum
+  }
+
+  for (let metadata of Object.values(catalog)) {
+    if (contractNames[metadata.contractName] != 1) {
+      continue
+    }
+    if (displayNames[metadata.collectionDisplay.name] != 1) {
+      continue
+    }
+    let copyMetadata = Object.assign({}, metadata)
+    copyMetadata.name = metadata.collectionDisplay.name
+    copyMetadata.logoURL = getCatalogImageSrc(metadata)
+    catalogArray.push(copyMetadata)
+  }
+
+  return catalogArray.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+}
 
 export default function MultiRolesVerifierCreator(props) {
   const { user } = props
   const router = useRouter()
   const [transactionInProgress, setTransactionInProgress] = useRecoilState(transactionInProgressState)
   const [transactionStatus, setTransactionStatus] = useRecoilState(transactionStatusState)
+  const [nftCatalog, setNFTCatalog] = useRecoilState(nftCatalogState)
 
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
@@ -42,6 +95,13 @@ export default function MultiRolesVerifierCreator(props) {
   const [mode, setMode] = useState(ModeNormal)
 
   const { data: session } = useSession()
+  const { data: catalogData, error: catalogError } = useSWR(user && session ? ["catalogFetcher"] : null, catalogFetcher)
+
+  useEffect(() => {
+    if (catalogData) {
+      setNFTCatalog(filterCatalog(catalogData))
+    }
+  }, [catalogData])
 
   const canCreateLego = () => {
     return !transactionInProgress && roleVerifiers.length > 0 && name.trim().length > 0
