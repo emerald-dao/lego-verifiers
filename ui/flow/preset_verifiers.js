@@ -66,7 +66,6 @@ export const presetVerifiersList = [
     name: "Owns FLOAT",
     description: "Checks to see if a user owns a FLOAT from a specific event.",
     logo: "/float.png",
-    cadence: "owns_float.cdc",
     parameters: [
       paramsEvent
     ],
@@ -88,7 +87,6 @@ export const presetVerifiersList = [
     name: "Owns _ NFL All Day with Rarity",
     description: "Checks to see if a user owns a specific number of moments that have a certain rarity.",
     logo: "/nfl-all-day.jpg",
-    cadence: "owns_nflallday_with_rarity.cdc",
     parameters: [
       paramsAmount,
       paramsNFLAllDayRarity
