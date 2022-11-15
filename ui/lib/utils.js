@@ -103,7 +103,7 @@ ${imports.join('\n')}
     let response: {String: [String]} = {}
     for discordId in discordIds {
       var earnedRoles: [String] = []
-      for user in EmeraldIdentity.getEmeraldIDs(discordID: discordId) {
+      for user in EmeraldIdentity.getEmeraldIDs(discordID: discordId).values {
 
         ${totalMain}
 
@@ -181,7 +181,7 @@ export const getCatalogImageSrc = (metadata) => {
   if (squareImageFile.url && squareImageFile.url.trim() != '' && !squareImageFile.url.includes("ipfs://")) {
     src = squareImageFile.url.trim()
     return src
-  } else if (squareImageFile.url.includes("ipfs://")) {
+  } else if (squareImageFile.url && squareImageFile.url.includes("ipfs://")) {
     return getIPFSFileURLByURL(squareImageFile.url)
   } else if (squareImageFile.cid
     && squareImageFile.cid.trim() != ''
