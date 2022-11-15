@@ -51,24 +51,24 @@ export default function BasicVerifierCreator(props) {
   return (
     <div className={`flex flex-col h-full justify-between font-flow p-1`}>
       <div className="flex flex-col gap-y-1 font-flow">
-        <div className="flex bg-gray-100 items-center rounded-full py-1 text-base font-bold text-black w-20 h-20 relative">
+        <div className="flex bg-gray-100 items-center rounded-full py-1 text-base font-bold text-black w-16 h-16 relative">
           {
             logo ?
               <Image className="rounded-full object-contain" src={logo} alt="" fill sizes="33vw" />
               : null
           }
         </div>
-        <label className="cursor-pointer truncate text-left text-2xl font-bold">{name}</label>
-        <label className="cursor-pointer truncate text-left text-sm">{description}</label>
+        <label className="cursor-pointer truncate text-left text-xl font-bold">{name}</label>
+        <label className="cursor-pointer text-left text-sm">{description}</label>
       </div>
 
-      <div className="flex flex-col gap-y-2 justify-end pb-4">
+      <div className="flex flex-col gap-y-1 justify-end pb-4">
         <NFTSelector selectedNFT={selectedNFT} setSelectedNFT={setSelectedNFT} />
         <div>
           <label className="block text-base font-bold font-flow">
             {parameter.names.display}
           </label>
-          <div className="mt-1">
+          <div>
             <input
               type={`text`}
               name={`amount`}

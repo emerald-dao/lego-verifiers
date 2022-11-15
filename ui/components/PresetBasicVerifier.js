@@ -12,22 +12,22 @@ export default function PresetBasicVerifier(props) {
   return (
     <div className={`flex flex-col h-full justify-between font-flow p-1`}>
       <div className="flex flex-col gap-y-1 font-flow">
-        <div className="flex items-center rounded-full py-1 text-base font-bold text-black w-20 h-20 relative">
+        <div className="flex items-center rounded-full py-1 text-base font-bold text-black w-16 h-16 relative">
           <Image className="rounded-full object-contain" src={verifierInfo.logo} alt="" fill sizes="33vw" />
         </div>
-        <label className="cursor-pointer truncate text-left text-2xl font-bold">{verifierInfo.name}</label>
-        <label className="cursor-pointer truncate text-left text-sm">{verifierInfo.description}</label>
+        <label className="cursor-pointer truncate text-left text-xl font-bold">{verifierInfo.name}</label>
+        <label className="cursor-pointer text-left text-sm">{verifierInfo.description}</label>
       </div>
       <div className="flex flex-col gap-y-2 p-1 pb-4">
         {
           verifierInfo.parameters.length > 0 ?
             verifierInfo.parameters.map((parameter) => {
               return (
-                <div className="flex flex-col gap-y-1" key={`${parameter.names.display}${index}`}>
+                <div className="flex flex-col" key={`${parameter.names.display}${index}`}>
                   <label className="block text-base font-bold font-flow">
                     {parameter.names.display}
                   </label>
-                  <div className="mt-1">
+                  <div>
                     <input
                       type={`text`}
                       name={`${parameter.names.display}${index}`}

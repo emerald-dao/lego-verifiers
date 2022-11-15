@@ -28,7 +28,7 @@ export default function NFTSelector(props) {
 
   return (
     <div className={"flex flex-col"}>
-      <label className="block text-base font-flow font-bold">NFT<span className="text-red-600">*</span></label>
+      <label className="block text-base font-flow font-bold">NFT</label>
 
       <Combobox as="div" className={props.className} value={selectedNFT} onChange={async (nft) => {
         if (!selectedNFT || nft.contractName != selectedNFT.contractName) {
@@ -36,7 +36,7 @@ export default function NFTSelector(props) {
         }
       }}>
 
-        <div className="relative mt-1">
+        <div className="relative">
           <Combobox.Input
             className={
               classNames(

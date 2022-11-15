@@ -10,7 +10,7 @@ export default function BasicVerifierView(props) {
     h-[424px] p-4 shrink-0
     shadow-lg bg-white
     ring-1 ring-black ring-opacity-5 rounded-2xl 
-    flex flex-col gap-y-4 
+    flex flex-col gap-y-2 
     ">
       <div className="flex justify-end">
         <button
