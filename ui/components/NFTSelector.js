@@ -9,7 +9,7 @@ import {
 import { classNames } from "../lib/utils"
 
 export default function NFTSelector(props) {
-  const [query, setQuery] = useState("")
+  let [query, setQuery] = useState("")
   const { selectedNFT, setSelectedNFT } = props
   const [filteredNFTs, setFilteredNFTs] = useState([])
   const [nftCatalog, setNFTCatalog] = useRecoilState(nftCatalogState)
@@ -17,13 +17,24 @@ export default function NFTSelector(props) {
   const NFTs = nftCatalog
 
   useEffect(() => {
-    setFilteredNFTs(
-      query === ""
-        ? NFTs
-        : NFTs.filter((nft) => {
-          const content = `${nft.name}`
-          return content.toLowerCase().includes(query.toLowerCase())
-        }))
+    const getFiltered = (query) => {
+      if (query === "") {
+        return NFTs
+      }
+
+      const filtered = NFTs.filter((nft) => {
+        const content = `${nft.name}`
+        return content.toLowerCase().includes(query.toLowerCase())
+      })
+
+      if (filtered.length == 0) {
+        return NFTs
+      }
+
+      return filtered
+    }
+
+    setFilteredNFTs(getFiltered(query))
   }, [query, NFTs])
 
   return (
@@ -50,11 +61,6 @@ export default function NFTSelector(props) {
             }}
             displayValue={(nft) => {
               return nft && `${nft.name}`
-            }}
-            onBlur={(event) => {
-              if (!selectedNFT) {
-                setQuery("")
-              }
             }}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
