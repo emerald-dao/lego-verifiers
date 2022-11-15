@@ -18,7 +18,6 @@ export const catalogTemplate =  {
 
 export const presetVerifiersList = [
   {
-    isPreset: true,
     name: "Owns FLOAT",
     description: "Checks to see if a user owns a FLOAT from a specific event.",
     logo: "/float.png",
@@ -39,7 +38,6 @@ export const presetVerifiersList = [
     }`
   },
   {
-    isPreset: true,
     name: "Owns _ NFL All Day with Tier",
     description: "Checks to see if a user owns a specific number of moments that have a certain tier.",
     logo: "/nfl-all-day.jpg",
@@ -67,7 +65,6 @@ export const presetVerifiersList = [
     }`
   },
   {
-    isPreset: true,
     name: "Owns _ UFC Strike with Tier",
     description: "Checks to see if a user owns a specific number of moments that have a certain tier.",
     logo: "/ufc-strike.jpg",
@@ -95,4 +92,7 @@ export const presetVerifiersList = [
       }
     }`
   }
-]
+].map((v) => {
+  v.isPreset = true
+  return v
+})

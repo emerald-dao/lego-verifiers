@@ -10,7 +10,6 @@ export default function EnumSelector(props) {
   const [filteredOptions, setFilteredTypes] = useState([])
   const [selectedOption, setSelectedOption] = useState(null)
   const options = parameter.type.options
-  console.log("parameter", parameter)
 
   useEffect(() => {
     if (selectedOption && parameter.value != selectedOption) {

@@ -115,21 +115,20 @@ export default function MultiRolesVerifierCreator(props) {
 
     const script = generateScript(roleVerifiers, mode)
     const roleIds = roleVerifiers.map((rv) => rv.role.id)
-    console.log(script)
 
-    // const res = await addVerifier(
-    //   name,
-    //   description || "",
-    //   image || "",
-    //   script,
-    //   session.guild.id,
-    //   roleIds,
-    //   `${mode.raw}`,
-    //   setTransactionInProgress,
-    //   setTransactionStatus
-    // )
+    const res = await addVerifier(
+      name,
+      description || "",
+      image || "",
+      script,
+      session.guild.id,
+      roleIds,
+      `${mode.raw}`,
+      setTransactionInProgress,
+      setTransactionStatus
+    )
 
-    // handleCreationResponse(res)
+    handleCreationResponse(res)
   }
 
   const handleCreationResponse = (res) => {
