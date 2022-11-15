@@ -1,3 +1,5 @@
+import EmeraldPass from "./EmeraldPass.cdc"
+
 pub contract EmeraldBotVerifiers {
 
     pub let VerifierCollectionStoragePath: StoragePath
@@ -64,6 +66,10 @@ pub contract EmeraldBotVerifiers {
             verificationMode: VerificationMode,
             extra: {String: AnyStruct}
         ) {
+            pre {
+                EmeraldPass.isActive(user: self.owner!.address) || self.verifiers.keys.length <= 1: 
+                    "You cannot have more than one verifier if you do not own Emerald Pass (https://pass.ecdao.org)."
+            }
 
             let verifier <- create Verifier(
                 name: name, 
@@ -118,9 +124,9 @@ pub contract EmeraldBotVerifiers {
     }
 
     init() {
-        self.VerifierCollectionStoragePath = /storage/emeraldBotVerifierCollection
-        self.VerifierCollectionPublicPath = /public/emeraldBotVerifierCollection
-        self.VerifierCollectionPrivatePath = /private/emeraldBotVerifierCollection
+        self.VerifierCollectionStoragePath = /storage/EmeraldBotVerifierCollection001
+        self.VerifierCollectionPublicPath = /public/EmeraldBotVerifierCollection001
+        self.VerifierCollectionPrivatePath = /private/EmeraldBotVerifierCollection001
 
         emit ContractInitialized()
     }
