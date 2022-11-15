@@ -131,7 +131,7 @@ export default function RoleVerifierCreatorSlideOver(props) {
                             }
                             for (let j = 0; j < bv.parameters.length; j++) {
                               const param = bv.parameters[j]
-                              if (!param.isValid) {
+                              if (!param.type.validate(param.value)) {
                                 alertInvalidParams()
                                 return
                               }

@@ -4,10 +4,54 @@ import {
   transactionInProgressState,
 } from "../lib/atoms"
 import { classNames } from "../lib/utils";
+import EnumSelector from "./EnumSelector";
 
 export default function PresetBasicVerifier(props) {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
   const { index, updateVerifierParam, verifierInfo } = props
+
+  const generateInputByParameter = (parameter) => {
+    if (parameter.type.name == "PositiveInt") {
+      return (
+        <div>
+          <input
+            type={`text`}
+            name={`${parameter.names.display}${index}`}
+            id={`${parameter.names.display}${index}`}
+            disabled={transactionInProgress}
+            required
+            placeholder={``}
+            className={classNames(
+              parameter.type.validate(parameter.value) ? `border-emerald` : `border-rose-500`,
+              `bg-white block w-full font-flow text-lg rounded-2xl px-3 py-2 border
+                 focus:border-emerald-dark
+                outline-0 focus:outline-2 focus:outline-emerald-dark 
+                placeholder:text-gray-300`
+            )}
+            value={parameter.value ?? ""}
+            onChange={(event) => {
+              if (parameter.type.formatRegex) {
+                if (event.target.value === '' || parameter.type.formatRegex.test(event.target.value)) {
+                  updateVerifierParam(index, parameter.names.placeholder, event.target.value)
+                }
+                return
+              }
+              updateVerifierParam(index, parameter.names.placeholder, event.target.value)
+            }}
+            onBlur={(event) => {
+              const isValid = parameter.type.validate(parameter.value)
+              updateVerifierParam(index, parameter.names.placeholder, event.target.value, isValid)
+            }}
+          />
+        </div>)
+    }
+
+    if (parameter.type.name == "Enum") {
+      return (
+        <EnumSelector parameter={parameter} />
+      )
+    }
+  }
 
   return (
     <div className={`flex flex-col h-full justify-between font-flow p-1`}>
@@ -27,37 +71,7 @@ export default function PresetBasicVerifier(props) {
                   <label className="block text-base font-bold font-flow">
                     {parameter.names.display}
                   </label>
-                  <div>
-                    <input
-                      type={`text`}
-                      name={`${parameter.names.display}${index}`}
-                      id={`${parameter.names.display}${index}`}
-                      disabled={transactionInProgress}
-                      required
-                      placeholder={``}
-                      className={classNames(
-                        parameter.isValid ? `border-emerald` : `border-rose-500`,
-                        `bg-white block w-full font-flow text-lg rounded-2xl px-3 py-2 border
-                               focus:border-emerald-dark
-                              outline-0 focus:outline-2 focus:outline-emerald-dark 
-                              placeholder:text-gray-300`
-                      )}
-                      value={parameter.value ?? ""}
-                      onChange={(event) => {
-                        if (parameter.regex) {
-                          if (event.target.value === '' || parameter.regex.test(event.target.value)) {
-                            updateVerifierParam(index, parameter.names.placeholder, event.target.value)
-                          }
-                          return
-                        }
-                        updateVerifierParam(index, parameter.names.placeholder, event.target.value)
-                      }}
-                      onBlur={(event) => {
-                        const isValid = parameter.validate(parameter.value)
-                        updateVerifierParam(index, parameter.names.placeholder, event.target.value, isValid)
-                      }}
-                    />
-                  </div>
+                  {generateInputByParameter(parameter)}
                 </div>
               )
             })

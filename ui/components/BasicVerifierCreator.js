@@ -77,7 +77,7 @@ export default function BasicVerifierCreator(props) {
               required
               placeholder={``}
               className={classNames(
-                parameter.isValid ? `border-emerald` : `border-rose-500`,
+                parameter.type.validate(parameter.value) ? `border-emerald` : `border-rose-500`,
                 `bg-white block w-full font-flow text-lg rounded-2xl px-3 py-2 border
                                focus:border-emerald-dark
                               outline-0 focus:outline-2 focus:outline-emerald-dark 
@@ -85,8 +85,8 @@ export default function BasicVerifierCreator(props) {
               )}
               value={parameter.value ?? ""}
               onChange={(event) => {
-                if (parameter.regex) {
-                  if (event.target.value === '' || parameter.regex.test(event.target.value)) {
+                if (parameter.type.formatRegex) {
+                  if (event.target.value === '' || parameter.type.formatRegex.test(event.target.value)) {
                     updateVerifierParam(index, parameter.names.placeholder, event.target.value)
                   }
                   return
@@ -94,7 +94,7 @@ export default function BasicVerifierCreator(props) {
                 updateVerifierParam(index, parameter.names.placeholder, event.target.value)
               }}
               onBlur={(event) => {
-                const isValid = parameter.validate(parameter.value)
+                const isValid = parameter.type.validate(parameter.value)
                 updateVerifierParam(index, parameter.names.placeholder, event.target.value, isValid)
               }}
             />
