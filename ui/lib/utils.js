@@ -82,14 +82,13 @@ export const generateScript = (roleVerifiers, verificationMode) => {
 
     if (verificationMode.key == ModeShortCircuit.key) {
       totalMain += `
-      if ${ifStatement.join(` ${operator} `)} {
+      if !earnedRoles.contains("${roleId}") && (${ifStatement.join(` ${operator} `)}) {
         earnedRoles.append("${roleId}")
-        response[user] = earnedRoles
         continue
       }`
     } else {
       totalMain += `
-      if ${ifStatement.join(` ${operator} `)} {
+      if !earnedRoles.contains("${roleId}") && (${ifStatement.join(` ${operator} `)}) {
         earnedRoles.append("${roleId}")
       }`
     }
