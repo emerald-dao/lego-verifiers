@@ -96,16 +96,19 @@ export const generateScript = (roleVerifiers, verificationMode) => {
   }
 
   const verifyScript = `
+  import EmeraldIdentity from 0x39e42c67cc851cfb
 ${imports.join('\n')}
 
-  pub fun main(users: [Address]): {Address: [String]} {
-    let response: {Address: [String]} = {}
-    for user in users {
+  pub fun main(discordIds: [String]): {String: [String]} {
+    let response: {String: [String]} = {}
+    for discordId in discordIds {
       var earnedRoles: [String] = []
+      for user in EmeraldIdentity.getEmeraldIDs(discordID: discordId) {
 
-      ${totalMain}
+        ${totalMain}
 
-      response[user] = earnedRoles
+      }
+      response[discordId] = earnedRoles
     }
 
     return response
