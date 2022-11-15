@@ -12,6 +12,19 @@ export default function EnumSelector(props) {
   const options = parameter.type.options
 
   useEffect(() => {
+    if (parameter.value && selectedOption) {
+      if (parameter.value != selectedOption) {
+        setSelectedOption(parameter.value)
+      }
+      return
+    }
+
+    if (parameter.value) {
+      setSelectedOption(parameter.value)
+    }
+  }, [parameter])
+
+  useEffect(() => {
     if (selectedOption && parameter.value != selectedOption) {
       parameter.value = selectedOption
     }
@@ -33,7 +46,7 @@ export default function EnumSelector(props) {
 
       return filtered
     }
-    
+
     setFilteredTypes(getFiltered(query))
   }, [query, options])
 
