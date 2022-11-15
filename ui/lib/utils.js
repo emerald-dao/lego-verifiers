@@ -12,7 +12,6 @@ export const getIPFSFileURLByURL = (url) => {
   return `https://gateway.pinata.cloud/ipfs/${newURL}`
 }
 
-
 export const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
 }

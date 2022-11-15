@@ -29,13 +29,24 @@ export default function DiscordRoleSelector(props) {
   }, [session])
 
   useEffect(() => {
-    setFilteredRoles(
-      query === ""
-        ? roles
-        : roles.filter((role) => {
-          const content = `${role.name}`
-          return content.toLowerCase().includes(query.toLowerCase())
-        }))
+    const getFiltered = (query) => {
+      if (query === "") {
+        return roles
+      }
+
+      const filtered = roles.filter((role) => {
+        const content = `${role.name}`
+        return content.toLowerCase().includes(query.toLowerCase())
+      })
+
+      if (filtered.length == 0) {
+        return roles
+      }
+
+      return filtered
+    }
+
+    setFilteredRoles(getFiltered(query))
   }, [query, roles])
 
 
@@ -62,11 +73,6 @@ export default function DiscordRoleSelector(props) {
               setQuery(event.target.value)
             }}
             displayValue={() => selectedRole && `${selectedRole.name}`}
-            onBlur={(event) => {
-              if (!selectedRole) {
-                setQuery("")
-              }
-            }}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
             <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />

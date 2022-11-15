@@ -1,62 +1,4 @@
-import Decimal from "decimal.js"
-
-const paramsAmount = {
-  names: {placeholder: "AMOUNT", display: "Amount"},
-  value: null,
-  regex: /^(0|[1-9]\d*)$/,
-  isValid: false,
-  validate: (value) => {
-    try {
-      const v = new Decimal(value)
-      return v.isInteger() && v.isPositive() && !v.isZero()
-    } catch (e) {
-      return false
-    }
-  }
-}
-
-const paramsEvent = {
-  names: {placeholder: "EVENT_ID", display: "Event ID"},
-  value: null,
-  regex: /^(0|[1-9]\d*)$/,
-  isValid: false,
-  validate: (value) => {
-    try {
-      const v = new Decimal(value)
-      return v.isInteger() && v.isPositive() && !v.isZero()
-    } catch (e) {
-      return false
-    }
-  }
-}
-
-const paramsNFLAllDayTier = {
-  names: {placeholder: "TIER", display: "Tier"},
-  value: null,
-  regex: null,
-  isValid: false,
-  validate: (value) => {
-    try {
-      return value == "COMMON" || value == "RARE" || value == "LEGENDARY" || value == "ULTIMATE"
-    } catch (e) {
-      return false
-    }
-  }
-}
-
-const paramsUFCStrikeTier = {
-  names: {placeholder: "TIER", display: "Tier"},
-  value: null,
-  regex: null,
-  isValid: false,
-  validate: (value) => {
-    try {
-      return value == "CHALLENGER" || value == "CONTENDER" || value == "CHAMPION" || value == "FANDOM"
-    } catch (e) {
-      return false
-    }
-  }
-}
+import { paramsAmount, paramsEvent, paramsNFLAllDayTier, paramsUFCStrikeTier } from "./verifier_params"
 
 export const catalogTemplate =  {
   isPreset: false,
@@ -76,7 +18,6 @@ export const catalogTemplate =  {
 
 export const presetVerifiersList = [
   {
-    isPreset: true,
     name: "Owns FLOAT",
     description: "Checks to see if a user owns a FLOAT from a specific event.",
     logo: "/float.png",
@@ -97,7 +38,6 @@ export const presetVerifiersList = [
     }`
   },
   {
-    isPreset: true,
     name: "Owns _ NFL All Day with Tier",
     description: "Checks to see if a user owns a specific number of moments that have a certain tier.",
     logo: "/nfl-all-day.jpg",
@@ -125,7 +65,6 @@ export const presetVerifiersList = [
     }`
   },
   {
-    isPreset: true,
     name: "Owns _ UFC Strike with Tier",
     description: "Checks to see if a user owns a specific number of moments that have a certain tier.",
     logo: "/ufc-strike.jpg",
@@ -153,4 +92,7 @@ export const presetVerifiersList = [
       }
     }`
   }
-]
+].map((v) => {
+  v.isPreset = true
+  return v
+})
