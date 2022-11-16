@@ -75,15 +75,15 @@ export default function NavigationBar(props) {
 
   return (
     <div className="px-6 m-auto max-w-[920px] min-w-[380px] relative gap-x-5 flex items-center justify-between bg-transparent h-44">
-      <div className="flex items-center gap-x-2">
+      <div className="shrink-0 flex items-center gap-x-2">
         <Link href="/">
-          <div className="min-w-[40px]">
+          <div className="w-[36px] sm:w-[50px]">
             <Image src="/emerald-bot.png" alt="" width={50} height={50} priority={true} />
           </div>
         </Link>
 
         <Link href="/">
-          <label className="font-flow font-bold text-3xl">
+          <label className="shrink-0 font-flow font-bold text-xl sm:text-3xl">
             Emerald bot
           </label>
         </Link>
@@ -95,8 +95,8 @@ export default function NavigationBar(props) {
         </label>
       </div>
 
-      <div className="flex items-center gap-x-5">
-        <a className="font-bold" href="https://emeralddao.notion.site/Emerald-Bot-5e20a7d9fc214c7ea5a1f4a5fddccd1c" target="_blank" rel="noopener noreferrer">Docs</a>
+      <div className="shrink truncate flex items-center gap-x-5">
+        <a className="hidden sm:block font-bold" href="https://emeralddao.notion.site/Emerald-Bot-5e20a7d9fc214c7ea5a1f4a5fddccd1c" target="_blank" rel="noopener noreferrer">Docs</a>
         {user && user.loggedIn
         ? <AuthedState />
         : <UnauthenticatedState />

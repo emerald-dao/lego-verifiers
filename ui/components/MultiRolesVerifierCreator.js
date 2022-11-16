@@ -4,11 +4,12 @@ import { useRecoilState } from "recoil"
 import {
   nftCatalogState,
   transactionInProgressState,
-  transactionStatusState
+  transactionStatusState,
+  showBasicNotificationState,
+  basicNotificationContentState
 } from "../lib/atoms"
 import * as fcl from "@onflow/fcl"
 import { classNames, generateScript, getCatalogImageSrc } from "../lib/utils"
-import ImageSelector from "./ImageSelector"
 import MultiRolesView from "./MultiRolesView"
 import VerificationModeSelector, { ModeNormal } from "./VerificationModeSelector"
 import { addVerifier } from "../flow/transactions"
@@ -21,15 +22,6 @@ import useSWR from "swr"
 
 const NamePlaceholder = "Verifier's Name";
 const DescriptionPlaceholder = "Details about this verifier"
-
-const BasicInfoMemoizeImage = React.memo(({ image }) => {
-  return (
-    <div className="rounded-full shrink-0 h-[144px] aspect-square bg-white relative sm:max-w-[460px] ring-1 ring-black ring-opacity-10 overflow-hidden">
-      <Image src={image} alt="" className="rounded-2xl object-cover" fill sizes="33vw" />
-    </div>
-  )
-})
-BasicInfoMemoizeImage.displayName = "BasicInfoMemozieImage"
 
 const catalogFetcher = async (funcName) => {
   return await getNFTCatalog()
@@ -85,12 +77,14 @@ export default function MultiRolesVerifierCreator(props) {
   const router = useRouter()
   const [transactionInProgress, setTransactionInProgress] = useRecoilState(transactionInProgressState)
   const [transactionStatus, setTransactionStatus] = useRecoilState(transactionStatusState)
+  const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
+  const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
   const [nftCatalog, setNFTCatalog] = useRecoilState(nftCatalogState)
 
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [image, setImage] = useState(null)
-  const [imageSize, setImageSize] = useState(0)
+  const [imageError, setImageError] = useState(null)
   const [roleVerifiers, setRoleVerifiers] = useState([])
   const [mode, setMode] = useState(ModeNormal)
 
@@ -102,6 +96,12 @@ export default function MultiRolesVerifierCreator(props) {
       setNFTCatalog(filterCatalog(catalogData))
     }
   }, [catalogData])
+
+  useEffect(() => {
+    if (image) {
+      setImageError(null)
+    }
+  }, [image])
 
   const canCreateLego = () => {
     return !transactionInProgress && roleVerifiers.length > 0 && name.trim().length > 0
@@ -148,18 +148,52 @@ export default function MultiRolesVerifierCreator(props) {
             <label className="shrink-0 text-gray-400 text-sm">⬇️ BUILD YOUR VERIFIER ⬇️</label>
             <div className="w-full h-[1px] bg-gray-200"></div>
           </div>
-          <div className="flex flex-row justify-between gap-x-10">
-            <div className="flex flex-col justify-between">
+          <div className="flex flex-row items-center justify-between gap-x-10 sm:gap-x-16">
+            <div className="w-full flex flex-col">
               <label className="block text-2xl font-bold font-flow">
                 Image
               </label>
-              <label className="block text-md font-flow leading-6 mt-2 mb-2">Should not be larger than 500 KB.</label>
-              <ImageSelector imageSelectedCallback={(_image, _imageSize) => {
-                setImage(_image)
-                setImageSize(_imageSize)
-              }} />
+              <div className="relative mt-3 flex items-center">
+                <input
+                  type="url"
+                  name="image"
+                  id="image"
+                  disabled={transactionInProgress}
+                  required
+                  className="block w-full font-flow text-lg rounded-2xl px-3 py-2
+            border border-emerald focus:border-emerald-dark
+            outline-0 focus:outline-2 focus:outline-emerald-dark 
+            placeholder:text-gray-300 pr-[64px]"
+                  placeholder={"Paste image url here, press Enter to fetch it"}
+                  onKeyUp={(event) => {
+                    console.log(event)
+                    if (event.key == "Enter") {
+                      const url = event.target.value
+                      if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
+                        setImage(event.target.value)
+                      } else {
+                        setShowBasicNotification(true)
+                        setBasicNotificationContent({ type: "exclamation", title: "Invalid Image URL", detail: null }) 
+                      }
+                    }
+                  }}
+                />
+                <div className="absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
+                  <kbd className="inline-flex items-center rounded-xl border border-gray-200 px-2 font-sans text-sm font-medium text-gray-400">
+                    Enter
+                  </kbd>
+                </div>
+              </div>
             </div>
-            <BasicInfoMemoizeImage image={image || "/emerald-bot.png"} />
+
+            <div className="rounded-full shrink-0 h-[100px] sm:h-[120px] aspect-square relative sm:max-w-[460px] ring-1 ring-black ring-opacity-10 overflow-hidden">
+              <Image src={(imageError || !image) ? "/emerald-bot.png" : image} alt="" className="rounded-2xl object-cover" fill sizes="33vw"
+                onError={(error) => {
+                  setImageError(error)
+                  setShowBasicNotification(true)
+                  setBasicNotificationContent({ type: "exclamation", title: "Invalid Image URL", detail: "Fetch Image Failed" })
+                }} />
+            </div>
           </div>
 
           <div className="flex flex-col gap-y-2">
