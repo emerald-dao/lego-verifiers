@@ -97,7 +97,7 @@ export default function GuildVerifiersList(props) {
                     }).map((verifier) => (
                       <tr key={verifier.uuid}>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <Image src="/copy.png" width="25" height="25" className="cursor-pointer m-0" onClick={() => navigator.clipboard.writeText(`/verifier custom verifierowner:${user.addr} verifierid:${verifier.id}`)} />
+                          <Image src="/copy.png" width="25" height="25" className="cursor-pointer m-0" onClick={() => navigator.clipboard.writeText(`/verifier custom verifierowner:${user.addr} verifierid:${verifier.uuid}`)} />
                         </td>
                         <td className="py-4 px-3 text-sm">
                           <div className="flex items-center">
