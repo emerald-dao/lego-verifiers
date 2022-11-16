@@ -8,7 +8,35 @@
         "EmeraldBotVerifiers": {
             "source": "./contracts/EmeraldBotVerifiers.cdc",
             "aliases": {
-                "testnet": "0x91c0d5719248ed76"
+                "testnet": "0x91c0d5719248ed76",
+				"mainnet": "0x9d9253cd0b87e928"
+            }
+        },
+		"FungibleToken": {
+            "source": "./contracts/FungibleToken.cdc",
+            "aliases": {
+                "testnet": "0x9a0766d93b6608b7",
+				"mainnet": "0xf233dcee88fe0abe"
+            }
+        },
+		"FUSD": {
+            "source": "./contracts/FUSD.cdc",
+            "aliases": {
+                "testnet": "0xe223d8a629e49c68",
+				"mainnet": "0x3c5959b568896393"
+            }
+        },
+		"FlowToken": {
+            "source": "./contracts/FlowToken.cdc",
+            "aliases": {
+                "testnet": "0x7e60df042a9c0868",
+				"mainnet": "0x1654653399040a61"
+            }
+        },
+		"EmeraldPass": {
+            "source": "./contracts/EmeraldPass.cdc",
+            "aliases": {
+				"mainnet": "0x6a07dbeb03167a13"
             }
         }
     },
@@ -16,16 +44,7 @@
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "480e353acac967009d20c8d8e7a647b8d1fbc4a7e3c41858c35c218d08f1c2b5"
-		},
-        "lego-testnet": {
-            "fromFile": "lego.private.json"
-        }
+		}
 	},
-    "deployments": {
-        "testnet": {
-            "lego-testnet": [
-                "EmeraldBotVerifiers"
-            ]
-        }
-    }
+    "deployments": {}
 }
