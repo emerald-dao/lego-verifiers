@@ -97,7 +97,7 @@ export default function GuildVerifiersList(props) {
                       return verifier
                     }).map((verifier) => (
                       <tr key={verifier.uuid}>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <div className="flex items-center justify-center">
                             <DocumentDuplicateIcon className="h-5 w-5 cursor-pointer" onClick={() => {
                               navigator.clipboard.writeText(`/verifier custom verifierowner:${user.addr} verifierid:${verifier.uuid}`)
