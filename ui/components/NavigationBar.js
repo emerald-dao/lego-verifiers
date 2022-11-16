@@ -61,15 +61,14 @@ export default function NavigationBar(props) {
 
   const UnauthenticatedState = () => {
     return (
-
       <button
         type="button"
         className="cursor-pointer h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
         onClick={fcl.logIn}
       >
-        Connect Wallet
+        <label className="hidden sm:block">Connect Wallet</label>
+        <label className="block sm:hidden">Connect</label>
       </button>
-
     )
   }
 

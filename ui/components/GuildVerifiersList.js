@@ -3,11 +3,14 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useRecoilState } from "recoil"
 import {
+  showBasicNotificationState,
+  basicNotificationContentState,
   transactionInProgressState,
   transactionStatusState
 } from "../lib/atoms"
 import { classNames, getItemsInPage } from '../lib/utils'
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid"
+import { DocumentDuplicateIcon } from "@heroicons/react/outline"
 import { getModeFromRaw } from "./VerificationModeSelector"
 import ScriptModal from "./ScriptModal"
 import { deleteVerifier } from "../flow/transactions"
@@ -16,6 +19,8 @@ import { useSWRConfig } from "swr"
 export default function GuildVerifiersList(props) {
   const [transactionInProgress, setTransactionInProgress] = useRecoilState(transactionInProgressState)
   const [, setTransactionStatus] = useRecoilState(transactionStatusState)
+  const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
+  const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
   const router = useRouter()
 
   const { verifiers, user, guildId } = props
@@ -97,7 +102,13 @@ export default function GuildVerifiersList(props) {
                     }).map((verifier) => (
                       <tr key={verifier.uuid}>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <Image src="/copy.png" width="25" height="25" className="cursor-pointer m-0" onClick={() => navigator.clipboard.writeText(`/verifier custom verifierowner:${user.addr} verifierid:${verifier.uuid}`)} />
+                          <div className="flex items-center justify-center hover:text-emerald">
+                            <DocumentDuplicateIcon className="h-5 w-5 cursor-pointer" onClick={() => {
+                              navigator.clipboard.writeText(`/verifier custom verifierowner:${user.addr} verifierid:${verifier.uuid}`)
+                              setShowBasicNotification(true)
+                              setBasicNotificationContent({ type: "information", title: "Copied!", detail: null })
+                            }} />
+                          </div>
                         </td>
                         <td className="py-4 px-3 text-sm">
                           <div className="flex items-center">
