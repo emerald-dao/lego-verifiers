@@ -25,6 +25,7 @@ pub contract EmeraldBotVerifiers {
         pub let roleIds: [String]
         pub let verificationMode: VerificationMode
         pub let extra: {String: AnyStruct}
+        pub let version: UInt64
 
         init(
             name: String, 
@@ -44,6 +45,7 @@ pub contract EmeraldBotVerifiers {
             self.roleIds = roleIds
             self.verificationMode = verificationMode
             self.extra = extra
+            self.version = 1
         }
     }
 
@@ -124,9 +126,9 @@ pub contract EmeraldBotVerifiers {
     }
 
     init() {
-        self.VerifierCollectionStoragePath = /storage/EmeraldBotVerifierCollection001
-        self.VerifierCollectionPublicPath = /public/EmeraldBotVerifierCollection001
-        self.VerifierCollectionPrivatePath = /private/EmeraldBotVerifierCollection001
+        self.VerifierCollectionStoragePath = /storage/EmeraldBotVerifierCollection01
+        self.VerifierCollectionPublicPath = /public/EmeraldBotVerifierCollection01
+        self.VerifierCollectionPrivatePath = /private/EmeraldBotVerifierCollection01
 
         emit ContractInitialized()
     }

@@ -9,7 +9,7 @@
             "source": "./contracts/EmeraldBotVerifiers.cdc",
             "aliases": {
                 "testnet": "0x91c0d5719248ed76",
-				"mainnet": "0x9d9253cd0b87e928"
+                "mainnet": "0x129fee333390875e"
             }
         },
 		"FungibleToken": {
