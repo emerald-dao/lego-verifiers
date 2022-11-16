@@ -79,13 +79,13 @@ export default function NavigationBar(props) {
       <div className="flex items-center gap-x-2">
         <Link href="/">
           <div className="min-w-[40px]">
-            <Image src="/lego.png" alt="" width={50} height={50} priority={true} />
+            <Image src="/emerald-bot.png" alt="" width={50} height={50} priority={true} />
           </div>
         </Link>
 
         <Link href="/">
           <label className="font-flow font-bold text-3xl">
-            Lego
+            Emerald bot
           </label>
         </Link>
         <label className="hidden sm:block px-1 text-center font-flow text-emerald font-medium text-xs border border-1 border-emerald">

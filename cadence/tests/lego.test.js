@@ -11,7 +11,7 @@ const deployContracts = async () => {
   await deployByName(deployer, "EmeraldBotVerifiers")
 }
 
-describe("Lego", () => {
+describe("Bot", () => {
   beforeEach(async () => {
     const basePath = path.resolve(__dirname, "..")
     const port = 8080

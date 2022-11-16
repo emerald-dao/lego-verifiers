@@ -6,6 +6,6 @@ config({
   "accessNode.api": publicConfig.accessNodeAPI,
   "discovery.wallet": publicConfig.walletDiscovery,
   "sdk.transport": httpSend,
-  "app.detail.title": "Lego",
+  "app.detail.title": "Emerald bot",
   "app.detail.icon": "https://i.imgur.com/QbxspcR.png"
 })

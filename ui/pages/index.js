@@ -39,7 +39,7 @@ export default function Home(props) {
         <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Your <span className="text-emerald">🤖️ Emerald Bot</span></label>
         <div className="-mt-2 flex flex-col justify-center items-center">
           <label className="font-flow text-base sm:text-lg">You need to connect discord account</label>
-          <label className="font-flow text-base sm:text-lg">to create Lego verifiers for your server</label>
+          <label className="font-flow text-base sm:text-lg">to create verifiers for your server</label>
         </div>
   
         <button

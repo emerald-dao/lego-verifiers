@@ -96,7 +96,7 @@ export default function VerifiersList(props) {
                         <td className="py-4 px-3 text-sm">
                           <div className="flex items-center">
                             <div className="h-10 w-10 flex-shrink-0 relative">
-                              <Image className="rounded-lg object-contain" src={(verifier.image && verifier.image != "") ? verifier.image : "/lego.png"} alt="" fill sizes="33vw" />
+                              <Image className="rounded-lg object-contain" src={(verifier.image && verifier.image != "") ? verifier.image : "/emerald-bot.png"} alt="" fill sizes="33vw" />
                             </div>
                             <div className="flex flex-col ml-4">
                               <label className="block font-medium text-gray-900 break-words max-w-[300px] min-w-[60px]">{verifier.name}</label>

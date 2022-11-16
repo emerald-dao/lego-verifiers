@@ -145,7 +145,7 @@ export default function MultiRolesVerifierCreator(props) {
         <>
           <div className="w-full justify-between flex gap-x-2 items-center">
             <div className="w-full h-[1px] bg-gray-200"></div>
-            <label className="shrink-0 text-gray-400 text-sm">⬇️ BUILD YOUR LEGO ⬇️</label>
+            <label className="shrink-0 text-gray-400 text-sm">⬇️ BUILD YOUR VERIFIER ⬇️</label>
             <div className="w-full h-[1px] bg-gray-200"></div>
           </div>
           <div className="flex flex-row justify-between gap-x-10">
@@ -159,7 +159,7 @@ export default function MultiRolesVerifierCreator(props) {
                 setImageSize(_imageSize)
               }} />
             </div>
-            <BasicInfoMemoizeImage image={image || "/lego.png"} />
+            <BasicInfoMemoizeImage image={image || "/emerald-bot.png"} />
           </div>
 
           <div className="flex flex-col gap-y-2">
@@ -233,7 +233,7 @@ export default function MultiRolesVerifierCreator(props) {
                 handleSubmit()
               }}
             >
-              {user.loggedIn ? "Create Lego Verifier" : "Connect Wallet"}
+              {user.loggedIn ? "Create Verifier" : "Connect Wallet"}
             </button>
           </div>
         </> : null

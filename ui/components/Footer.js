@@ -13,7 +13,7 @@ export default function Footer() {
               <Image src="/ecdao.png" alt="" width={24} height={24} />
             </div>
           </a>
-          <a href="https://github.com/emerald-dao/lego-verifiers"
+          <a href="https://github.com/emerald-dao/emerald-bot-frontend"
             target="_blank"
             rel="noopener noreferrer"
           >

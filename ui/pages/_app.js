@@ -21,8 +21,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
         <SessionProvider session={session}>
         <RecoilRoot>
           <Head>
-            <title>Lego | Create Your Emerald Bot Verifier</title>
-            <meta property="og:title" content="Lego | Create Your Emerald Bot Verifier" key="title" />
+            <title>Emerald bot | Create Your Verifier</title>
+            <meta property="og:title" content="Emerald bot | Create Your Verifier" key="title" />
           </Head>
           <NavigationBar user={user} />
           <Component {...pageProps} user={user} />
