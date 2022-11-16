@@ -61,16 +61,15 @@ export default function NavigationBar(props) {
 
   const UnauthenticatedState = () => {
     return (
-      <div>
+
         <button
           type="button"
-          className="h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
+          className="cursor-pointer h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
           onClick={fcl.logIn}
         >
-          <label className="hidden sm:block">Connect Wallet</label>
-          <label className="block sm:hidden">Connect</label>
+          Connect Wallet
         </button>
-      </div>
+
     )
   }
 
@@ -96,10 +95,13 @@ export default function NavigationBar(props) {
         </label>
       </div>
 
-      {user && user.loggedIn
+      <div className="flex items-center gap-x-5">
+        <a className="font-bold" href="https://emeralddao.notion.site/Emerald-Bot-5e20a7d9fc214c7ea5a1f4a5fddccd1c" target="_blank">Docs</a>
+        {user && user.loggedIn
         ? <AuthedState />
         : <UnauthenticatedState />
       }
+      </div>
     </div>
   )
 }
