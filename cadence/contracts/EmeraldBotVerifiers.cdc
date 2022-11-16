@@ -67,7 +67,7 @@ pub contract EmeraldBotVerifiers {
             extra: {String: AnyStruct}
         ) {
             pre {
-                EmeraldPass.isActive(user: self.owner!.address) || self.verifiers.keys.length <= 1: 
+                EmeraldPass.isActive(user: self.owner!.address) || self.verifiers.keys.length < 1: 
                     "You cannot have more than one verifier if you do not own Emerald Pass (https://pass.ecdao.org)."
             }
 
