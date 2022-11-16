@@ -96,7 +96,7 @@ export default function NavigationBar(props) {
       </div>
 
       <div className="flex items-center gap-x-5">
-        <a className="font-bold" href="https://emeralddao.notion.site/Emerald-Bot-5e20a7d9fc214c7ea5a1f4a5fddccd1c" target="_blank">Docs</a>
+        <a className="font-bold" href="https://emeralddao.notion.site/Emerald-Bot-5e20a7d9fc214c7ea5a1f4a5fddccd1c" target="_blank" rel="noopener noreferrer">Docs</a>
         {user && user.loggedIn
         ? <AuthedState />
         : <UnauthenticatedState />
