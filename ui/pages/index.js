@@ -45,12 +45,12 @@ export default function Home(props) {
   
         <button
           type="button"
-          className="mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-white bg-discord hover:bg-discord-dark"
+          className="cursor-pointer mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-white bg-discord hover:bg-discord-dark"
           onClick={() => {
             signIn('discord')}
           }
         >
-          <label>Connect Discord</label>
+          Connect Discord
         </button>
       </div>
       )
