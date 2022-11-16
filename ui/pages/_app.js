@@ -17,12 +17,12 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
   useEffect(() => fcl.currentUser.subscribe(setUser), [])
 
   return (
-      <div className="bg-white text-black bg-[url('/bg.png')] bg-cover bg-center min-h-screen">
-        <SessionProvider session={session}>
+    <div className="bg-white text-black bg-[url('/bg.png')] bg-cover bg-center min-h-screen">
+      <SessionProvider session={session}>
         <RecoilRoot>
           <Head>
-            <title>Emerald bot | Create Your Verifier</title>
-            <meta property="og:title" content="Emerald bot | Create Your Verifier" key="title" />
+            <title>Emerald Bot | Discord Bot on Flow</title>
+            <meta property="og:title" content="Emerald Bot | Discord Bot on Flow" key="title" />
           </Head>
           <NavigationBar user={user} />
           <Component {...pageProps} user={user} />
@@ -30,8 +30,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
           <TransactionNotification />
           <BasicNotification />
         </RecoilRoot>
-        </SessionProvider>
-      </div>
+      </SessionProvider>
+    </div>
   )
 }
 

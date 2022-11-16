@@ -13,7 +13,7 @@ import ScriptModal from "./ScriptModal"
 import { deleteVerifier } from "../flow/transactions"
 import { useSWRConfig } from "swr"
 
-export default function VerifiersList(props) {
+export default function GuildVerifiersList(props) {
   const [transactionInProgress, setTransactionInProgress] = useRecoilState(transactionInProgressState)
   const [, setTransactionStatus] = useRecoilState(transactionStatusState)
   const router = useRouter()
@@ -148,7 +148,7 @@ export default function VerifiersList(props) {
                               )}
                             onClick={async () => {
                               await deleteVerifier(verifier.uuid, setTransactionInProgress, setTransactionStatus)
-                              mutate(["verifiersFetcher", user.addr, guildId])
+                              mutate(["allVerifiersFetcher", user.addr, guildId])
                             }}
                           >
                             Delete
@@ -196,7 +196,7 @@ export default function VerifiersList(props) {
         </div> :
         <div className="flex mb-10 justify-center">
           <label className="leading-[200px] font-flow font-medium text-base text-gray-500">
-            {"You haven't created any verifier yet"}
+            {"There is nothing here"}
           </label>
         </div>}
       <ScriptModal open={openScript} setOpen={setOpenScript} script={currentScript} />
