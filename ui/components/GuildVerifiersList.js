@@ -8,6 +8,7 @@ import {
 } from "../lib/atoms"
 import { classNames, getItemsInPage } from '../lib/utils'
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/solid"
+import { DocumentDuplicateIcon } from "@heroicons/react/outline"
 import { getModeFromRaw } from "./VerificationModeSelector"
 import ScriptModal from "./ScriptModal"
 import { deleteVerifier } from "../flow/transactions"
@@ -96,8 +97,12 @@ export default function GuildVerifiersList(props) {
                       return verifier
                     }).map((verifier) => (
                       <tr key={verifier.uuid}>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <Image src="/copy.png" width="25" height="25" className="cursor-pointer m-0" onClick={() => navigator.clipboard.writeText(`/verifier custom verifierowner:${user.addr} verifierid:${verifier.uuid}`)} />
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 text-center">
+                          <div className="flex items-center justify-center">
+                            <DocumentDuplicateIcon className="h-5 w-5 cursor-pointer" onClick={() => {
+                              navigator.clipboard.writeText(`/verifier custom verifierowner:${user.addr} verifierid:${verifier.uuid}`)
+                            }} />
+                          </div>
                         </td>
                         <td className="py-4 px-3 text-sm">
                           <div className="flex items-center">
