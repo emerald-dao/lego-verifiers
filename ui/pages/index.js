@@ -14,11 +14,12 @@ export default function Home(props) {
     if (!account) {
       return (
         <div className="w-full mt-10 flex flex-col gap-y-8 items-center justify-center">
-        <label className="font-flow font-bold text-3xl sm:text-5xl">Your Verifiers for</label>
-        <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Your <span className="text-emerald">🤖️ Emerald Bot</span></label>
+        <label className="font-flow font-bold text-3xl sm:text-5xl">A verification and utility</label>
+        <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Discord bot <span className="text-emerald">#onFlow</span></label>
         <div className="-mt-2 flex flex-col justify-center items-center">
-          <label className="font-flow text-base sm:text-lg">Build unique Emerald Bot verifiers</label>
-          <label className="font-flow text-base sm:text-lg">for the roles in your community</label>
+          <label className="font-flow text-base sm:text-lg">Build unique verifiers to gate access to channels.</label>
+          <label className="font-flow text-base sm:text-lg">Identify your users using our identity service.</label>
+          <label className="font-flow text-base sm:text-lg">Better manage your Discord community.</label>
         </div>
 
         <button
@@ -35,11 +36,11 @@ export default function Home(props) {
     if (!session) {
       return (
         <div className="w-full mt-10 flex flex-col gap-y-8 items-center justify-center">
-        <label className="font-flow font-bold text-3xl sm:text-5xl">Your Verifiers for</label>
-        <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Your <span className="text-emerald">🤖️ Emerald Bot</span></label>
+        <label className="font-flow font-bold text-3xl sm:text-5xl">A verification and utility</label>
+        <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Discord bot <span className="text-emerald">#onFlow</span></label>
         <div className="-mt-2 flex flex-col justify-center items-center">
-          <label className="font-flow text-base sm:text-lg">You need to connect discord account</label>
-          <label className="font-flow text-base sm:text-lg">to create verifiers for your server</label>
+          <label className="font-flow text-base sm:text-lg">Connect to the server you want to</label>
+          <label className="font-flow text-base sm:text-lg">set up verifications in.</label>
         </div>
   
         <button
