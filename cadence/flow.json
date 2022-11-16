@@ -8,7 +8,7 @@
         "EmeraldBotVerifiers": {
             "source": "./contracts/EmeraldBotVerifiers.cdc",
             "aliases": {
-                "testnet": "0x91c0d5719248ed76",
+                "testnet": "0x2a78fdfa7b7f8ed5",
                 "mainnet": "0x129fee333390875e"
             }
         },
@@ -36,6 +36,7 @@
 		"EmeraldPass": {
             "source": "./contracts/EmeraldPass.cdc",
             "aliases": {
+                "testnet": "0x2a78fdfa7b7f8ed5",
 				"mainnet": "0x6a07dbeb03167a13"
             }
         }
