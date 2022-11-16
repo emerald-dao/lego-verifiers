@@ -67,6 +67,9 @@ export default function GuildVerifiersList(props) {
                   <thead className="bg-gray-50">
                     <tr>
                       <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                        Copy
+                      </th>
+                      <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                         Name
                       </th>
                       <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
@@ -93,6 +96,9 @@ export default function GuildVerifiersList(props) {
                       return verifier
                     }).map((verifier) => (
                       <tr key={verifier.uuid}>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <Image src="/copy.png" width="25" height="25" className="cursor-pointer m-0" onClick={() => navigator.clipboard.writeText(`/verifier custom verifierowner:${user.addr} verifierid:${verifier.id}`)} />
+                        </td>
                         <td className="py-4 px-3 text-sm">
                           <div className="flex items-center">
                             <div className="h-10 w-10 flex-shrink-0 relative">
@@ -105,9 +111,7 @@ export default function GuildVerifiersList(props) {
                           </div>
                         </td>
                         <td className="px-3 py-4 text-sm text-gray-500 min-w-[140px]">
-                          <div className="text-gray-500">
-                            {verifier.description}
-                          </div>
+                          {verifier.description}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <label className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${verifier.mode.tagColor}`}>
