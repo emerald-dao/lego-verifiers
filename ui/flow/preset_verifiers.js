@@ -38,6 +38,22 @@ export const presetVerifiersList = [
     }`
   },
   {
+    name: "Has Emerald ID",
+    description: "Checks to see if the user has an Emerald ID set up.",
+    logo: "/emerald-id.png",
+    parameters: [],
+    imports: {
+      testnet: [],
+      mainnet: []
+    },
+    script: `
+    let emeraldIds = EmeraldIdentity.getEmeraldIDs(discordID: discordId)
+    if emeraldIds.keys.length > 0 {
+      SUCCESS
+    }
+    `
+  },
+  {
     name: "Owns _ NFL All Day with Tier",
     description: "Checks to see if a user owns a specific number of moments that have a certain tier.",
     logo: "/nfl-all-day.jpg",
