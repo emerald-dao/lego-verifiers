@@ -166,14 +166,13 @@ export default function MultiRolesVerifierCreator(props) {
             placeholder:text-gray-300 pr-[64px]"
                   placeholder={"Paste image url here, press Enter to fetch it"}
                   onKeyUp={(event) => {
-                    console.log(event)
                     if (event.key == "Enter") {
                       const url = event.target.value
-                      if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
+                      if (url && (url.startsWith("https://"))) {
                         setImage(event.target.value)
                       } else {
                         setShowBasicNotification(true)
-                        setBasicNotificationContent({ type: "exclamation", title: "Invalid Image URL", detail: null }) 
+                        setBasicNotificationContent({ type: "exclamation", title: "Invalid Image URL", detail: "Should start with https://" })
                       }
                     }
                   }}

@@ -17,11 +17,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
   useEffect(() => fcl.currentUser.subscribe(setUser), [])
 
   return (
-      <div className="bg-white text-black bg-[url('/bg.png')] bg-cover bg-center min-h-screen">
-        <SessionProvider session={session}>
+    <div className="bg-white text-black bg-[url('/bg.png')] bg-cover bg-center min-h-screen">
+      <SessionProvider session={session}>
         <RecoilRoot>
           <Head>
-            <title>Emerald bot | Create Your Verifier</title>
+            <title>Emerald Bot | Create Your Verifier</title>
             <meta property="og:title" content="Emerald bot | Create Your Verifier" key="title" />
           </Head>
           <NavigationBar user={user} />
@@ -30,8 +30,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
           <TransactionNotification />
           <BasicNotification />
         </RecoilRoot>
-        </SessionProvider>
-      </div>
+      </SessionProvider>
+    </div>
   )
 }
 

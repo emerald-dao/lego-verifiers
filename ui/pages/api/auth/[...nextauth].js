@@ -8,7 +8,7 @@ export const authOptions = {
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      authorization: {params: {scope: scopes, permissions: 8}},
+      authorization: { params: { scope: scopes, permissions: 8 } },
       userinfo: "https://discord.com/api/users/@me"
     })
   ],
@@ -18,7 +18,7 @@ export const authOptions = {
       session.user.id = token.id
       session.user.discriminator = token.discriminator
       session.guild = token.guild
-      session.token_type = token.token_type
+      session.tokenType = token.tokenType
       return session
     },
     async jwt({ token, account, profile }) {
@@ -26,7 +26,7 @@ export const authOptions = {
         token.accessToken = account.access_token
         token.id = profile.id
         token.discriminator = profile.discriminator
-        token.token_type = account.token_type
+        token.tokenType = account.token_type
         token.guild = account.guild
       }
       return token
