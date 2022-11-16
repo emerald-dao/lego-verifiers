@@ -23,10 +23,10 @@ export default function Home(props) {
 
         <button
           type="button"
-          className="mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
+          className="cursor-pointer mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
           onClick={fcl.logIn}
         >
-          <label>Connect Wallet</label>
+          Connect Wallet
         </button>
       </div>
       )

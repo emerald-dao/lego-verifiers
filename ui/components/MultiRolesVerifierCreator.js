@@ -226,7 +226,7 @@ export default function MultiRolesVerifierCreator(props) {
               type="button"
               className={classNames(
                 !canCreateLego() ? "bg-emerald-light text-gray-500" : "bg-emerald hover:bg-emerald-dark text-black",
-                "mt-24 w-full h-[56px] text-lg font-semibold rounded-2xl shadow-drizzle"
+                "mt-24 w-full h-[56px] text-lg font-semibold rounded-2xl shadow-drizzle cursor-pointer"
               )}
               disabled={!canCreateLego()}
               onClick={() => {
