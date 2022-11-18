@@ -60,7 +60,7 @@ export default function RoleVerifierCreator(props) {
     <div className="flex flex-col gap-y-2">
       <div className="flex gap-x-2 justify-between items-center">
         <label className="block text-2xl font-bold font-flow">
-          Basic Verifiers
+          Verifiers
         </label>
       </div>
 

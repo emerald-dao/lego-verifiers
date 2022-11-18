@@ -16,7 +16,7 @@ export default function LogicSelector(props) {
   return (
     <div className="flex flex-col gap-y-2">
       <label className="block text-2xl font-bold font-flow">
-        Basic Verifiers Logic
+        Verifier Logic
       </label>
       <div className="mt-1 flex gap-x-4 h-12">
         <button

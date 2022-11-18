@@ -48,7 +48,7 @@ export default function RoleView(props) {
           <div className="truncate shrink flex justify-between h-5 gap-x-2">
             <div className="truncate shrink flex gap-x-1 items-center">
               <div className="shrink-0 rounded-full w-2 h-2 bg-green-500"></div>
-              <label className="truncate shrink text-black font-flow font-bold">Basic Verifiers</label>
+              <label className="truncate shrink text-black font-flow font-bold">Verifiers</label>
             </div>
             <div className="flex gap-x-1 items-center overflow-hidden">
               {
