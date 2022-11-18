@@ -72,7 +72,7 @@ export const presetVerifiersList = [
       for id in collection.getIDs() {
         let moment = collection.borrowMomentNFT(id: id)!
         let editionData = AllDay.getEditionData(id: moment.editionID)
-        count[editionData.tier] = (count[editionData.tier] ?? 0) + 1
+        count[editionData.tier.toUpper()] = (count[editionData.tier.toUpper()] ?? 0) + 1
       }
 
       if count["TIER"]! >= AMOUNT {
