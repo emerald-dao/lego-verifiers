@@ -17,10 +17,10 @@ export const paramsSetID = {
 
 export const paramsNFLAllDayTier = {
   names: { placeholder: "TIER", display: "Tier" },
-  type: Types.Enum(["COMMON", "RARE", "LEGENDARY", "ULTIMATE"])
+  type: Types.Enum(["common", "rare", "legendary", "ultimate"])
 }
 
 export const paramsUFCStrikeTier = {
   names: { placeholder: "TIER", display: "Tier" },
-  type: Types.Enum(["CHALLENGER", "CONTENDER", "CHAMPION", "FANDOM"])
+  type: Types.Enum(["challenger", "contender", "champion", "fandom"])
 }
