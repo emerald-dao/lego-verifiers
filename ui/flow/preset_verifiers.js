@@ -29,9 +29,9 @@ export const presetVerifiersList = [
       mainnet: ["import FLOAT from 0x2d4c3caffbeab845"]
     },
     script: `
-    if let floatCollection = getAccount(user).getCapability(FLOAT.FLOATCollectionPublicPath).borrow<&FLOAT.Collection{FLOAT.CollectionPublic}>() {
+    if let collection = getAccount(user).getCapability(FLOAT.FLOATCollectionPublicPath).borrow<&FLOAT.Collection{FLOAT.CollectionPublic}>() {
       let eventId: UInt64 = EVENT_ID
-      let ids = floatCollection.ownedIdsFromEvent(eventId: eventId)
+      let ids = collection.ownedIdsFromEvent(eventId: eventId)
       if ids.length > 0 {
         SUCCESS
       }
@@ -66,11 +66,11 @@ export const presetVerifiersList = [
       mainnet: ["import AllDay from 0xe4cf4bdc1751c65d"]
     },
     script: `
-    if let allDayCollection = getAccount(user).getCapability(AllDay.CollectionPublicPath).borrow<&AllDay.Collection{AllDay.MomentNFTCollectionPublic}>() {
+    if let collection = getAccount(user).getCapability(AllDay.CollectionPublicPath).borrow<&AllDay.Collection{AllDay.MomentNFTCollectionPublic}>() {
       let count: {String: Int} = {"COMMON": 0, "RARE": 0, "LEGENDARY": 0, "ULTIMATE": 0}
 
-      for id in allDayCollection.getIDs() {
-        let moment = allDayCollection.borrowMomentNFT(id: id)!
+      for id in collection.getIDs() {
+        let moment = collection.borrowMomentNFT(id: id)!
         let editionData = AllDay.getEditionData(id: moment.editionID)
         count[editionData.tier] = (count[editionData.tier] ?? 0) + 1
       }
@@ -93,14 +93,14 @@ export const presetVerifiersList = [
       mainnet: ["import UFC_NFT from 0x329feb3ab062d289"]
     },
     script: `
-    if let ufcStrikeCollection = getAccount(user).getCapability(UFC_NFT.CollectionPublicPath).borrow<&UFC_NFT.Collection{UFC_NFT.UFC_NFTCollectionPublic}>() {
+    if let collection = getAccount(user).getCapability(UFC_NFT.CollectionPublicPath).borrow<&UFC_NFT.Collection{UFC_NFT.UFC_NFTCollectionPublic}>() {
       let count: {String: Int} = {"CHAMPION": 0, "CONTENDER": 0, "CHALLENGER": 0, "FANDOM": 0}
 
-      for id in ufcStrikeCollection.getIDs() {
+      for id in collection.getIDs() {
         let moment = collection.borrowUFC_NFT(id: id)!
         let setId: UInt32 = moment.setId
         let metadata = UFC_NFT.getSetMetadata(setId: setId)!
-        count[metadata["TIER"]?.toUpper()] = count[metadata["TIER"]?.toUpper()] + 1
+        count[metadata["TIER"]?.toUpper()] = (count[metadata["TIER"]?.toUpper()] ?? 0) + 1
       }
 
       if count["TIER"]! >= AMOUNT {
