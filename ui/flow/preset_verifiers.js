@@ -138,6 +138,35 @@ export const presetVerifiersList = [
         SUCCESS
       }
     }`
+  },
+  {
+    name: "Owns All TopShot with Set ID",
+    description: "Checks to see if a user owns all the moments of a certain Set ID.",
+    logo: "/topshot.png",
+    parameters: [
+      paramsSetID
+    ],
+    imports: {
+      testnet: ["import TopShot from 0x877931736ee77cff"],
+      mainnet: ["import TopShot from 0x0b2a3299cc857e29"]
+    },
+    script: `
+    if let collection = getAccount(user).getCapability(/public/MomentCollection).borrow<&{TopShot.MomentCollectionPublic}>() {
+      var coveredPlays: [UInt32] = []
+      let setID: UInt32 = SET_ID
+      let numOfPlaysInSet = TopShot.getPlaysInSet(setID: setID)!.length
+      for id in collection.getIDs() {
+        let moment = collection.borrowMoment(id: id)!
+        if moment.data.setID == setID {
+          if !coveredPlays.contains(moment.data.playID) {
+            coveredPlays.append(moment.data.playID)
+          }
+        }
+      }
+      if coveredPlays.length >= numOfPlaysInSet {
+        SUCCESS
+      }
+    }`
   }
 ].map((v) => {
   v.isPreset = true
