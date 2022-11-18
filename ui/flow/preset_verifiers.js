@@ -1,6 +1,6 @@
-import { paramsAmount, paramsEvent, paramsNFLAllDayTier, paramsUFCStrikeTier } from "./verifier_params"
+import { paramsAmount, paramsEvent, paramsNFLAllDayTier, paramsSetID, paramsUFCStrikeTier } from "./verifier_params"
 
-export const catalogTemplate =  {
+export const catalogTemplate = {
   isPreset: false,
   name: "Owns _ NFT(s)",
   description: "Create customize verifiers for NFTs in NFT Catalog",
@@ -104,6 +104,37 @@ export const presetVerifiersList = [
       }
 
       if count["TIER"]! >= AMOUNT {
+        SUCCESS
+      }
+    }`
+  },
+  {
+    name: "Owns _ NBA TopShot Moments with Set ID",
+    description: "Checks to see if a user owns a specific number of moments that have a certain Set ID.",
+    logo: "/topshot.png",
+    parameters: [
+      paramsAmount,
+      paramsSetID
+    ],
+    imports: {
+      testnet: ["import TopShot from 0x877931736ee77cff"],
+      mainnet: ["import TopShot from 0x0b2a3299cc857e29"]
+    },
+    script: `
+    if let collection = getAccount(user).getCapability(/public/MomentCollection).borrow<&{TopShot.MomentCollectionPublic}>() {
+      var answer: Int = 0
+      var coveredPlays: [UInt32] = []
+      let setID: UInt32 = SET_ID
+      for id in collection.getIDs() {
+        let moment = collection.borrowMoment(id: id)!
+        if moment.data.setID == setID {
+          answer = answer + 1
+          if !coveredPlays.contains(moment.data.playID) {
+            coveredPlays.append(moment.data.playID)
+          }
+        }
+      }
+      if answer >= AMOUNT {
         SUCCESS
       }
     }`

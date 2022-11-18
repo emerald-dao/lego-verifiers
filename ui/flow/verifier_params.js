@@ -10,6 +10,11 @@ export const paramsEvent = {
   type: Types.PositiveInt()
 }
 
+export const paramsSetID = {
+  names: { placeholder: "SET_ID", display: "Set ID" },
+  type: Types.PositiveInt()
+}
+
 export const paramsNFLAllDayTier = {
   names: { placeholder: "TIER", display: "Tier" },
   type: Types.Enum(["COMMON", "RARE", "LEGENDARY", "ULTIMATE"])
