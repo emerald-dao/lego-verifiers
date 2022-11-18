@@ -97,7 +97,7 @@ export const presetVerifiersList = [
       let count: {String: Int} = {"CHAMPION": 0, "CONTENDER": 0, "CHALLENGER": 0, "FANDOM": 0}
 
       for id in collection.getIDs() {
-        let moment = collection_NFT(id: id)!
+        let moment = collection.borrowUFC_NFT(id: id)!
         let setId: UInt32 = moment.setId
         let metadata = UFC_NFT.getSetMetadata(setId: setId)!
         let momentTier = metadata["TIER"]!.toUpper()
