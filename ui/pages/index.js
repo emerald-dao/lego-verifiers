@@ -38,7 +38,7 @@ export default function Home(props) {
     if (!session) {
       return (
         <div className="w-full mt-10 flex flex-col gap-y-8 items-center justify-center">
-                    <div className="flex flex-col gap-y-5 sm:gap-y-8 items-center">
+          <div className="flex flex-col gap-y-5 sm:gap-y-8 items-center">
             <label className="font-flow font-bold text-2xl sm:text-5xl">A verification and utility</label>
             <label className="-mt-4 font-flow font-bold text-2xl sm:text-5xl">Discord bot <span className="text-emerald">#onFlow</span></label>
           </div>
