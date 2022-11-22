@@ -18,7 +18,8 @@ export const classNames = (...classes) => {
 
 const generateImportsAndScript = (basicVerifier) => {
   if (!basicVerifier.isPreset && basicVerifier.name == "Owns _ NFT(s)") {
-    const nft = basicVerifier.nft
+    const nft = basicVerifier.nft;
+    console.log(nft);
     const publicPath = `/${nft.collectionData.publicPath.domain}/${nft.collectionData.publicPath.identifier}`
     const imports = [
       `import ${nft.contractName} from ${nft.contractAddress}`,
@@ -177,20 +178,20 @@ export const discordColorPalette = {
 export const getCatalogImageSrc = (metadata) => {
   let src = null
   let squareImageFile = metadata.collectionDisplay.squareImage.file
-  if (squareImageFile.url && squareImageFile.url.trim() != '' && !squareImageFile.url.includes("ipfs://")) {
+  if (squareImageFile.url && squareImageFile.url.includes("https://")) {
     src = squareImageFile.url.trim()
-    return src
   } else if (squareImageFile.url && squareImageFile.url.includes("ipfs://")) {
-    return getIPFSFileURLByURL(squareImageFile.url)
+    src = getIPFSFileURLByURL(squareImageFile.url)
   } else if (squareImageFile.cid
     && squareImageFile.cid.trim() != ''
     && squareImageFile.path
     && squareImageFile.path.trim() != '') {
     const imageCID = squareImageFile.cid.trim()
     const imagePath = squareImageFile.path.trim()
-    return getIPFSFileURL(imageCID, imagePath)
+    src = getIPFSFileURL(imageCID, imagePath)
   } else {
-    return "/nft-catalog.png"
+    src = "/nft-catalog.png"
   }
+  return src
 }
 
