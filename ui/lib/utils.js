@@ -16,17 +16,25 @@ export const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
 }
 
+const findPublicInterface = (restrictions, contractAddress, contractName) => {
+  const interfaces = restrictions.filter(restriction => restriction.typeID.includes(`A.${contractAddress.slice(2)}.${contractName}`))
+  if (interfaces.length == 1) {
+    return interfaces[0].typeID.slice(19);
+  }
+  return 'NonFungibleToken.CollectionPublic';
+}
+
 const generateImportsAndScript = (basicVerifier) => {
   if (!basicVerifier.isPreset && basicVerifier.name == "Owns _ NFT(s)") {
     const nft = basicVerifier.nft;
-    console.log(nft);
+    const publicInterface = findPublicInterface(nft.collectionData.publicLinkedType.restrictions, nft.contractAddress, nft.contractName);
     const publicPath = `/${nft.collectionData.publicPath.domain}/${nft.collectionData.publicPath.identifier}`
     const imports = [
       `import ${nft.contractName} from ${nft.contractAddress}`,
       `import NonFungibleToken from ${publicConfig.nonFungibleTokenAddress}`
     ]
     const script = `
-    if let collection = getAccount(user).getCapability(${publicPath}).borrow<&{NonFungibleToken.CollectionPublic}>() {
+    if let collection = getAccount(user).getCapability(${publicPath}).borrow<&{${publicInterface}}>() {
       let amount: Int = AMOUNT
       if collection.getIDs().length >= amount {
         SUCCESS
