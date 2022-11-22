@@ -74,7 +74,7 @@ export default function NavigationBar(props) {
 
   return (
     <div className="px-6 m-auto max-w-[920px] min-w-[380px] relative gap-x-5 flex items-center justify-between bg-transparent h-44">
-      <div className="shrink-0 flex items-center gap-x-2">
+      <div className="shrink-0 flex items-center gap-x-1 sm:gap-x-2">
         <Link href="/">
           <div className="w-[36px] sm:w-[50px]">
             <Image src="/emerald-bot.png" alt="" width={50} height={50} priority={true} />
@@ -86,12 +86,17 @@ export default function NavigationBar(props) {
             Emerald Bot
           </label>
         </Link>
-        <label className="hidden sm:block px-1 text-center font-flow text-emerald font-medium text-xs border border-1 border-emerald">
-          {`${publicConfig.chainEnv == "mainnet" ? "BETA" : "TESTNET"}`}
-        </label>
-        <label className="block sm:hidden px-1 text-center font-flow text-emerald font-medium text-xs border border-1 border-emerald">
-          {`${publicConfig.chainEnv == "mainnet" ? "BETA" : "T"}`}
-        </label>
+        {
+          publicConfig.chainEnv == "mainnet" ? null :
+            <>
+              <label className="hidden sm:block px-1 text-center font-flow text-emerald font-medium text-xs border border-1 border-emerald">
+                {`${"TESTNET"}`}
+              </label>
+              <label className="block sm:hidden px-1 text-center font-flow text-emerald font-medium text-xs border border-1 border-emerald">
+                {`${"T"}`}
+              </label>
+            </>
+        }
       </div>
 
       <div className="shrink truncate flex items-center gap-x-5">

@@ -14,45 +14,50 @@ export default function Home(props) {
     if (!account) {
       return (
         <div className="w-full mt-10 flex flex-col gap-y-8 items-center justify-center">
-        <label className="font-flow font-bold text-3xl sm:text-5xl">A verification and utility</label>
-        <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Discord bot <span className="text-emerald">#onFlow</span></label>
-        <div className="-mt-2 flex flex-col justify-center items-center">
-          <label className="font-flow text-base sm:text-lg">Build unique verifiers to gate access to channels.</label>
-          <label className="font-flow text-base sm:text-lg">Identify your users using our identity service.</label>
-          <label className="font-flow text-base sm:text-lg">Better manage your Discord community.</label>
-        </div>
+          <div className="flex flex-col gap-y-5 sm:gap-y-8 items-center">
+            <label className="font-flow font-bold text-2xl sm:text-5xl">A verification and utility</label>
+            <label className="-mt-4 font-flow font-bold text-2xl sm:text-5xl">Discord bot <span className="text-emerald">#onFlow</span></label>
+          </div>
+          <div className="-mt-2 flex flex-col justify-center items-center">
+            <label className="font-flow text-sm sm:text-lg">Build unique verifiers to gate access to channels.</label>
+            <label className="font-flow text-sm sm:text-lg">Identify your users using our identity service.</label>
+            <label className="font-flow text-sm sm:text-lg">Better manage your Discord community.</label>
+          </div>
 
-        <button
-          type="button"
-          className="cursor-pointer mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
-          onClick={fcl.logIn}
-        >
-          Connect Wallet
-        </button>
-      </div>
+          <button
+            type="button"
+            className="cursor-pointer mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-black bg-emerald hover:bg-emerald-dark"
+            onClick={fcl.logIn}
+          >
+            Connect Wallet
+          </button>
+        </div>
       )
     }
 
     if (!session) {
       return (
         <div className="w-full mt-10 flex flex-col gap-y-8 items-center justify-center">
-        <label className="font-flow font-bold text-3xl sm:text-5xl">A verification and utility</label>
-        <label className="-mt-4 font-flow font-bold text-3xl sm:text-5xl">Discord bot <span className="text-emerald">#onFlow</span></label>
-        <div className="-mt-2 flex flex-col justify-center items-center">
-          <label className="font-flow text-base sm:text-lg">Connect to the server you want to</label>
-          <label className="font-flow text-base sm:text-lg">set up verifications in.</label>
+          <div className="flex flex-col gap-y-5 sm:gap-y-8 items-center">
+            <label className="font-flow font-bold text-2xl sm:text-5xl">A verification and utility</label>
+            <label className="-mt-4 font-flow font-bold text-2xl sm:text-5xl">Discord bot <span className="text-emerald">#onFlow</span></label>
+          </div>
+          <div className="-mt-2 flex flex-col justify-center items-center">
+            <label className="font-flow text-sm sm:text-lg">Connect to the server you want to</label>
+            <label className="font-flow text-sm sm:text-lg">set up verifications in.</label>
+          </div>
+
+          <button
+            type="button"
+            className="cursor-pointer mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-white bg-discord hover:bg-discord-dark"
+            onClick={() => {
+              signIn('discord')
+            }
+            }
+          >
+            Connect Discord
+          </button>
         </div>
-  
-        <button
-          type="button"
-          className="cursor-pointer mt-3 h-12 px-6 text-base rounded-2xl font-flow font-semibold shadow-sm text-white bg-discord hover:bg-discord-dark"
-          onClick={() => {
-            signIn('discord')}
-          }
-        >
-          Connect Discord
-        </button>
-      </div>
       )
     }
 
