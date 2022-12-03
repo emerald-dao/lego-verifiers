@@ -170,7 +170,7 @@ export const presetVerifiersList = [
     }`
   },
   {
-    name: "Owns Party Goobz with Specific Season",
+    name: "Owns Party Goobz with specific Season",
     description: "Checks to see if a user owns a Party Goobz with a specific season.",
     logo: "/party-goobz.jpeg",
     parameters: [
