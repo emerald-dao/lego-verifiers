@@ -183,14 +183,19 @@ export const presetVerifiersList = [
     script: `
     if let collection = getAccount(user).getCapability(PartyFavorz.CollectionPublicPath).borrow<&{MetadataViews.ResolverCollection}>() {
       let seasonNum: UInt64 = SEASON
+      var found: Bool = false
       for id in collection.getIDs() {
         let resolver = collection.borrowViewResolver(id: id)
         let view = resolver.resolveView(Type<MetadataViews.Traits>())! as! MetadataViews.Traits
         for trait in view.traits {
           if trait.name == "Season" && (trait.value as? UInt64) == seasonNum {
-            SUCCESS
+            found = true
             break
           }
+        }
+        if found == true {
+          SUCCESS
+          break
         }
       }
     }`
