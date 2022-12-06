@@ -38,10 +38,10 @@ export default function BasicVerifierSelector(props) {
               }}>
               <div className={`flex flex-col gap-y-1 font-flow p-1`}>
                 <div className="flex gap-x-1 items-center py-1 text-lg font-bold text-black">
-                  <div className="w-5 h-5 relative">
+                  <div className="w-5 h-5 relative shrink-0">
                     <Image className="rounded-full object-cover" src={verifier.logo} alt="" fill sizes="33vw" />
                   </div>
-                  <label>{verifier.name}</label>
+                  <label className="text-base text-left">{verifier.name}</label>
                 </div>
                 <label className="cursor-pointer text-left text-sm">{verifier.description}</label>
               </div>
