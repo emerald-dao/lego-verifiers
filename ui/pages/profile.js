@@ -81,7 +81,7 @@ export default function Profile(props) {
   )
 
   const { data: userGuildsData, error: userGuildsError } = useSWR(
-    account && session ? ["userGuildsFetcher", session.tokenType, session.accessToken] : null, userGuildsFetcher
+    account && session ? ["userGuildsFetcher", "Bearer", session.accessToken] : null, userGuildsFetcher
   )
 
   const [guildVerifiers, setGuildVerifiers] = useState([])
