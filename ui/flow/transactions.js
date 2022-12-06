@@ -1,5 +1,5 @@
 import * as fcl from "@onflow/fcl"
-import publicConfig from "../publicConfig"
+
 // Different from the response of FCL
 // We don't need to show every status to users
 export const TxStatus = {
@@ -53,8 +53,6 @@ export const txHandler = async (
   }
 }
 
-const EmeraldBotVerifiersPath = "0xEmeraldBotVerifiers"
-
 export const deleteVerifier = async (
   verifierID,
   setTransactionInProgress,
@@ -84,7 +82,6 @@ const doDeleteVerifier = async (verifierID) => {
     }
 }
   `
-  .replace(EmeraldBotVerifiersPath, publicConfig.emeraldBotVerifiersAddress)
 
   const transactionId = await fcl.mutate({
     cadence: code,
@@ -155,7 +152,6 @@ transaction(
     }
 }
   `
-  .replace(EmeraldBotVerifiersPath, publicConfig.emeraldBotVerifiersAddress)
 
   const transactionId = await fcl.mutate({
     cadence: code,
