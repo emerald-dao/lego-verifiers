@@ -18,7 +18,6 @@ export const authOptions = {
       session.user.id = token.id
       session.user.discriminator = token.discriminator
       session.guild = token.guild
-      session.tokenType = token.tokenType
       return session
     },
     async jwt({ token, account, profile }) {
@@ -26,8 +25,14 @@ export const authOptions = {
         token.accessToken = account.access_token
         token.id = profile.id
         token.discriminator = profile.discriminator
-        token.tokenType = account.token_type
-        token.guild = account.guild
+        token.guild = {
+          id: account.guild.id,
+          name: account.guild.name,
+          icon: account.guild.icon,
+          roles: account.guild.roles.filter((r) => r.name != "@everyone" && !r.tags).map((r) => {
+            return {id: r.id, name: r.name, color: r.color }
+          })
+        }
       }
       return token
     }

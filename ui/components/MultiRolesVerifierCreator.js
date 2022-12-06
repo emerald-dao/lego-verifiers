@@ -17,14 +17,14 @@ import { useRouter } from "next/router"
 import DiscordAccountView from "./DiscordAccountView"
 import { useSession } from 'next-auth/react'
 import DiscordGuildView from "./DiscordGuildView"
-import { getNFTCatalog } from "../flow/scripts"
+import { bulkGetNftCatalog } from "../flow/scripts"
 import useSWR from "swr"
 
 const NamePlaceholder = "Verifier's Name";
 const DescriptionPlaceholder = "Details about this verifier"
 
 const catalogFetcher = async (funcName) => {
-  return await getNFTCatalog()
+  return await bulkGetNftCatalog()
 }
 
 // There are some projects with duplicate contractName/displayName

@@ -1,25 +1,96 @@
-import publicConfig from "../publicConfig"
 import * as fcl from "@onflow/fcl"
 
-const EmeraldBotVerifiersPath = "0xEmeraldBotVerifiers"
-const NFTCatalogPath = "0xNFTCatalog"
+// --- Utils ---
 
-export const getNFTCatalog = async () => {
+const splitList = (list, chunkSize) => {
+  const groups = []
+  let currentGroup = []
+  for (let i = 0; i < list.length; i++) {
+      const collectionID = list[i]
+      if (currentGroup.length >= chunkSize) {
+        groups.push([...currentGroup])
+        currentGroup = []
+      }
+      currentGroup.push(collectionID)
+  }
+  groups.push([...currentGroup])
+  return groups
+}
+
+// --- NFT Catalog ---
+
+export const bulkGetNftCatalog = async () => {
+  const collectionIdentifiers = await getCollectionIdentifiers()
+  const groups = splitList(collectionIdentifiers, 50)
+  const promises = groups.map((group) => {
+    return getNftCatalogByCollectionIDs(group)
+  })
+
+  const itemGroups = await Promise.all(promises)
+  const items = itemGroups.reduce((acc, current) => {
+    return Object.assign(acc, current)
+  }, {}) 
+  return items 
+}
+
+export const getNftCatalogByCollectionIDs = async (collectionIDs) => {
   const code = `
   import NFTCatalog from 0xNFTCatalog
 
-  pub fun main(): {String : NFTCatalog.NFTCatalogMetadata} {
-      return NFTCatalog.getCatalog()
+  pub fun main(collectionIdentifiers: [String]): {String: NFTCatalog.NFTCatalogMetadata} {
+    let res: {String: NFTCatalog.NFTCatalogMetadata} = {}
+    for collectionID in collectionIdentifiers {
+        if let catalog = NFTCatalog.getCatalogEntry(collectionIdentifier: collectionID) {
+          res[collectionID] = catalog
+        }
+    }
+    return res
   }
   `
-  .replace(NFTCatalogPath, publicConfig.nftCatalogAddress)
 
-  const catalog = await fcl.query({
+  const catalogs = await fcl.query({
+    cadence: code,
+    args: (arg, t) => [
+      arg(collectionIDs, t.Array(t.String))
+    ]
+  }) 
+
+  return catalogs  
+}
+
+const getCollectionIdentifiers = async () => {
+  const typeData = await getCatalogTypeData()
+
+  const collectionData = Object.values(typeData)
+  const collectionIdentifiers = []
+  for (let i = 0; i < collectionData.length; i++) {
+    const data = collectionData[i]
+    let collectionIDs = Object.keys(Object.assign({}, data))
+    if (collectionIDs.length > 0) {
+      collectionIdentifiers.push(collectionIDs[0])
+    }
+  }
+  return collectionIdentifiers
+}
+
+const getCatalogTypeData = async () => {
+  const code = `
+  import NFTCatalog from 0xNFTCatalog
+
+  pub fun main(): {String : {String : Bool}} {
+    let catalog = NFTCatalog.getCatalogTypeData()
+    return catalog
+  }
+  `
+
+  const typeData = await fcl.query({
     cadence: code
   }) 
 
-  return catalog
+  return typeData 
 }
+
+// --- EmeraldBot ---
 
 export const getVerifiersByGuildId = async (address, guildId) => {
   const code = `
@@ -47,7 +118,6 @@ export const getVerifiersByGuildId = async (address, guildId) => {
       return res
   }
   `
-  .replace(EmeraldBotVerifiersPath, publicConfig.emeraldBotVerifiersAddress)
 
   const verifiers = await fcl.query({
     cadence: code,
@@ -86,7 +156,6 @@ export const getVerifiers = async (address) => {
       return res
   }
   `
-  .replace(EmeraldBotVerifiersPath, publicConfig.emeraldBotVerifiersAddress)
 
   const verifiers = await fcl.query({
     cadence: code,
