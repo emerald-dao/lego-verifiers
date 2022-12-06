@@ -1,4 +1,4 @@
-import { paramsAmount, paramsEvent, paramsNFLAllDayTier, paramsSetID, paramsUFCStrikeTier } from "./verifier_params"
+import { paramsAmount, paramsEvent, paramsNFLAllDayTier, paramsSetID, paramsUFCStrikeTier, paramsSeason } from "./verifier_params"
 
 export const catalogTemplate = {
   isPreset: false,
@@ -166,6 +166,37 @@ export const presetVerifiersList = [
       }
       if coveredPlays.length >= numOfPlaysInSet {
         SUCCESS
+      }
+    }`
+  },
+  {
+    name: "Owns Party Favorz with specific Season",
+    description: "Checks to see if a user owns a Party Favorz with a specific season.",
+    logo: "/party-favorz.png",
+    parameters: [
+      paramsSeason
+    ],
+    imports: {
+      testnet: [],
+      mainnet: ["import PartyFavorz from 0x123cb666996b8432", "import MetadataViews from 0x1d7e57aa55817448"]
+    },
+    script: `
+    if let collection = getAccount(user).getCapability(PartyFavorz.CollectionPublicPath).borrow<&{MetadataViews.ResolverCollection}>() {
+      let seasonNum: UInt64 = SEASON
+      var found: Bool = false
+      for id in collection.getIDs() {
+        let resolver = collection.borrowViewResolver(id: id)
+        let view = resolver.resolveView(Type<MetadataViews.Traits>())! as! MetadataViews.Traits
+        for trait in view.traits {
+          if trait.name == "Season" && (trait.value as? UInt64) == seasonNum {
+            found = true
+            break
+          }
+        }
+        if found == true {
+          SUCCESS
+          break
+        }
       }
     }`
   }

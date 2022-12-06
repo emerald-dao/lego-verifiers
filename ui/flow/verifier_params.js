@@ -10,6 +10,11 @@ export const paramsEvent = {
   type: Types.PositiveInt()
 }
 
+export const paramsSeason = {
+  names: { placeholder: "SEASON", display: "Season" },
+  type: Types.PositiveInt()
+}
+
 export const paramsSetID = {
   names: { placeholder: "SET_ID", display: "Set ID" },
   type: Types.PositiveInt()
