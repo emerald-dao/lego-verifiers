@@ -20,7 +20,7 @@ const splitList = (list, chunkSize) => {
 // --- NFT Catalog ---
 
 export const bulkGetNftCatalog = async () => {
-  const collectionIdentifiers = (await getCollectionIdentifiers()).filter((i) => i != "MindtrixPodcastExampleNFT" && i != "Mindtrix")
+  const collectionIdentifiers = await getCollectionIdentifiers()
   const groups = splitList(collectionIdentifiers, 40)
   const promises = groups.map((group) => {
     return getNftCatalogByCollectionIDs(group)
