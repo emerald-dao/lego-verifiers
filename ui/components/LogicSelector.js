@@ -9,14 +9,19 @@ export const BasicVerifiersLogic = {
   OR: "OR"
 }
 
+export const TraitsLogic = {
+  AND: "AND",
+  OR: "OR"
+}
+
 export default function LogicSelector(props) {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
-  const { basicVerifiersLogic, setBasicVerifiersLogic } = props
+  const { basicVerifiersLogic, setBasicVerifiersLogic, title } = props
 
   return (
     <div className="flex flex-col gap-y-2">
       <label className="block text-2xl font-bold font-flow">
-        Verifier Logic
+        {title}
       </label>
       <div className="mt-1 flex gap-x-4 h-12">
         <button

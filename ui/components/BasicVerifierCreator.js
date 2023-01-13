@@ -6,11 +6,15 @@ import { useRecoilState } from "recoil"
 import {
   transactionInProgressState,
 } from "../lib/atoms"
+import { PlusIcon } from "@heroicons/react/outline";
+import TraitFilterModal from "./TraitFilterModal";
 
 export default function BasicVerifierCreator(props) {
   const [transactionInProgress,] = useRecoilState(transactionInProgressState)
-  const { index, verifierInfo, updateVerifierParam, updateNFTCatalogVerifier } = props
+  const { index, verifierInfo, updateVerifierParam, updateNFTCatalogVerifier, updateVerifierTraits} = props
   const [selectedNFT, setSelectedNFT] = useState(null)
+
+  const [traitFilterOpen, setTraitFilterOpen] = useState(false)
 
   const [logo, setLogo] = useState(verifierInfo.logo)
   const [name, setName] = useState(verifierInfo.name)
@@ -62,7 +66,7 @@ export default function BasicVerifierCreator(props) {
         <label className="cursor-pointer text-left text-sm">{description}</label>
       </div>
 
-      <div className="flex flex-col gap-y-1 justify-end pb-4">
+      <div className="flex flex-col gap-y-1 justify-end pb-2">
         <NFTSelector selectedNFT={selectedNFT} setSelectedNFT={setSelectedNFT} />
         <div>
           <label className="block text-base font-bold font-flow">
@@ -100,7 +104,26 @@ export default function BasicVerifierCreator(props) {
             />
           </div>
         </div>
+        <button className="mt-2 flex flex-col h-8 w-full items-center justify-center bg-emerald disabled:bg-emerald-light rounded-xl text-black disabled:text-gray-500"
+          disabled={selectedNFT ? false : true}
+          onClick={() => {
+            setTraitFilterOpen(!traitFilterOpen)
+          }}>
+          <div className="flex gap-x-1 w-full justify-center items-center">
+            <PlusIcon className="h-5 w-5" />
+            <div>{`Traits Filter (${verifierInfo.traits.length})`}</div>
+          </div>
+        </button>
       </div>
+      <TraitFilterModal 
+        index={index} 
+        open={traitFilterOpen} 
+        setOpen={setTraitFilterOpen} 
+        name={selectedNFT && selectedNFT.name}
+        initTraits={verifierInfo.traits}
+        initTraitsLogic={verifierInfo.traitsLogic}
+        updateVerifierTraits={updateVerifierTraits} 
+      />
     </div>
   )
 }

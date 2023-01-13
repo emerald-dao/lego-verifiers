@@ -3,11 +3,11 @@ import BasicVerifierCreator from "./BasicVerifierCreator";
 import PresetBasicVerifier from "./PresetBasicVerifier";
 
 export default function BasicVerifierView(props) {
-  const { isPreset, verifierInfo, index, updateNFTCatalogVerifier, updateVerifierParam, deleteVerifier } = props
+  const { isPreset, verifierInfo, index, updateNFTCatalogVerifier, updateVerifierParam, deleteVerifier, updateVerifierTraits } = props
 
   return (
     <div className="
-    h-[424px] p-4 shrink-0
+    h-[434px] p-4 shrink-0
     shadow-lg bg-white
     ring-1 ring-black ring-opacity-5 rounded-2xl 
     flex flex-col gap-y-2 
@@ -28,7 +28,7 @@ export default function BasicVerifierView(props) {
       {
         isPreset ?
           <PresetBasicVerifier index={index} updateVerifierParam={updateVerifierParam} verifierInfo={verifierInfo} />
-          : <BasicVerifierCreator index={index} updateVerifierParam={updateVerifierParam} verifierInfo={verifierInfo} updateNFTCatalogVerifier={updateNFTCatalogVerifier} />
+          : <BasicVerifierCreator index={index} updateVerifierParam={updateVerifierParam} verifierInfo={verifierInfo} updateNFTCatalogVerifier={updateNFTCatalogVerifier} updateVerifierTraits={updateVerifierTraits} />
       }
     </div>
   )

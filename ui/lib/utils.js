@@ -1,3 +1,4 @@
+import { TraitsLogic } from "../components/LogicSelector"
 import { ModeShortCircuit } from "../components/VerificationModeSelector"
 import publicConfig from "../publicConfig"
 
@@ -24,20 +25,82 @@ const findPublicInterface = (restrictions, contractAddress, contractName) => {
   return 'NonFungibleToken.CollectionPublic';
 }
 
+const generateTraitsVerificationCode = (traits, traitsLogic) => {
+  if (traits.length == 0) {
+    return `var traitsCheckPassed = true`
+  }
+
+  let code = `
+            var traitsCheckPassed = false
+            var checksCount = ${traits.length}
+            if checksCount == 0 {
+              traitsCheckPassed = true
+            }
+            for trait in view.traits {
+  `
+  for (let i = 0; i < traits.length; i++) {
+    let t = traits[i]
+    let snippet = ``
+    if (traitsLogic == TraitsLogic.AND) {
+      snippet = `
+              if trait.name == "${t.trait}" && (trait.value as? String) == "${t.value}" {
+                checksCount = checksCount - 1
+                if checksCount == 0 {
+                  traitsCheckPassed = true
+                  break
+                }
+                continue
+              }
+      `
+    } else {
+      snippet = `
+              if trait.name == "${t.trait}" && (trait.value as? String) == "${t.value}" {
+                traitsCheckPassed = true
+                break
+              }
+      `
+    }
+    code += snippet
+  }
+
+  code += `
+            }
+  `
+  return code
+}
+
 const generateImportsAndScript = (basicVerifier) => {
   if (!basicVerifier.isPreset && basicVerifier.name == "Owns _ NFT(s)") {
-    const nft = basicVerifier.nft;
+    const nft = basicVerifier.nft
     const publicInterface = findPublicInterface(nft.collectionData.publicLinkedType.restrictions, nft.contractAddress, nft.contractName);
     const publicPath = `/${nft.collectionData.publicPath.domain}/${nft.collectionData.publicPath.identifier}`
     const imports = [
       `import ${nft.contractName} from ${nft.contractAddress}`,
-      `import NonFungibleToken from ${publicConfig.nonFungibleTokenAddress}`
+      `import NonFungibleToken from ${publicConfig.nonFungibleTokenAddress}`,
+      `import MetadataViews from ${publicConfig.metadataViewsAddress}`
     ]
+    const traitsCheckScript = generateTraitsVerificationCode(basicVerifier.traits, basicVerifier.traitsLogic)
     const script = `
-    if let collection = getAccount(user).getCapability(${publicPath}).borrow<&{${publicInterface}}>() {
-      let amount: Int = AMOUNT
-      if collection.getIDs().length >= amount {
-        SUCCESS
+    if let collection = getAccount(user).getCapability(${publicPath}).borrow<&{${publicInterface}, MetadataViews.ResolverCollection}>() {
+      var amount: Int = 0
+      let traitsLength = ${basicVerifier.traits.length}
+      for id in collection.getIDs() {
+        let resolver = collection.borrowViewResolver(id: id)
+        if let _view = resolver.resolveView(Type<MetadataViews.Traits>()) {
+          let view = _view as! MetadataViews.Traits
+          ${traitsCheckScript}
+          if traitsCheckPassed {
+            amount = amount + 1
+          }
+        } else if traitsLength == 0 {
+          amount = amount + 1
+        } else {
+          panic("No traits view found")
+        }
+        if amount >= AMOUNT {
+          SUCCESS
+          break
+        }
       }
     }
     `;
@@ -104,7 +167,7 @@ export const generateScript = (roleVerifiers, verificationMode) => {
   }
 
   const verifyScript = `
-  import EmeraldIdentity from 0x39e42c67cc851cfb
+import EmeraldIdentity from 0x39e42c67cc851cfb
 ${imports.join('\n')}
 
   pub fun main(discordIds: [String]): {String: [String]} {

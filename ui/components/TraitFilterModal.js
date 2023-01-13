@@ -3,35 +3,49 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import RoleVerifierCreator from './RoleVerifierCreator'
 import DiscordRoleSelector from './DiscordRoleSelector'
-import LogicSelector, { BasicVerifiersLogic } from './LogicSelector'
+import LogicSelector, { BasicVerifiersLogic, TraitsLogic } from './LogicSelector'
 import { useRecoilState } from "recoil"
 import {
   showBasicNotificationState,
   basicNotificationContentState
 } from "../lib/atoms.js"
+import TraitsEditor from './TraitsEditor'
 
-export default function RoleVerifierCreatorSlideOver(props) {
+const getTraitsDefaultValue = (initTraits, traitID) => {
+  if (initTraits.length == 0) {
+    return [{ id: traitID, trait: "", value: "" }]
+  }
+  return initTraits
+}
+
+const getTraitsIDDefaultValue = (initTraits) => {
+  let id = 0
+  for (let i = 0; i < initTraits.length; i++) {
+    const t = initTraits[i]
+    if (t.id > id) {
+      id = t.id
+    }
+  }
+  return id + 1
+}
+
+export default function TraitFilterModal(props) {
   const [, setShowBasicNotification] = useRecoilState(showBasicNotificationState)
   const [, setBasicNotificationContent] = useRecoilState(basicNotificationContentState)
 
-  const { open, setOpen,
-    createNewRoleVerifier, roleVerifierToBeEdit } = props
-  const [selectedRole, setSelectedRole] = useState(null)
+  const [traits, setTraits] = useState([])
 
-  const [basicVerifiersLogic, setBasicVerifiersLogic] = useState(BasicVerifiersLogic.AND)
-  const [basicVerifiers, setBasicVerifiers] = useState([])
+  const { open, setOpen, name, index, updateVerifierTraits, initTraits, initTraitsLogic } = props
+  
+  const [traitID, setTraitID] = useState(getTraitsIDDefaultValue(initTraits))
+  const [traitsLogic, setTraitsLogic] = useState(initTraitsLogic)
 
   useEffect(() => {
-    if (roleVerifierToBeEdit) {
-      setSelectedRole(roleVerifierToBeEdit.role)
-      setBasicVerifiersLogic(roleVerifierToBeEdit.basicVerifiersLogic)
-      setBasicVerifiers(roleVerifierToBeEdit.basicVerifiers)
-    } else if (open) {
-      setSelectedRole(null)
-      setBasicVerifiersLogic(BasicVerifiersLogic.AND)
-      setBasicVerifiers([])
+    if (open) {
+      const defaultTraits = getTraitsDefaultValue(initTraits, traitID)
+      setTraits(defaultTraits)
     }
-  }, [roleVerifierToBeEdit, open])
+  }, [open])
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -65,7 +79,7 @@ export default function RoleVerifierCreatorSlideOver(props) {
                     <div className="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6">
                       <div className="px-4 sm:px-6">
                         <div className="flex items-start justify-between">
-                          <Dialog.Title className="text-lg font-medium text-gray-900">{roleVerifierToBeEdit ? "Update Role Verifier" : "Create Role Verifier"}</Dialog.Title>
+                          <Dialog.Title className="text-lg font-medium text-gray-900">{name}</Dialog.Title>
                           <div className="ml-3 flex h-7 items-center">
                             <button
                               type="button"
@@ -80,16 +94,12 @@ export default function RoleVerifierCreatorSlideOver(props) {
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
                         <div className="flex flex-col gap-y-8">
-                          <DiscordRoleSelector selectedRole={selectedRole} setSelectedRole={setSelectedRole} />
                           <LogicSelector
-                            basicVerifiersLogic={basicVerifiersLogic}
-                            setBasicVerifiersLogic={setBasicVerifiersLogic}
-                            title={"Verifier Logic"}
+                            basicVerifiersLogic={traitsLogic}
+                            setBasicVerifiersLogic={setTraitsLogic}
+                            title={"Traits Logic"}
                           />
-                          <RoleVerifierCreator
-                            basicVerifiers={basicVerifiers}
-                            setBasicVerifiers={setBasicVerifiers}
-                          />
+                          <TraitsEditor traits={traits} setTraits={setTraits} traitID={traitID} setTraitID={setTraitID} />
                         </div>
                       </div>
                     </div>
@@ -107,53 +117,14 @@ export default function RoleVerifierCreatorSlideOver(props) {
                         type="submit"
                         className="h-12 w-24 items-center ml-4 inline-flex justify-center rounded-xl border border-transparent bg-emerald py-2 px-4 text-sm font-bold text-black shadow-sm hover:bg-emerald-dark focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2"
                         onClick={() => {
-                          const alertInvalidParams = (detail) => {
-                            setShowBasicNotification(true)
-                            setBasicNotificationContent({ type: "exclamation", title: "INVALID PARAMS", detail: detail })
-                          }
-
-                          const alertEmptyBasicVerifiers = () => {
-                            setShowBasicNotification(true)
-                            setBasicNotificationContent({ type: "exclamation", title: "EMPTY VERIFIERS", detail: null })
-                          }
-
-                          if (!selectedRole) {
-                            alertInvalidParams("No Selected Role")
-                            return
-                          }
-
-                          for (let i = 0; i < basicVerifiers.length; i++) {
-                            const bv = basicVerifiers[i]
-                            if (!bv.isPreset) {
-                              if (!bv.nft) {
-                                alertInvalidParams("No Selected NFT")
-                                return
-                              }
-                            }
-                            for (let j = 0; j < bv.parameters.length; j++) {
-                              const param = bv.parameters[j]
-                              if (!param.type.validate(param.value)) {
-                                alertInvalidParams()
-                                return
-                              }
-                            }
-                          }
-
-                          if (basicVerifiers.length > 0) {
-                            if (roleVerifierToBeEdit) {
-                              roleVerifierToBeEdit.role = selectedRole
-                              roleVerifierToBeEdit.basicVerifiers = basicVerifiers
-                              roleVerifierToBeEdit.basicVerifiersLogic = basicVerifiersLogic
-                            } else {
-                              createNewRoleVerifier(selectedRole, basicVerifiersLogic, basicVerifiers)
-                            }
-                            setOpen(false)
-                          } else {
-                            alertEmptyBasicVerifiers()
-                          }
+                          const filteredTraits = traits.filter((t) => {
+                            return t.trait.trim().length > 0 && t.value.trim().length > 0
+                          })
+                          updateVerifierTraits(index, filteredTraits, traitsLogic)
+                          setOpen(false)
                         }}
                       >
-                        {roleVerifierToBeEdit ? "Update" : "Save"}
+                        {"Save"}
                       </button>
                     </div>
                   </div>

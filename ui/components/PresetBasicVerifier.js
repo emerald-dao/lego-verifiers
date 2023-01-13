@@ -1,3 +1,4 @@
+import { PlusCircleIcon, PlusIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import { useRecoilState } from "recoil"
 import {
@@ -62,7 +63,7 @@ export default function PresetBasicVerifier(props) {
         <label className="cursor-pointer truncate text-left text-xl font-bold">{verifierInfo.name}</label>
         <label className="cursor-pointer text-left text-sm">{verifierInfo.description}</label>
       </div>
-      <div className="flex flex-col gap-y-2 p-1 pb-4">
+      <div className="flex flex-col gap-y-2 p-1 pb-2">
         {
           verifierInfo.parameters.length > 0 ?
             verifierInfo.parameters.map((parameter) => {
@@ -77,6 +78,12 @@ export default function PresetBasicVerifier(props) {
             })
             : null
         }
+        {/* <div className="flex flex-col h-8 w-full items-center justify-center">
+          <div className="flex gap-x-1 w-full justify-between items-center text-emerald">
+            <div>Traits Filter</div>
+            <PlusIcon className="h-5 w-5"/>
+          </div> 
+        </div> */}
       </div>
     </div>
   )
