@@ -78,12 +78,6 @@ export default function PresetBasicVerifier(props) {
             })
             : null
         }
-        {/* <div className="flex flex-col h-8 w-full items-center justify-center">
-          <div className="flex gap-x-1 w-full justify-between items-center text-emerald">
-            <div>Traits Filter</div>
-            <PlusIcon className="h-5 w-5"/>
-          </div> 
-        </div> */}
       </div>
     </div>
   )
