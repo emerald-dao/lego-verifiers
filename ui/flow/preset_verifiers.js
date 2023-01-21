@@ -199,6 +199,37 @@ export const presetVerifiersList = [
         }
       }
     }`
+  },
+  {
+    name: "Owns Party Favorz Set from specific Season",
+    description: "Checks to see if a user owns a Party Favorz set from a specific season.",
+    logo: "/party-favorz.png",
+    parameters: [
+      paramsSeason
+    ],
+    imports: {
+      testnet: [],
+      mainnet: ["import PartyFavorz from 0x123cb666996b8432", "import MetadataViews from 0x1d7e57aa55817448"]
+    },
+    script: `
+    if let collection = getAccount(user).getCapability(PartyFavorz.CollectionPublicPath).borrow<&{MetadataViews.ResolverCollection}>() {
+      let seasonNum: UInt64 = SEASON
+      var found: {String: Bool} = {}
+      for id in collection.getIDs() {
+        let resolver = collection.borrowViewResolver(id: id)
+        let traitsView = resolver.resolveView(Type<MetadataViews.Traits>())! as! MetadataViews.Traits
+        let displayView = resolver.resolveView(Type<MetadataViews.Display>())! as! MetadataViews.Display
+        for trait in view.traits {
+          if trait.name == "Season" && (trait.value as? UInt64) == seasonNum {
+            found[displayView.name] = true
+          }
+        }
+        if found.keys.length >= 3 {
+          SUCCESS
+          break
+        }
+      }
+    }`
   }
 ].map((v) => {
   v.isPreset = true
