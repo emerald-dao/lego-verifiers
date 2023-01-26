@@ -219,7 +219,7 @@ export const presetVerifiersList = [
         let resolver = collection.borrowViewResolver(id: id)
         let traitsView = resolver.resolveView(Type<MetadataViews.Traits>())! as! MetadataViews.Traits
         let displayView = resolver.resolveView(Type<MetadataViews.Display>())! as! MetadataViews.Display
-        for trait in view.traits {
+        for trait in traitsView.traits {
           if trait.name == "Season" && (trait.value as? UInt64) == seasonNum {
             found[displayView.name] = true
           }
