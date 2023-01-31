@@ -232,7 +232,7 @@ export const presetVerifiersList = [
   },
   {
     name: "Owns Doodles Beta Pass",
-    description: "Checks to see if a user owns a specific number of Doodles Beta Passes.",
+    description: "Checks to see if a user owns at least a certain number of Doodles Beta Passes.",
     logo: "/betapass.png",
     parameters: [
       paramsAmount
@@ -258,7 +258,7 @@ export const presetVerifiersList = [
   },
   {
     name: "Owns Doodles Wearables",
-    description: "Checks to see if a user owns a specific number of Doodles Wearables.",
+    description: "Checks to see if a user owns at least a certain number of Doodles Wearables.",
     logo: "/navysweater.png",
     parameters: [
       paramsAmount
