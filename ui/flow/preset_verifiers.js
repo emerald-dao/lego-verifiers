@@ -47,8 +47,7 @@ export const presetVerifiersList = [
       mainnet: []
     },
     script: `
-    let emeraldIds = EmeraldIdentity.getEmeraldIDs(discordID: discordId)
-    if emeraldIds.keys.length > 0 {
+    if EmeraldIdentity.getEmeraldIDs(discordID: discordId).keys.length > 0 {
       SUCCESS
     }
     `
@@ -228,6 +227,32 @@ export const presetVerifiersList = [
           SUCCESS
           break
         }
+      }
+    }`
+  },
+  {
+    name: "Owns Doodles Beta Pass",
+    description: "Checks to see if a user owns a specific number of Doodles Beta Passes..",
+    logo: "/betapass.png",
+    parameters: [
+      paramsAmount
+    ],
+    imports: {
+      testnet: [],
+      mainnet: ["import Wearables from 0xe81193c424cfd3fb", "import MetadataViews from 0x1d7e57aa55817448"]
+    },
+    script: `
+    if let collection = getAccount(user).getCapability(Wearables.CollectionPublicPath).borrow<&Wearables.Collection{MetadataViews.ResolverCollection}>() {
+      var answer: Int = 0
+      for id in collection.getIDs() {
+        let resolver = collection.borrowViewResolver(id: id)
+        let display = resolver.resolveView(Type<MetadataViews.Display>())! as! MetadataViews.Display
+        if display.name == "beta pass" {
+          answer = answer + 1
+        }
+      }
+      if answer >= AMOUNT {
+        SUCCESS
       }
     }`
   }
