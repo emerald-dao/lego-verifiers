@@ -232,7 +232,7 @@ export const presetVerifiersList = [
   },
   {
     name: "Owns Doodles Beta Pass",
-    description: "Checks to see if a user owns a specific number of Doodles Beta Passes..",
+    description: "Checks to see if a user owns a specific number of Doodles Beta Passes.",
     logo: "/betapass.png",
     parameters: [
       paramsAmount
@@ -252,6 +252,24 @@ export const presetVerifiersList = [
         }
       }
       if answer >= AMOUNT {
+        SUCCESS
+      }
+    }`
+  },
+  {
+    name: "Owns Doodles Wearables",
+    description: "Checks to see if a user owns a specific number of Doodles Wearables.",
+    logo: "/navysweater.png",
+    parameters: [
+      paramsAmount
+    ],
+    imports: {
+      testnet: [],
+      mainnet: ["import Wearables from 0xe81193c424cfd3fb", "import NonFungibleToken from 0x1d7e57aa55817448"]
+    },
+    script: `
+    if let collection = getAccount(user).getCapability(Wearables.CollectionPublicPath).borrow<&Wearables.Collection{NonFungibleToken.CollectionPublic}>() {
+      if collection.getIDs().length >= AMOUNT {
         SUCCESS
       }
     }`
