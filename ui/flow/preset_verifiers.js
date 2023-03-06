@@ -273,6 +273,20 @@ export const presetVerifiersList = [
         SUCCESS
       }
     }`
+  },
+  {
+    name: "Owns .find Name",
+    description: "Checks to see if a user owns a .find name.",
+    logo: "/find-logo.jpg",
+    parameters: [],
+    imports: {
+      testnet: [],
+      mainnet: ["import FIND from 0x097bafa4e0b48eef"]
+    },
+    script: `
+    if FIND.reverseLookup(user) != nil {
+      SUCCESS
+    }`
   }
 ].map((v) => {
   v.isPreset = true
