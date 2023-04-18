@@ -83,7 +83,7 @@ export default function NavigationBar(props) {
 
         <Link href="/">
           <label className="shrink-0 font-flow font-bold text-xl sm:text-3xl">
-            Emerald Bot
+            Emerald bot
           </label>
         </Link>
         {

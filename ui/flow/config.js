@@ -6,8 +6,8 @@ config({
   "accessNode.api": publicConfig.accessNodeAPI,
   "discovery.wallet": publicConfig.walletDiscovery,
   "sdk.transport": httpSend,
-  "app.detail.title": "Emerald Bot",
-  "app.detail.icon": "https://i.imgur.com/hO6zv5r.png",
+  "app.detail.title": "Emerald bot",
+  "app.detail.icon": "https://i.imgur.com/OcQOlGJ.png",
 
   "0xNFTCatalog": publicConfig.nftCatalogAddress,
   "0xEmeraldBotVerifiers": publicConfig.emeraldBotVerifiersAddress,

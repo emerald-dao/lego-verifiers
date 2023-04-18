@@ -21,8 +21,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps }, }) {
       <SessionProvider session={session}>
         <RecoilRoot>
           <Head>
-            <title>Emerald Bot | Discord Bot on Flow</title>
-            <meta property="og:title" content="Emerald Bot | Discord Bot on Flow" key="title" />
+            <title>Emerald bot | Discord Bot on Flow</title>
+            <meta property="og:title" content="Emerald bot | Discord Bot on Flow" key="title" />
           </Head>
           <NavigationBar user={user} />
           <Component {...pageProps} user={user} />
