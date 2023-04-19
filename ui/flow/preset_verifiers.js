@@ -1,4 +1,4 @@
-import { paramsAmount, paramsEvent, paramsNFLAllDayTier, paramsSetID, paramsUFCStrikeTier, paramsSeason } from "./verifier_params"
+import { paramsAmount, paramsEvent, paramsNFLAllDayTier, paramsSetID, paramsUFCStrikeTier, paramsSeason, paramsPlayID } from "./verifier_params"
 
 export const catalogTemplate = {
   isPreset: false,
@@ -109,7 +109,34 @@ export const presetVerifiersList = [
     }`
   },
   {
-    name: "Owns _ TopShot with Set ID",
+    name: "Owns _ TopShot Moment(s)",
+    description: "Checks to see if a user owns a certain number of a specific TopShot moment.",
+    logo: "/topshot.png",
+    parameters: [
+      paramsPlayID,
+      paramsAmount
+    ],
+    imports: {
+      testnet: ["import TopShot from 0x877931736ee77cff"],
+      mainnet: ["import TopShot from 0x0b2a3299cc857e29"]
+    },
+    script: `
+    if let collection = getAccount(user).getCapability(/public/MomentCollection).borrow<&{TopShot.MomentCollectionPublic}>() {
+      let ids = collection.getIDs()
+      var total: Int = 0
+      for id in ids {
+        let moment = collection.borrowMoment(id: id)!
+        if moment.data.playID == PLAY_ID {
+          total = total + 1
+        }
+      }
+      if total >= AMOUNT {
+        SUCCESS
+      }
+    }`
+  },
+  {
+    name: "Owns _ TopShot(s) with Set ID",
     description: "Checks to see if a user owns a specific number of moments that have a certain Set ID.",
     logo: "/topshot.png",
     parameters: [

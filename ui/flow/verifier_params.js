@@ -20,6 +20,11 @@ export const paramsSetID = {
   type: Types.PositiveInt()
 }
 
+export const paramsPlayID = {
+  names: { placeholder: "PLAY_ID", display: "Play ID" },
+  type: Types.PositiveInt()
+}
+
 export const paramsNFLAllDayTier = {
   names: { placeholder: "TIER", display: "Tier" },
   type: Types.Enum(["common", "rare", "legendary", "ultimate"])
