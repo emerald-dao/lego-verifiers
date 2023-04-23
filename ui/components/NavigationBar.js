@@ -100,7 +100,7 @@ export default function NavigationBar(props) {
       </div>
 
       <div className="shrink truncate flex items-center gap-x-5">
-        <a className="hidden sm:block font-bold" href="https://emeralddao.notion.site/Emerald-Bot-5e20a7d9fc214c7ea5a1f4a5fddccd1c" target="_blank" rel="noopener noreferrer">Docs</a>
+        <a className="hidden sm:block font-bold" href="https://docs.ecdao.org/grow-your-city/emerald-bot" target="_blank" rel="noopener noreferrer">Docs</a>
         {user && user.loggedIn
           ? <AuthedState />
           : <UnauthenticatedState />
