@@ -1,4 +1,4 @@
-import { paramsAmount, paramsEvent, paramsNFLAllDayTier, paramsSetID, paramsUFCStrikeTier, paramsSeason, paramsPlayID } from "./verifier_params"
+import { paramsAmount, paramsEvent, paramsNFLAllDayTier, paramsSetID, paramsUFCStrikeTier, paramsSeason, paramsPlayID, paramsSetName, paramsSeriesId } from "./verifier_params"
 
 export const catalogTemplate = {
   isPreset: false,
@@ -75,6 +75,70 @@ export const presetVerifiersList = [
       }
 
       if count["TIER"]! >= AMOUNT {
+        SUCCESS
+      }
+    }`
+  },
+  {
+    name: "Owns NFL All Day Set",
+    description: "Checks to see if a user owns a whole set from a certain series.",
+    logo: "/nfl-all-day.jpg",
+    parameters: [
+      paramsSetName,
+      paramsSeriesId
+    ],
+    imports: {
+      testnet: ["import AllDay from 0x4dfd62c88d1b6462"],
+      mainnet: ["import AllDay from 0xe4cf4bdc1751c65d"]
+    },
+    script: `
+    let setData: AllDay.SetData = AllDay.getSetDataByName(name: "SET_NAME")
+    let setPlaysInEditions: [UInt64] = setData.setPlaysInEditions.keys
+    let neededLength = setPlaysInEditions.length
+    let editionIds: [UInt64] = []
+    
+    if let collection = getAccount(account).getCapability(AllDay.CollectionPublicPath).borrow<&{AllDay.MomentNFTCollectionPublic}>() {
+      let ids = collection.getIDs()
+      for id in ids {
+        let moment = collection.borrowMomentNFT(id: id)!
+        let editionID = moment.editionID
+        let edition: AllDay.EditionData = AllDay.getEditionData(id: editionID)
+        if edition.seriesID != SERIES_ID {
+          continue
+        }
+        if setPlaysInEditions.contains(editionID) && !editionIds.contains(editionID) {
+          editionIds.append(editionID)
+        }
+      }
+    }
+
+    if editionIds.length == neededLength {
+      SUCCESS
+    }`
+  },
+  {
+    name: "Owns _ NFL All Day Moment(s)",
+    description: "Checks to see if a user owns a certain number of a specific NFL All Day moment.",
+    logo: "/nfl-all-day.jpg",
+    parameters: [
+      paramsPlayID,
+      paramsAmount
+    ],
+    imports: {
+      testnet: ["import AllDay from 0x4dfd62c88d1b6462"],
+      mainnet: ["import AllDay from 0xe4cf4bdc1751c65d"]
+    },
+    script: `
+    if let collection = getAccount(user).getCapability(AllDay.CollectionPublicPath).borrow<&{AllDay.MomentNFTCollectionPublic}>() {
+      let ids = collection.getIDs()
+      var total: Int = 0
+      for id in ids {
+        let moment = collection.borrowMomentNFT(id: id)!
+        if moment.editionID == PLAY_ID {
+          total = total + 1
+        }
+      }
+      if total >= AMOUNT {
         SUCCESS
       }
     }`

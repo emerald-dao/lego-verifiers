@@ -20,6 +20,16 @@ export const paramsSetID = {
   type: Types.PositiveInt()
 }
 
+export const paramsSetName = {
+  names: { placeholder: "SET_NAME", display: "Set Name" },
+  type: Types.String()
+}
+
+export const paramsSeriesId = {
+  names: { placeholder: "SERIES_ID", display: "Series ID" },
+  type: Types.PositiveInt()
+}
+
 export const paramsPlayID = {
   names: { placeholder: "PLAY_ID", display: "Play ID" },
   type: Types.PositiveInt()

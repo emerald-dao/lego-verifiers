@@ -23,5 +23,13 @@ export const Types = {
         return options.includes(value)
       }
     }
+  },
+  String: function () {
+    return {
+      name: "String",
+      validate: function (value) {
+        return typeof value === 'string' || value instanceof String
+      }
+    }
   }
 }
