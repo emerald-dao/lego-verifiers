@@ -97,7 +97,7 @@ export const presetVerifiersList = [
     let neededLength = setPlaysInEditions.length
     let editionIds: [UInt64] = []
     
-    if let collection = getAccount(account).getCapability(AllDay.CollectionPublicPath).borrow<&{AllDay.MomentNFTCollectionPublic}>() {
+    if let collection = getAccount(user).getCapability(AllDay.CollectionPublicPath).borrow<&{AllDay.MomentNFTCollectionPublic}>() {
       let ids = collection.getIDs()
       for id in ids {
         let moment = collection.borrowMomentNFT(id: id)!
