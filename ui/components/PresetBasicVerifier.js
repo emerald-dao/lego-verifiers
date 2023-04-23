@@ -11,7 +11,7 @@ export default function PresetBasicVerifier(props) {
   const { index, updateVerifierParam, verifierInfo } = props
 
   const generateInputByParameter = (parameter) => {
-    if (parameter.type.name == "PositiveInt") {
+    if (parameter.type.name == "PositiveInt" || parameter.type.name == "String") {
       return (
         <div>
           <input
