@@ -231,11 +231,11 @@ export const presetVerifiersList = [
     }`
   },
   {
-    name: "Owns All TopShot with Set ID",
-    description: "Checks to see if a user owns all the moments of a certain Set ID.",
+    name: "Owns TopShot Set",
+    description: "Checks to see if a user owns all the moments of a certain Set.",
     logo: "/topshot.png",
     parameters: [
-      paramsSetID
+      paramsSetName
     ],
     imports: {
       testnet: ["import TopShot from 0x877931736ee77cff"],
@@ -244,7 +244,7 @@ export const presetVerifiersList = [
     script: `
     if let collection = getAccount(user).getCapability(/public/MomentCollection).borrow<&{TopShot.MomentCollectionPublic}>() {
       var coveredPlays: [UInt32] = []
-      let setID: UInt32 = SET_ID
+      let setID = TopShot.getSetIDsByName(setName: "SET_NAME")?.removeFirst()!
       let numOfPlaysInSet = TopShot.getPlaysInSet(setID: setID)!.length
       for id in collection.getIDs() {
         let moment = collection.borrowMoment(id: id)!
