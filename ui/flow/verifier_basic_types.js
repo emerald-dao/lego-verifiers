@@ -8,7 +8,7 @@ export const Types = {
       validate: function (value) {
         try {
           const v = new Decimal(value)
-          return v.isInteger() && v.isPositive() && !v.isZero()
+          return v.isInteger() && v.isPositive()
         } catch (e) {
           return false
         }
