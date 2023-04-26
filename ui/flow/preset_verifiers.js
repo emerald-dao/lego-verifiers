@@ -265,7 +265,7 @@ export const presetVerifiersList = [
         }
       }
 
-      let numOfPlaysInSet = TopShot.getPlaysInSet(setID: setID)!.length
+      let numOfPlaysInSet = TopShot.getPlaysInSet(setID: setID!)!.length
       for id in collection.getIDs() {
         let moment = collection.borrowMoment(id: id)!
         if moment.data.setID == setID! {
