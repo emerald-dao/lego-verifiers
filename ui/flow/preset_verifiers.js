@@ -217,7 +217,7 @@ export const presetVerifiersList = [
       var answer: Int = 0
       var coveredPlays: [UInt32] = []
       
-      let setIDs: [UInt32] = TopShot.getSetIDsByName(setName: SET_NAME)!
+      let setIDs: [UInt32] = TopShot.getSetIDsByName(setName: "SET_NAME")!
       var setID: UInt32? = nil
       for setId in setIDs {
         if TopShot.getSetSeries(setID: setId)! == SERIES_ID {
@@ -256,7 +256,7 @@ export const presetVerifiersList = [
     if let collection = getAccount(user).getCapability(/public/MomentCollection).borrow<&{TopShot.MomentCollectionPublic}>() {
       var coveredPlays: [UInt32] = []
       
-      let setIDs: [UInt32] = TopShot.getSetIDsByName(setName: SET_NAME)!
+      let setIDs: [UInt32] = TopShot.getSetIDsByName(setName: "SET_NAME")!
       var setID: UInt32? = nil
       for setId in setIDs {
         if TopShot.getSetSeries(setID: setId)! == SERIES_ID {
