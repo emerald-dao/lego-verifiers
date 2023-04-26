@@ -228,7 +228,7 @@ export const presetVerifiersList = [
 
       for id in collection.getIDs() {
         let moment = collection.borrowMoment(id: id)!
-        if moment.data.setID == setID! {
+        if moment.data.setID == setID {
           answer = answer + 1
           if !coveredPlays.contains(moment.data.playID) {
             coveredPlays.append(moment.data.playID)
@@ -268,7 +268,7 @@ export const presetVerifiersList = [
       let numOfPlaysInSet = TopShot.getPlaysInSet(setID: setID!)!.length
       for id in collection.getIDs() {
         let moment = collection.borrowMoment(id: id)!
-        if moment.data.setID == setID! {
+        if moment.data.setID == setID {
           if !coveredPlays.contains(moment.data.playID) {
             coveredPlays.append(moment.data.playID)
           }
