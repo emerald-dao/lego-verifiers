@@ -148,7 +148,7 @@ export default function MultiRolesVerifierCreator(props) {
             <label className="shrink-0 text-gray-400 text-sm">⬇️ BUILD YOUR VERIFIER ⬇️</label>
             <div className="w-full h-[1px] bg-gray-200"></div>
           </div>
-          <div className="flex flex-row items-center justify-between gap-x-10 sm:gap-x-16">
+          {/* <div className="flex flex-row items-center justify-between gap-x-10 sm:gap-x-16">
             <div className="w-full flex flex-col">
               <label className="block text-2xl font-bold font-flow">
                 Image
@@ -193,7 +193,7 @@ export default function MultiRolesVerifierCreator(props) {
                   setBasicNotificationContent({ type: "exclamation", title: "Invalid Image URL", detail: "Fetch Image Failed" })
                 }} />
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-col gap-y-2">
             <label className="block text-2xl font-bold font-flow">
