@@ -205,7 +205,8 @@ export const presetVerifiersList = [
     logo: "/topshot.png",
     parameters: [
       paramsAmount,
-      paramsSetID
+      paramsSetName,
+      paramsSeriesId
     ],
     imports: {
       testnet: ["import TopShot from 0x877931736ee77cff"],
@@ -215,7 +216,16 @@ export const presetVerifiersList = [
     if let collection = getAccount(user).getCapability(/public/MomentCollection).borrow<&{TopShot.MomentCollectionPublic}>() {
       var answer: Int = 0
       var coveredPlays: [UInt32] = []
-      let setID: UInt32 = SET_ID
+      
+      let setIDs: [UInt32] = TopShot.getSetIDsByName(setName: SET_NAME)!
+      var setID: UInt32? = nil
+      for setId in setIDs {
+        if TopShot.getSetSeries(setID: setId)! == SERIES_ID {
+          setID = setId
+          break
+        }
+      }
+
       for id in collection.getIDs() {
         let moment = collection.borrowMoment(id: id)!
         if moment.data.setID == setID {
@@ -235,7 +245,8 @@ export const presetVerifiersList = [
     description: "Checks to see if a user owns all the moments of a certain Set.",
     logo: "/topshot.png",
     parameters: [
-      paramsSetName
+      paramsSetName,
+      paramsSeriesId
     ],
     imports: {
       testnet: ["import TopShot from 0x877931736ee77cff"],
@@ -244,7 +255,16 @@ export const presetVerifiersList = [
     script: `
     if let collection = getAccount(user).getCapability(/public/MomentCollection).borrow<&{TopShot.MomentCollectionPublic}>() {
       var coveredPlays: [UInt32] = []
-      let setID = TopShot.getSetIDsByName(setName: "SET_NAME")?.removeFirst()!
+      
+      let setIDs: [UInt32] = TopShot.getSetIDsByName(setName: SET_NAME)!
+      var setID: UInt32? = nil
+      for setId in setIDs {
+        if TopShot.getSetSeries(setID: setId)! == SERIES_ID {
+          setID = setId
+          break
+        }
+      }
+
       let numOfPlaysInSet = TopShot.getPlaysInSet(setID: setID)!.length
       for id in collection.getIDs() {
         let moment = collection.borrowMoment(id: id)!

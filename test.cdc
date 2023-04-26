@@ -1,23 +1,33 @@
-import PartyFavorz from 0x123cb666996b8432
-import MetadataViews from 0x1d7e57aa55817448
+import TopShot from 0x0b2a3299cc857e29
 
-pub fun main(user: Address): [Info] {
+pub fun main(user: Address, setName: String, seriesId: UInt32): Bool {
   let infos: [Info] = []
-  if let collection = getAccount(user).getCapability(PartyFavorz.CollectionPublicPath).borrow<&{MetadataViews.ResolverCollection}>() {
-    var found: Bool = false
+  var ret: Bool = false
+  if let collection = getAccount(user).getCapability(/public/MomentCollection).borrow<&{TopShot.MomentCollectionPublic}>() {
+    var answer: Int = 0
+    var coveredPlays: [UInt32] = []
+    let setIDs: [UInt32] = TopShot.getSetIDsByName(setName: setName)!
+    var setID: UInt32? = nil
+    for setId in setIDs {
+      if TopShot.getSetSeries(setID: setId)! == seriesId {
+        setID = setId
+        break
+      }
+    }
     for id in collection.getIDs() {
-      let resolver = collection.borrowViewResolver(id: id)
-      let displayView = resolver.resolveView(Type<MetadataViews.Display>())! as! MetadataViews.Display
-      let traitsView = resolver.resolveView(Type<MetadataViews.Traits>())! as! MetadataViews.Traits
-      for trait in traitsView.traits {
-        if trait.name == "Season" {
-          infos.append(Info(trait.value as! UInt64, displayView.name))
-          break
+      let moment = collection.borrowMoment(id: id)!
+      if moment.data.setID == setID {
+        answer = answer + 1
+        if !coveredPlays.contains(moment.data.playID) {
+          coveredPlays.append(moment.data.playID)
         }
       }
     }
+    if answer >= 1 {
+      ret = true
+    }
   }
-  return infos
+  return ret
 }
 
 pub struct Info {
