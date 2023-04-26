@@ -200,7 +200,7 @@ export const presetVerifiersList = [
     }`
   },
   {
-    name: "Owns _ TopShot(s) with Set ID",
+    name: "Owns _ TopShot(s) from Set",
     description: "Checks to see if a user owns a specific number of moments that have a certain Set ID.",
     logo: "/topshot.png",
     parameters: [
