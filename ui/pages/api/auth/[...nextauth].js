@@ -8,7 +8,7 @@ export const authOptions = {
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      authorization: { params: { scope: scopes, permissions: 8 } },
+      authorization: { params: { scope: scopes, permissions: 294473821264 } },
       userinfo: "https://discord.com/api/users/@me"
     })
   ],
@@ -30,7 +30,7 @@ export const authOptions = {
           name: account.guild.name,
           icon: account.guild.icon,
           roles: account.guild.roles.filter((r) => r.name != "@everyone" && !r.tags).map((r) => {
-            return {id: r.id, name: r.name, color: r.color }
+            return { id: r.id, name: r.name, color: r.color }
           })
         }
       }
