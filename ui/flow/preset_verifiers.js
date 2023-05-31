@@ -161,7 +161,6 @@ export const presetVerifiersList = [
       for id in collection.getIDs() {
         let moment = collection.borrowUFC_NFT(id: id)!
         let setId: UInt32 = moment.setId
-        let metadata = UFC_NFT.getSetMetadata(setId: setId)!
         if setId == SET_ID {
           count = count + 1
         }
