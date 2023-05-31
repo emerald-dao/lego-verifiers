@@ -117,7 +117,7 @@ export const presetVerifiersList = [
     }`
   },
   {
-    name: "Owns _ NFL All Day Moment(s)",
+    name: "Owns _ Specific NFL All Day Moment(s)",
     description: "Checks to see if a user owns a certain number of a specific NFL All Day moment.",
     logo: "/nfl-all-day.jpg",
     parameters: [
@@ -144,8 +144,36 @@ export const presetVerifiersList = [
     }`
   },
   {
+    name: "Owns _ Specific UFC Strike Moment(s)",
+    description: "Checks to see if a user owns a certain number of a specific UFC Strike moment.",
+    logo: "/ufc-strike.jpg",
+    parameters: [
+      paramsAmount,
+      paramsSetID
+    ],
+    imports: {
+      testnet: ["import UFC_NFT from 0x04625c28593d9408"],
+      mainnet: ["import UFC_NFT from 0x329feb3ab062d289"]
+    },
+    script: `
+    if let collection = getAccount(user).getCapability(UFC_NFT.CollectionPublicPath).borrow<&UFC_NFT.Collection{UFC_NFT.UFC_NFTCollectionPublic}>() {
+      var count: Int = 0
+      for id in collection.getIDs() {
+        let moment = collection.borrowUFC_NFT(id: id)!
+        let setId: UInt32 = moment.setId
+        let metadata = UFC_NFT.getSetMetadata(setId: setId)!
+        if setId == SET_ID {
+          count = count + 1
+        }
+      }
+      if count >= AMOUNT {
+        SUCCESS
+      }
+    }`
+  },
+  {
     name: "Owns _ UFC Strike with Tier",
-    description: "Checks to see if a user owns a specific number of moments that have a certain tier.",
+    description: "Checks to see if a user owns a specific number of UFC Strike moments that have a certain tier.",
     logo: "/ufc-strike.jpg",
     parameters: [
       paramsAmount,
@@ -173,7 +201,7 @@ export const presetVerifiersList = [
     }`
   },
   {
-    name: "Owns _ TopShot Moment(s)",
+    name: "Owns _ Specific TopShot Moment(s)",
     description: "Checks to see if a user owns a certain number of a specific TopShot moment.",
     logo: "/topshot.png",
     parameters: [
