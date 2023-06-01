@@ -36,11 +36,11 @@ export const paramsPlayID = {
 }
 
 export const paramsNFLAllDayTier = {
-  names: { placeholder: "TIER", display: "Tier" },
+  names: { placeholder: "TIER_INPUT", display: "Tier" },
   type: Types.Enum(["common", "rare", "legendary", "ultimate"])
 }
 
 export const paramsUFCStrikeTier = {
-  names: { placeholder: "TIER", display: "Tier" },
+  names: { placeholder: "TIER_INPUT", display: "Tier" },
   type: Types.Enum(["challenger", "contender", "champion", "fandom"])
 }

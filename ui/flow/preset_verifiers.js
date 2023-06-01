@@ -190,7 +190,7 @@ export const presetVerifiersList = [
         let moment = collection.borrowUFC_NFT(id: id)!
         let setId: UInt32 = moment.setId
         let metadata = UFC_NFT.getSetMetadata(setId: setId)!
-        if (metadata["TIER"]?.toLower() == "TIER") {
+        if (metadata["TIER"]?.toLower() == "TIER_INPUT") {
           count[momentTier] = (count[momentTier] ?? 0) + 1 
         }
       }
