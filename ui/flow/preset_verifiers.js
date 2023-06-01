@@ -184,7 +184,7 @@ export const presetVerifiersList = [
     },
     script: `
     if let collection = getAccount(user).getCapability(UFC_NFT.CollectionPublicPath).borrow<&UFC_NFT.Collection{UFC_NFT.UFC_NFTCollectionPublic}>() {
-      let count: Int = 0
+      var count: Int = 0
 
       for id in collection.getIDs() {
         let moment = collection.borrowUFC_NFT(id: id)!
