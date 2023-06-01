@@ -184,18 +184,18 @@ export const presetVerifiersList = [
     },
     script: `
     if let collection = getAccount(user).getCapability(UFC_NFT.CollectionPublicPath).borrow<&UFC_NFT.Collection{UFC_NFT.UFC_NFTCollectionPublic}>() {
-      let count: {String: Int} = {"champion": 0, "contender": 0, "challenger": 0, "fandom": 0}
+      let count: Int = 0
 
       for id in collection.getIDs() {
         let moment = collection.borrowUFC_NFT(id: id)!
         let setId: UInt32 = moment.setId
         let metadata = UFC_NFT.getSetMetadata(setId: setId)!
         if (metadata["TIER"]?.toLower() == "TIER_INPUT") {
-          count[momentTier] = (count[momentTier] ?? 0) + 1 
+          count = count + 1
         }
       }
 
-      if count["TIER"]! >= AMOUNT {
+      if count >= AMOUNT {
         SUCCESS
       }
     }`
