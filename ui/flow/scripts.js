@@ -21,7 +21,7 @@ const splitList = (list, chunkSize) => {
 
 export const bulkGetNftCatalog = async () => {
   const collectionIdentifiers = await getCollectionIdentifiers()
-  const groups = splitList(collectionIdentifiers, 50)
+  const groups = splitList(collectionIdentifiers, 40)
   const promises = groups.map((group) => {
     return getNftCatalogByCollectionIDs(group)
   })

@@ -1,18 +1,30 @@
 import BasicVerifierSelector from "./BasicVerifierSelector"
 import BasicVerifierView from "./BasicVerifierView"
 import { catalogTemplate } from "../flow/preset_verifiers"
+import { TraitsLogic } from "./LogicSelector"
+import { useState } from "react"
 
 export default function RoleVerifierCreator(props) {
   const { basicVerifiers: verifiers, setBasicVerifiers: setVerifiers } = props
 
+  const [verifierID, setVerifierID] = useState(verifiers.length)
+
   const createNewVerifier = () => {
     const verifier = Object.assign({}, catalogTemplate)
+    verifier.id = verifierID
+    setVerifierID(verifierID + 1)
+
     verifier.isPreset = false
+    verifier.traits = []
+    verifier.traitsLogic = TraitsLogic.AND
     setVerifiers(oldVerifiers => [...oldVerifiers, verifier])
   }
 
   const createPresetVerifier = (verifierInfo) => {
     const verifier = Object.assign({}, verifierInfo)
+    verifier.id = verifierID
+    setVerifierID(verifierID + 1)
+
     verifier.isPreset = true
     setVerifiers(oldVerifiers => [...oldVerifiers, verifier])
   }
@@ -56,6 +68,18 @@ export default function RoleVerifierCreator(props) {
     })
   }
 
+  const updateVerifierTraits = (index, traits, traitsLogic) => {
+    setVerifiers(oldVerifiers => {
+      const newVerifiers = oldVerifiers.map((verifier, idx) => {
+        if (idx == index) {
+          return { ...verifier, traits: traits, traitsLogic: traitsLogic}
+        }
+        return verifier
+      })
+      return newVerifiers
+    })
+  }
+
   return (
     <div className="flex flex-col gap-y-2">
       <div className="flex gap-x-2 justify-between items-center">
@@ -70,7 +94,7 @@ export default function RoleVerifierCreator(props) {
             if (verifier.isPreset) {
               return (
                 <BasicVerifierView
-                  key={index}
+                  key={verifier.id}
                   index={index}
                   isPreset={true}
                   verifierInfo={verifier}
@@ -81,11 +105,12 @@ export default function RoleVerifierCreator(props) {
             }
             return (
               <BasicVerifierView
-                key={index}
+                key={verifier.id}
                 index={index}
                 isPreset={false}
                 verifierInfo={verifier}
                 updateNFTCatalogVerifier={updateNFTCatalogVerifier}
+                updateVerifierTraits={updateVerifierTraits}
                 updateVerifierParam={updateVerifierParam}
                 deleteVerifier={deleteVerifier}
               />
